@@ -1,4 +1,7 @@
-from Level.game_scene import GameScene
+from Scenes.main_menu_scene import MainMenuScene
+from Scenes.race_scene import RaceScene
+from Scenes.high_score_scene import HighScoreScene
+from Scenes.car_selection_scene import CarSelectionScene
 
 
 class SceneManager:
@@ -26,10 +29,10 @@ class SceneManager:
     def create_scenes(self):
         # Create a static list of scenes based on the base class GameScene.
         scenes = {
-            GameScene(self, "Main menu", {}),
-            GameScene(self, "High scores", {}),
-            GameScene(self, "Race", {}),
-            GameScene(self, "Car selection", {})
+            MainMenuScene(self, {}),
+            HighScoreScene(self, {}),
+            RaceScene(self, {}),
+            CarSelectionScene(self, {}),
         }
         return scenes
 
