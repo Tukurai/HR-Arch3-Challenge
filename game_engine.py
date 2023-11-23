@@ -22,14 +22,15 @@ class GameEngine:
 
     def update(self, timedelta):
         self.input_state.update(
-            pygame.key.get_pressed(), pygame.mouse.get_pressed()
+            pygame.key.get_pressed(), 
+            pygame.mouse.get_pressed()
         )  # Update current states.
         self.scene_manager.update(timedelta, self.input_state)
 
     def draw(self):
         self.game.screen.fill((0, 0, 0))  # Fill the screen with black.
 
-        self.scene_manager.draw()  # Draw any scene related components.
+        self.scene_manager.draw(self.game.screen)  # Draw any scene related components.
 
         pygame.display.flip()  # Flip the display
 

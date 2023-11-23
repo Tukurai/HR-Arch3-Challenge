@@ -1,5 +1,5 @@
 class Component:
-    def __init__(self, component_name, sprite, x, y, width, height, rotation):
+    def __init__(self, component_name, sprite, x, y, width, height, rotation, depth):
         self.component_name = component_name
         self.sprite = sprite
         self.x = x
@@ -7,6 +7,7 @@ class Component:
         self.width = width
         self.height = height
         self.rotation = rotation
+        self.depth = depth
 
     def handle_events(self):
         print(
@@ -18,7 +19,7 @@ class Component:
             f"DEBUG: {self.component_name} triggered 'update({timedelta}, {input_state})'."
         )
 
-    def draw(self):
+    def draw(self, screen):
         print(
             f"DEBUG: {self.component_name} triggered 'draw()'."
         )
