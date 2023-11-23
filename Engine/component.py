@@ -9,17 +9,11 @@ class Component:
         self.rotation = rotation
         self.depth = depth
 
-    def handle_events(self):
-        print(
-            f"DEBUG: {self.component_name} triggered 'handle_events()'."
-        )
+    def handle_event(self, event):
+        pass
 
     def update(self, timedelta, input_state):
-        print(
-            f"DEBUG: {self.component_name} triggered 'update({timedelta}, {input_state})'."
-        )
+        pass
 
     def draw(self, screen):
-        print(
-            f"DEBUG: {self.component_name} triggered 'draw()'."
-        )
+        pass

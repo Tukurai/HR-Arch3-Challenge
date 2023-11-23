@@ -17,8 +17,8 @@ class GameEngine:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-        self.scene_manager.handle_events()
+            else:
+                self.scene_manager.handle_event(event)
 
     def update(self, timedelta):
         self.input_state.update(

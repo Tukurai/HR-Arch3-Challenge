@@ -4,25 +4,43 @@ import pygame
 
 class TextComponent(Component):
     def __init__(
-        self, component_name, text, sprite, x, y, width, height, rotation, depth
+        self,
+        component_name,
+        text,
+        font_size,
+        centered,
+        sprite,
+        x,
+        y,
+        width,
+        height,
+        rotation,
+        depth,
     ):
         super().__init__(component_name, sprite, x, y, width, height, rotation, depth)
         self.text = text
+        self.font_size = font_size
+        self.centered = centered
 
-    def handle_events(self):
-        print(f"DEBUG: {self.component_name} triggered 'handle_events()'.")
+    def handle_event(self, event):
+        pass
 
     def update(self, timedelta, input_state):
-        print(
-            f"DEBUG: {self.component_name} triggered 'update({timedelta}, {input_state})'."
-        )
+        pass
 
     def draw(self, screen):
         # Set up the font
-        font = pygame.font.Font(None, 36)
+        font = pygame.font.Font(None, self.font_size)
 
-        # Render the text
+        # Render the text, and center it
         rendered_text = font.render(self.text, True, (255, 255, 255))
+        drawX = self.x
+        drawY = self.y
+
+        if self.centered:
+            rendered_text_size = font.size(self.text)
+            drawX -= (rendered_text_size[0] / 2.0)
+            drawY -= (rendered_text_size[1] / 2.0)
 
         # Draw the text
-        screen.blit(rendered_text, self.x, self.y)
+        screen.blit(rendered_text, (drawX, drawY))

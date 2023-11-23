@@ -12,8 +12,8 @@ class SceneManager:
 
         self.active_scene = self.get_scene_by_name("Main menu")
 
-    def handle_events(self):
-        self.active_scene.handle_events()
+    def handle_event(self, event):
+        self.active_scene.handle_event(event)
 
     def update(self, timedelta, input_state):
         self.active_scene.update(timedelta, input_state)
@@ -31,11 +31,21 @@ class SceneManager:
         # Create a static list of scenes based on the base class GameScene.
         scenes = {
             MainMenuScene(self, [
-                TextComponent("Logo", "Fantastic Race Game", None, 200, 60, 0, 0, 0, 1.00)
+                TextComponent("Header", "Fantastic Race Game", 36, True, None, 400, 60, 0, 0, 0, 1.00),
+                TextComponent("Instruction", "Press Enter to play", 24, True, None, 400, 500, 0, 0, 0, 1.00)
             ]),
-            HighScoreScene(self, {}),
-            RaceScene(self, {}),
-            CarSelectionScene(self, {}),
+            CarSelectionScene(self,  [
+                TextComponent("Header", "Select a car", 36, True, None, 400, 60, 0, 0, 0, 1.00),
+                TextComponent("Instruction", "Press 1, 2, 3 or 4 to choose", 24, True, None, 400, 500, 0, 0, 0, 1.00)
+            ]),
+            RaceScene(self,  [
+                TextComponent("Header", "Race", 36, True, None, 400, 60, 0, 0, 0, 1.00),
+                TextComponent("Instruction", "Use W, A, S, D to control your car", 24, True, None, 400, 500, 0, 0, 0, 1.00)
+            ]),
+            HighScoreScene(self,  [
+                TextComponent("Header", "High Scores", 36, True, None, 400, 60, 0, 0, 0, 1.00),
+                TextComponent("Instruction", "Press Enter to to back to the main menu", 24, True, None, 400, 500, 0, 0, 0, 1.00)
+            ]),
         }
         return scenes
 

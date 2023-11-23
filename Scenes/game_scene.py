@@ -4,9 +4,9 @@ class GameScene:
         self.scene_name = scene_name
         self.components = components
 
-    def handle_events(self):
+    def handle_event(self, event):
         for component in self.components:
-            component.handle_events()
+            component.handle_event(event)
 
     def update(self, timedelta, input_state):
         for component in self.components:
