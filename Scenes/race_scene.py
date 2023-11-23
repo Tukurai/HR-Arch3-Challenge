@@ -8,14 +8,12 @@ class RaceScene(GameScene):
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
-            if (
-                event.key == pygame.K_w
-                or event.key == pygame.K_a
-                or event.key == pygame.K_s
-                or event.key == pygame.K_d
-            ):
+            if event.key == pygame.K_SPACE:
                 self.scene_manager.set_active_scene(
                     self.scene_manager.get_scene_by_name("High score")
                 )
+        
+        for component in self.components:
+            component.handle_event(event)
 
         return super().handle_event(event)
