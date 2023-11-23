@@ -3,10 +3,23 @@ import xml.etree.ElementTree as ET
 
 
 class Spritesheet:
-    def __init__(self, filename):
+    def __init__(self, filename, mask_layer_amount=0):
         self.file_name = filename
-        self.sprite_sheet = pygame.image.load(filename).convert()
+        self.sprite_sheet = self.load_sprite_sheet(filename)
+        self.mask_layers = self.load_mask_layers(mask_layer_amount)
         self.sprite_atlas = self.load_atlas()
+
+    def load_sprite_sheet(self, filename):
+        print(f"Loaded [Spritesheet]:  {filename}")
+        return pygame.image.load(filename).convert()
+
+    def load_mask_layers(self, mask_layers_amount=1) -> dict[int, pygame.Surface]:
+        mask_layers = {}
+        for layer in range(mask_layers_amount):
+            mask_file_name = ".." + self.file_name.split('.')[-2] + f"_mask{layer}.png"
+            mask_layers[layer] = pygame.image.load(mask_file_name).convert()
+            print(f"Loaded [Mask Layer] :  {mask_file_name}")
+        return mask_layers
 
     def load_atlas(self) -> dict:
         # Atlas XML has same base name as spritesheet
@@ -29,17 +42,25 @@ class Spritesheet:
                            'h': height}
         return atlas
 
-    def extract_sprite(self, x, y, w, h):
+    def create_sprite_from_sheet(self, x, y, w, h, sheet):
         sprite = pygame.Surface((w, h))
         sprite.set_colorkey((0, 0, 0))
-        sprite.blit(self.sprite_sheet, (0, 0), (x, y, w, h))
+        sprite.blit(sheet, (0, 0), (x, y, w, h))
         return sprite
 
     def get_sprite(self, name):
-        sprite = self.sprite_atlas[name]
-        x, y, w, h = sprite["x"], sprite["y"], sprite["w"], sprite["h"]
-        image = self.extract_sprite(x, y, w, h)
+        x, y, w, h = self.find_sprite_coordinates(name)
+        image = self.create_sprite_from_sheet(x, y, w, h, self.sprite_sheet)
         return image
+
+    def get_mask_from_layer(self, name, mask_layer):
+        x, y, w, h = self.find_sprite_coordinates(name)
+        mask = self.create_sprite_from_sheet(x, y, w, h, self.mask_layers[mask_layer])
+        return mask
+
+    def find_sprite_coordinates(self, name):
+        sprite_cords = self.sprite_atlas[name]
+        return sprite_cords["x"], sprite_cords["y"], sprite_cords["w"], sprite_cords["h"]
 
 
 if __name__ == '__main__':
@@ -51,7 +72,8 @@ if __name__ == '__main__':
     pygame.display.set_caption("Asphalt Carousel")
     running = True
 
-    loaded_spritesheet = Spritesheet('../Assets/Sprites/spritesheet_tiles.png')
+    loaded_spritesheet = Spritesheet('../Assets/Sprites/spritesheet_tiles.png',
+                                     mask_layer_amount=1)
     names = ['road_asphalt01.png',
              'road_asphalt02.png',
              'road_asphalt03.png',
@@ -148,15 +170,18 @@ if __name__ == '__main__':
     for name in names:
         asphalt_road_sprites.append(loaded_spritesheet.get_sprite(name))
 
+    # Populate masks
+    asphalt_road_masks = []
+    for name in names:
+        asphalt_road_masks.append(loaded_spritesheet.get_mask_from_layer(name, 0))
+
     index = 0
 
     # --------- Text properties
     # Font and size
     font = pygame.font.Font(None, 56)
     # Color
-    text_color = (0, 0, 0)
-
-
+    text_color = (255, 255, 255)
 
     while running:
         for event in pygame.event.get():
@@ -169,16 +194,18 @@ if __name__ == '__main__':
                     index = (index - 1) % len(asphalt_road_sprites)
 
         # Make white background
-        canvas.fill((255, 255, 255))
+        canvas.fill((0, 0, 0))
         # Place road sprite
         canvas.blit(asphalt_road_sprites[index], (50, DISPLAY_H - 200))
+        # Place road sprite
+        canvas.blit(asphalt_road_masks[index], (200, DISPLAY_H - 200))
 
         # Get text and render it
         name_text_surface = font.render(names[index], True, text_color)
         instruction_text_surface = font.render("Press spacebar to check names",
                                                True, text_color)
         # Place text on canvas
-        canvas.blit(name_text_surface, (250, 100))
+        canvas.blit(name_text_surface, (370, 100))
         canvas.blit(instruction_text_surface, (50, 250))
 
         window.blit(canvas, (0, 0))
