@@ -9,8 +9,8 @@ def main():
     clock = pygame.time.Clock()
     sound_manager = SoundManager()
 
-    sound_manager.play_music(0)
-    sound_manager.play_sfx(0)
+    sound_manager.play_music("mainmenu.wav")
+    sound_manager.play_sfx("augh.wav")
     sound_manager.volume(-0.9)
 
     print(f"Current volume: {sound_manager.volume()}")
@@ -23,23 +23,20 @@ def main():
 
 
 class SoundManager(object):
-    assets_dir = os.path.abspath(os.path.join(
-        os.getcwd(), os.pardir)) + "\Assets"
+    def __init__(self):
+        # Setup assets folder path and init sound libraries
+        current_path = os.path.dirname(os.path.dirname(__file__))
 
-    # Creates object if it does not exist. Else returns instance.
-    def __new__(cls):
-        if not hasattr(cls, "instance"):
-            cls.instance = super(SoundManager, cls).__new__(cls)
+        # Init the sound libraries
+        self.libraries = self.init_libraries(
+            os.path.join(current_path, "Assets")
+        )
+        self.sfx_library = self.libraries[0]
+        self.music_library = self.libraries[1]
 
-            cls.mixer = pygame.mixer.init()
+        self.mixer = pygame.mixer.init()
 
-            libraries = cls.init_libraries(cls)
-            cls.sfx_library = libraries[0]
-            cls.music_library = libraries[1]
-
-        return cls.instance
-
-    def init_libraries(cls):
+    def init_libraries(self, assets_dir):
         '''
         Init the sound libraries\n
         Uses the \Assets\Music and \Assets\SFX folders!
@@ -48,10 +45,10 @@ class SoundManager(object):
         sfx_library = {}
         music_library = {}
 
-        # Paths for asset folders
+        # Paths for sound folders
         paths = {
-            "sfx": cls.assets_dir + "\SFX\\",
-            "music": cls.assets_dir + "\Music\\"
+            "sfx": os.path.join(assets_dir, "SFX"),
+            "music": os.path.join(assets_dir, "Music")
         }
 
         for key, value in paths.items():
@@ -60,31 +57,39 @@ class SoundManager(object):
                 os.chdir(value)
 
                 # Add all wav files in sfx folder to dict
-                index = 0
                 for file in glob.glob("*.wav"):
                     if key == "sfx":
-                        sfx_library[index] = pygame.mixer.Sound(file)
+                        sfx_library[file] = pygame.mixer.Sound(file)
                     else:
-                        music_library[index] = file
-
-                    index += 1
+                        music_library[file] = file
 
         return sfx_library, music_library
 
-    def play_sfx(cls, id: int):
+
+    # TODO: Implement the sound channels n stuff :)
+
+    def play_sfx(self, id: int):
         '''
         Play a sound effect
         '''
-        pygame.mixer.Sound.play(cls.sfx_library[id])
+        pygame.mixer.Sound.play(self.sfx_library[id])
 
-    def play_music(cls, id: int, loops=-1, start=0.0, fade_ms=0):
+    def pause_sfx(self):
+        '''
+        Pause a sound effect
+        '''
+
+    def play_music(self, id: int, loops=-1, start=0.0, fade_ms=0):
         '''
         Loads and starts the music\n
         '''
-        pygame.mixer.music.load(cls.music_library[id])
+        pygame.mixer.music.load(self.music_library[id])
         pygame.mixer.music.play(loops, start, fade_ms)
 
-    def volume(cls, amount=0):
+    def pause_all(self):
+        pygame.mixer.pause()
+
+    def volume(self, amount=0):
         '''
         amount 0 will get the current volume\n
         higher or lower will also change the current volume
@@ -102,7 +107,7 @@ class SoundManager(object):
     # List of 3 sound files: rev_up, steady(repeatable) and rev_down.
     # Returns the assigned mixer track:
 
-    def play_car_sound(cls, sound_files: list):
+    def play_car_sound(self, sound_files: list):
         ...
 
 
