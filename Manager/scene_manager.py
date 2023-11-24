@@ -9,10 +9,11 @@ from Scenes.car_selection_scene import CarSelectionScene
 
 
 class SceneManager:
-    def __init__(self, sound_manager):
-        self.scenes = self.create_scenes()
+    def __init__(self, sound_manager, sprite_manager):
         self.sound_manager = sound_manager
+        self.sprite_manager = sprite_manager
 
+        self.scenes = self.create_scenes()
         self.active_scene = self.get_scene_by_name("Main menu")
 
     def handle_event(self, event):
@@ -44,7 +45,7 @@ class SceneManager:
                         36,
                         True,
                         None,
-                        400,
+                        768,
                         60,
                         0,
                         0,
@@ -57,8 +58,8 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        400,
-                        500,
+                        768,
+                        1080,
                         0,
                         0,
                         0,
@@ -70,7 +71,7 @@ class SceneManager:
                 self,
                 [
                     TextComponent(
-                        "Header", "Select a car", 36, True, None, 400, 60, 0, 0, 0, 1.00
+                        "Header", "Select a car", 36, True, None, 768, 60, 0, 0, 0, 1.00
                     ),
                     TextComponent(
                         "Instruction",
@@ -78,8 +79,8 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        400,
-                        500,
+                        768,
+                        1080,
                         0,
                         0,
                         0,
@@ -91,7 +92,7 @@ class SceneManager:
                 self,
                 [
                     TextComponent(
-                        "Header", "Race", 36, True, None, 400, 60, 0, 0, 0, 1.00
+                        "Header", "Race", 36, True, None, 768, 60, 0, 0, 0, 1.00
                     ),
                     TextComponent(
                         "Instruction",
@@ -99,8 +100,8 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        400,
-                        500,
+                        768,
+                        1080,
                         0,
                         0,
                         0,
@@ -116,11 +117,9 @@ class SceneManager:
                         },
                         180,
                         "Player Car",
-                        None,
-                        400,
+                        self.sprite_manager.game_object_library['Cars']['car_black_1.png'],
+                        768,
                         250,
-                        40,
-                        80,
                         0,
                         1.10,
                     ),
@@ -130,7 +129,7 @@ class SceneManager:
                 self,
                 [
                     TextComponent(
-                        "Header", "High Scores", 36, True, None, 400, 60, 0, 0, 0, 1.00
+                        "Header", "High Scores", 36, True, None, 768, 60, 0, 0, 0, 1.00
                     ),
                     TextComponent(
                         "Instruction",
@@ -138,8 +137,8 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        400,
-                        500,
+                        768,
+                        1080,
                         0,
                         0,
                         0,

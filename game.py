@@ -5,7 +5,7 @@ import pygame
 class RacingGame:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((800, 600))
+        self.screen = pygame.display.set_mode((1536, 1280))
         pygame.display.set_caption("Racing Game")
         self.clock = pygame.time.Clock()
         self.game_engine = GameEngine(self)

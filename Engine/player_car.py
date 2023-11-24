@@ -12,16 +12,14 @@ class PlayerCar(Car):
         controls,
         max_speed,
         component_name,
-        sprite,
+        full_sprite,
         x,
         y,
-        width,
-        height,
         rotation,
         depth,
     ):
         super().__init__(
-            max_speed, component_name, sprite, x, y, width, height, rotation, depth
+            max_speed, component_name, full_sprite, x, y, rotation, depth
         )
         self.player_name = player_name
         self.controls = controls
@@ -45,12 +43,6 @@ class PlayerCar(Car):
         self.move(timedelta)
 
     def draw(self, screen):
-        # Create a Surface for the car
-        self.sprite = pygame.Surface((self.width, self.height))
-
-        # Fill the Surface with a color (in this case, red)
-        self.sprite.fill((255, 0, 0))
-
         # Create a new surface with the car image, rotated
         rotated_car = pygame.transform.rotate(self.sprite, -self.rotation)
 

@@ -1,5 +1,7 @@
 import sys
 from Manager.scene_manager import SceneManager
+from Manager.sound_manager import SoundManager
+from Manager.sprite_manager import SpriteManager
 from Engine.input_state import InputState
 import pygame
 
@@ -10,7 +12,9 @@ class GameEngine:
         self.input_state = InputState(
             None, pygame.key.get_pressed(), None, pygame.mouse.get_pressed()
         )
-        self.scene_manager = SceneManager(sound_manager=None)
+        self.scene_manager = SceneManager(
+            sound_manager=SoundManager(), sprite_manager=SpriteManager()
+        )
 
     def handle_events(self):
         for event in pygame.event.get():  # Handle the close window event.
@@ -22,8 +26,7 @@ class GameEngine:
 
     def update(self, timedelta):
         self.input_state.update(
-            pygame.key.get_pressed(), 
-            pygame.mouse.get_pressed()
+            pygame.key.get_pressed(), pygame.mouse.get_pressed()
         )  # Update current states.
         self.scene_manager.update(timedelta, self.input_state)
 
