@@ -4,6 +4,7 @@ import pygame
 
 
 def main():
+    # For testing:
     pygame.init()
     clock = pygame.time.Clock()
     sound_manager = SoundManager()
@@ -47,7 +48,7 @@ class SoundManager(object):
         sfx_library = {}
         music_library = {}
 
-        # Paths for the folders
+        # Paths for asset folders
         paths = {
             "sfx": cls.assets_dir + "\SFX\\",
             "music": cls.assets_dir + "\Music\\"
@@ -76,18 +77,12 @@ class SoundManager(object):
         '''
         pygame.mixer.Sound.play(cls.sfx_library[id])
 
-    def play_music(cls, id: int, loops=-1, start=0.0, fade_ms=0, action="start"):
+    def play_music(cls, id: int, loops=-1, start=0.0, fade_ms=0):
         '''
-        start, pause or stop the music\n
-        loops=-1 infinitly loops the music, other amounts will loop the given amount
+        Loads and starts the music\n
         '''
-        if action == "start":
-            pygame.mixer.music.load(cls.music_library[id])
-            pygame.mixer.music.play(loops, start, fade_ms)
-        elif action == "pause":
-            pygame.mixer.music.pause()
-        else:
-            pygame.mixer.music.stop()
+        pygame.mixer.music.load(cls.music_library[id])
+        pygame.mixer.music.play(loops, start, fade_ms)
 
     def volume(cls, amount=0):
         '''
@@ -100,7 +95,15 @@ class SoundManager(object):
             return current_vol
         else:
             pygame.mixer.music.set_volume(current_vol + amount)
-            return pygame.mixer.music.get_volume
+            return pygame.mixer.music.get_volume()
+
+    # TODO: Add method for car sounds
+    # Function assigns car sound sequence to any free mixer track
+    # List of 3 sound files: rev_up, steady(repeatable) and rev_down.
+    # Returns the assigned mixer track:
+
+    def play_car_sound(cls, sound_files: list):
+        ...
 
 
 if __name__ == "__main__":
