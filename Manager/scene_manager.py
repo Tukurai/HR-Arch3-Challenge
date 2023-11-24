@@ -1,7 +1,4 @@
-import pygame
-from Engine.player_car import PlayerCar
 from Engine.text_component import TextComponent
-from Enums.direction import Direction
 from Scenes.main_menu_scene import MainMenuScene
 from Scenes.race_scene import RaceScene
 from Scenes.high_score_scene import HighScoreScene
@@ -75,7 +72,7 @@ class SceneManager:
                     ),
                     TextComponent(
                         "Instruction",
-                        "Press 1, 2, 3 or 4 to choose",
+                        "Press 1, 2, 3, 4 or 5 to choose",
                         24,
                         True,
                         None,
@@ -106,22 +103,6 @@ class SceneManager:
                         0,
                         0,
                         1.00,
-                    ),
-                    PlayerCar(
-                        "Player",
-                        {
-                            pygame.K_w: Direction.UP,
-                            pygame.K_a: Direction.LEFT,
-                            pygame.K_s: Direction.DOWN,
-                            pygame.K_d: Direction.RIGHT,
-                        },
-                        180,
-                        "Player Car",
-                        self.sprite_manager.game_object_library['Cars']['car_black_1.png'],
-                        768,
-                        250,
-                        0,
-                        1.10,
                     ),
                 ],
             ),
