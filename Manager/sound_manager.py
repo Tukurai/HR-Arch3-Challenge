@@ -1,5 +1,6 @@
 import glob
 import os
+import time
 import pygame
 
 
@@ -11,19 +12,38 @@ def main():
 
     sound_manager.play_music("mainmenu.wav")
     sound_manager.play_sfx("augh.wav")
-    sound_manager.volume(-0.9)
 
-    print(f"Current volume: {sound_manager.volume()}")
+
 
     while True:
         for event in pygame.event.get():
+            speed = 0.0
+            max_speed = 1.0
+
+            car_sounds = ["car1_rev_up", "car1_driving", "car1_rev_down", "car1_idle"]
+
+            # ??????????????????????????????????????????
+            if event.type == pygame.KEYDOWN:
+                print("A key has been pressed!")
+                if event.key == pygame.K_UP:
+                    if speed < max_speed:
+                        speed += 0.01
+                    print("UP")
+                    sound_manager.play_car_sound(speed, max_speed, car_sounds)
+                else:
+                    if speed > 0:
+                        speed -= 0.01
+
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
 
-class SoundManager(object):
-    def __init__(self):
+class SoundManager():
+    def __init__(self, channels=10):
+        '''
+        Init the sound manager with the amount of mixer channels (10 default)
+        '''
         # Setup assets folder path and init sound libraries
         current_path = os.path.dirname(os.path.dirname(__file__))
 
@@ -35,6 +55,7 @@ class SoundManager(object):
         self.music_library = self.libraries[1]
 
         self.mixer = pygame.mixer.init()
+        pygame.mixer.set_num_channels(channels)
 
     def init_libraries(self, assets_dir):
         '''
@@ -65,31 +86,63 @@ class SoundManager(object):
 
         return sfx_library, music_library
 
-
-    # TODO: Implement the sound channels n stuff :)
-
-    def play_sfx(self, id: int):
+    def play_sfx(self, sfx_file: str):
         '''
-        Play a sound effect
+        Play a sound effect on an available channel
         '''
-        pygame.mixer.Sound.play(self.sfx_library[id])
+        self.sfx_library[sfx_file].play()
 
-    def pause_sfx(self):
+    def pause_sfx(self, sfx_file: str):
         '''
         Pause a sound effect
         '''
+        self.sfx_library[sfx_file].pause()
 
-    def play_music(self, id: int, loops=-1, start=0.0, fade_ms=0):
+    def stop_sfx(self, sfx_file: str):
         '''
-        Loads and starts the music\n
+        Stop a sound effect
         '''
-        pygame.mixer.music.load(self.music_library[id])
+        self.sfx_library[sfx_file].stop()
+
+    def volume_sfx(self, sfx_file: str, amount=0):
+        '''
+        amount 0 will get the current volume\n
+        higher or lower will also change the current volume
+        '''
+        current_vol = self.sfx_library[sfx_file].get_volume()
+
+        if amount == 0:
+            return current_vol
+        else:
+            self.sfx_library[sfx_file].set_volume(current_vol + amount)
+            return self.sfx_library[sfx_file].get_volume()
+
+    def play_music(self, sound_file: str, loops=-1, start=0.0, fade_ms=0):
+        '''
+        Loads and starts the music
+        '''
+        pygame.mixer.music.load(self.music_library[sound_file])
         pygame.mixer.music.play(loops, start, fade_ms)
 
-    def pause_all(self):
-        pygame.mixer.pause()
+    def pause_music(self):
+        '''
+        Pauses the music
+        '''
+        pygame.mixer.music.pause()
 
-    def volume(self, amount=0):
+    def stop_music(self):
+        '''
+        Stops the music
+        '''
+        pygame.mixer.music.stop()
+
+    def queue_music(self, sound_file: str):
+        '''
+        Queues music to be played after the current playing music has ended
+        '''
+        pygame.mixer.music.queue(sound_file)
+
+    def volume_music(self, amount=0):
         '''
         amount 0 will get the current volume\n
         higher or lower will also change the current volume
@@ -102,13 +155,52 @@ class SoundManager(object):
             pygame.mixer.music.set_volume(current_vol + amount)
             return pygame.mixer.music.get_volume()
 
+    def pause_all(self):
+        '''
+        Pauses all sound playback (mixer and music)
+        '''
+        pygame.mixer.pause()
+        pygame.mixer.music.pause()
+
+    def resume_all(self):
+        '''
+        Resumes all sound playback (mixer and music)
+        '''
+        pygame.mixer.unpause()
+        pygame.mixer.music.unpause()
+
+
+
     # TODO: Add method for car sounds
     # Function assigns car sound sequence to any free mixer track
     # List of 3 sound files: rev_up, steady(repeatable) and rev_down.
     # Returns the assigned mixer track:
 
-    def play_car_sound(self, sound_files: list):
-        ...
+    def play_car_sound(self, speed, max_speed, sound_files: list):
+        rev_up = self.sfx_library[sound_files[0]]
+        driving = self.sfx_library[sound_files[1]]
+        rev_down = self.sfx_library[sound_files[2]]
+        idle = self.sfx_library[sound_files[3]]
+
+        if speed == 0 and idle.get_num_channels() == 0:
+            self.stop_car_sound(sound_files)
+            idle.play(-1)
+        elif 0 < speed < max_speed and rev_up.get_num_channels() == 0:
+            self.stop_car_sound(sound_files)
+            rev_up.play()
+        elif speed == max_speed and driving.get_num_channels() == 0:
+            self.stop_car_sound(sound_files)
+            driving.play(-1)
+        elif 0 < speed < max_speed and driving.get_num_channels() == 1:
+            self.stop_car_sound(sound_files)
+            rev_down.play()
+
+    def stop_car_sound(self, sound_files: list):
+        for file in sound_files:
+            self.sfx_library[file].stop()
+
+            
+
 
 
 if __name__ == "__main__":
