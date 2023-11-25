@@ -55,6 +55,13 @@ class Spritesheet:
         mask = self.create_sprite_from_sheet(x, y, w, h, self.mask_layers[mask_layer])
         return mask
 
+    def get_mask_from_all_layers(self, name) -> dict:
+        masks = {}
+        if len(self.mask_layers) > 0:
+            for layer in self.mask_layers:
+                masks[layer] = self.get_mask_from_layer(name, layer)
+        return masks
+
     def find_sprite_coordinates(self, name):
         sprite_cords = self.sprite_atlas[name]
         return (
@@ -201,7 +208,7 @@ if __name__ == "__main__":
         canvas.fill((0, 0, 0))
         # Place road sprite
         canvas.blit(asphalt_road_sprites[index], (50, DISPLAY_H - 200))
-        # Place road sprite
+        # Place mask sprite
         canvas.blit(asphalt_road_masks[index], (200, DISPLAY_H - 200))
 
         # Get text and render it
