@@ -1,3 +1,5 @@
+import pygame
+from Engine.component import Component
 from Engine.text_component import TextComponent
 from Scenes.main_menu_scene import MainMenuScene
 from Scenes.race_scene import RaceScene
@@ -6,9 +8,10 @@ from Scenes.car_selection_scene import CarSelectionScene
 
 
 class SceneManager:
-    def __init__(self, sound_manager, sprite_manager):
+    def __init__(self, sound_manager, sprite_manager, screen):
         self.sound_manager = sound_manager
         self.sprite_manager = sprite_manager
+        self.screen = screen
 
         self.scenes = self.create_scenes()
         self.active_scene = self.get_scene_by_name("Main menu")
@@ -42,8 +45,8 @@ class SceneManager:
                         36,
                         True,
                         None,
-                        768,
-                        60,
+                        self.screen.get_width() / 2,
+                        32,
                         0,
                         0,
                         0,
@@ -55,8 +58,8 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        768,
-                        1080,
+                        self.screen.get_width() / 2,
+                        self.screen.get_height() - 60,
                         0,
                         0,
                         0,
@@ -68,7 +71,17 @@ class SceneManager:
                 self,
                 [
                     TextComponent(
-                        "Header", "Select a car", 36, True, None, 768, 60, 0, 0, 0, 1.00
+                        "Header",
+                        "Select a car",
+                        36,
+                        True,
+                        None,
+                        self.screen.get_width() / 2,
+                        32,
+                        0,
+                        0,
+                        0,
+                        1.00,
                     ),
                     TextComponent(
                         "Instruction",
@@ -76,8 +89,8 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        768,
-                        1080,
+                        self.screen.get_width() / 2,
+                        self.screen.get_height() - 60,
                         0,
                         0,
                         0,
@@ -89,7 +102,17 @@ class SceneManager:
                 self,
                 [
                     TextComponent(
-                        "Header", "Race", 36, True, None, 768, 60, 0, 0, 0, 1.00
+                        "Header",
+                        "Race",
+                        36,
+                        True,
+                        None,
+                        self.screen.get_width() / 2,
+                        32,
+                        0,
+                        0,
+                        0,
+                        1.00,
                     ),
                     TextComponent(
                         "Instruction",
@@ -97,12 +120,23 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        768,
-                        1080,
+                        self.screen.get_width() / 2,
+                        self.screen.get_height() - 60,
                         0,
                         0,
                         0,
                         1.00,
+                    ),
+                    Component(
+                        "Level bounds",
+                        None,
+                        64,
+                        64,
+                        1792,
+                        896,
+                        0,
+                        0.10,
+                        color=(40, 40, 40),
                     ),
                 ],
             ),
@@ -110,7 +144,17 @@ class SceneManager:
                 self,
                 [
                     TextComponent(
-                        "Header", "High Scores", 36, True, None, 768, 60, 0, 0, 0, 1.00
+                        "Header",
+                        "High Scores",
+                        36,
+                        True,
+                        None,
+                        self.screen.get_width() / 2,
+                        32,
+                        0,
+                        0,
+                        0,
+                        1.00,
                     ),
                     TextComponent(
                         "Instruction",
@@ -118,8 +162,8 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        768,
-                        1080,
+                        self.screen.get_width() / 2,
+                        self.screen.get_height() - 60,
                         0,
                         0,
                         0,

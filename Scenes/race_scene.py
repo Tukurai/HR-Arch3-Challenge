@@ -14,16 +14,20 @@ class RaceScene(GameScene):
                 self.scene_manager.set_active_scene(
                     self.scene_manager.get_scene_by_name("High score")
                 )
-        
+
         for component in self.components:
             component.handle_event(event)
 
         return super().handle_event(event)
-    
+
     def add_player(self, player_car):
+        player_car.x = 960
+        player_car.y = 540
         self.players[player_car.player_name] = player_car
         self.components.append(player_car)
 
     def clear_race(self):
-        self.components = [component for component in self.components if not isinstance(component, Car)]   
+        self.components = [
+            component for component in self.components if not isinstance(component, Car)
+        ]
         self.players = {}

@@ -13,7 +13,9 @@ class GameEngine:
             None, pygame.key.get_pressed(), None, pygame.mouse.get_pressed()
         )
         self.scene_manager = SceneManager(
-            sound_manager=SoundManager(), sprite_manager=SpriteManager()
+            sound_manager=SoundManager(), 
+            sprite_manager=SpriteManager(),
+            screen=self.game.screen
         )
 
     def handle_events(self):
