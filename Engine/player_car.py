@@ -43,5 +43,3 @@ class PlayerCar(Car):
             self.handle_controls(Direction.LEFT)
         elif keys[self.reverse_controls[Direction.RIGHT]]:
             self.handle_controls(Direction.RIGHT)
-
-        self.move(timedelta)

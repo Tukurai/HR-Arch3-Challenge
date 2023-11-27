@@ -27,20 +27,11 @@ class Car(Component):
 
     def update(self, timedelta, input_state):
         self.apply_drag()  # Only do this if the car is not actively moving backward of forward.
-        
+
         self.move(timedelta)
 
     def draw(self, screen):
-        # Create a new surface with the car image, rotated
-        rotated_car = pygame.transform.rotate(self.sprite, -self.rotation)
-
-        # Calculate the new upper left corner position of the rotated car
-        rect = rotated_car.get_rect(
-            center=self.sprite.get_rect(topleft=(self.x, self.y)).center
-        )
-
-        # Draw the rotated car onto the window
-        screen.blit(rotated_car, rect.topleft)
+        super().draw(screen, rotation=-self.rotation)
 
     def handle_controls(self, direction):
         match (direction):
@@ -82,8 +73,8 @@ class Car(Component):
 
         # Update the position
         # TODO: Handle collision before we set the actual X and Y
-        if self.x + dx <= 1920-self.width and self.x + dx >= 0:
+        if self.x + dx <= 1920 - self.width and self.x + dx >= 0:
             self.x += dx
 
-        if self.y + dy <= 1080-self.height and self.y + dy >= 0:
+        if self.y + dy <= 1080 - self.height and self.y + dy >= 0:
             self.y += dy

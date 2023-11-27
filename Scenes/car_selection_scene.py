@@ -5,8 +5,8 @@ from Scenes.game_scene import GameScene
 
 
 class CarSelectionScene(GameScene):
-    def __init__(self, scene_manager, components):
-        super().__init__(scene_manager, "Car selection", components)
+    def __init__(self, scene_manager, sprite_manager, components):
+        super().__init__(scene_manager, sprite_manager, "Car selection", components)
         self.car_selection = self.get_car_selection()
 
     def handle_event(self, event):
@@ -35,7 +35,7 @@ class CarSelectionScene(GameScene):
                 180,
                 1.0,
                 "Player Car",
-                self.scene_manager.sprite_manager.sprites_by_name["Cars"]["car_black_1.png"],
+                self.scene_manager.sprite_manager.get_car("car_black_small_1.png"),
                 0,
                 0,
                 0,
@@ -52,7 +52,7 @@ class CarSelectionScene(GameScene):
                 240,
                 1.0,
                 "Player Car",
-                self.scene_manager.sprite_manager.sprites_by_name["Cars"]["car_red_1.png"],
+                self.scene_manager.sprite_manager.get_car("car_red_small_1.png"),
                 0,
                 0,
                 0,
@@ -69,7 +69,7 @@ class CarSelectionScene(GameScene):
                 220,
                 1.0,
                 "Player Car",
-                self.scene_manager.sprite_manager.sprites_by_name["Cars"]["car_yellow_1.png"],
+                self.scene_manager.sprite_manager.get_car("car_yellow_small_1.png"),
                 0,
                 0,
                 0,
@@ -86,7 +86,7 @@ class CarSelectionScene(GameScene):
                 160,
                 1.0,
                 "Player Car",
-                self.scene_manager.sprite_manager.sprites_by_name["Cars"]["car_green_1.png"],
+                self.scene_manager.sprite_manager.get_car("car_green_small_1.png"),
                 0,
                 0,
                 0,
@@ -103,7 +103,7 @@ class CarSelectionScene(GameScene):
                 280,
                 1.0,
                 "Player Car",
-                self.scene_manager.sprite_manager.sprites_by_name["Cars"]["car_blue_1.png"],
+                self.scene_manager.sprite_manager.get_car("car_blue_small_1.png"),
                 0,
                 0,
                 0,

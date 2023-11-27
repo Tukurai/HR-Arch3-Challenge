@@ -38,6 +38,7 @@ class SceneManager:
         scenes = {
             MainMenuScene(
                 self,
+                self.sprite_manager,
                 [
                     TextComponent(
                         "Header",
@@ -69,6 +70,7 @@ class SceneManager:
             ),
             CarSelectionScene(
                 self,
+                self.sprite_manager,
                 [
                     TextComponent(
                         "Header",
@@ -100,6 +102,7 @@ class SceneManager:
             ),
             RaceScene(
                 self,
+                self.sprite_manager,
                 [
                     TextComponent(
                         "Header",
@@ -127,21 +130,11 @@ class SceneManager:
                         0,
                         1.00,
                     ),
-                    Component(
-                        "Level bounds",
-                        None,
-                        64,
-                        64,
-                        1792,
-                        896,
-                        0,
-                        0.10,
-                        color=(40, 40, 40),
-                    ),
                 ],
             ),
             HighScoreScene(
                 self,
+                self.sprite_manager,
                 [
                     TextComponent(
                         "Header",

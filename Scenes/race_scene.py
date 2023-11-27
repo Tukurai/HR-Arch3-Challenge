@@ -1,15 +1,17 @@
+import pygame
+from Engine.component import Component
 from Manager.collision_manager import CollisionManager
 from Manager.level_manager import LevelManager
-import pygame
 from Engine.car import Car
 from Scenes.game_scene import GameScene
+from Settings import settings
 
 
 class RaceScene(GameScene):
-    def __init__(self, scene_manager, components):
-        super().__init__(scene_manager, "Race", components)
-        self.level_manager = LevelManager()
-        self.collision_manager = CollisionManager()
+    def __init__(self, scene_manager, sprite_manager, components):
+        super().__init__(scene_manager, sprite_manager, "Race", components)
+        self.level_manager = LevelManager(sprite_manager)
+        self.collision_manager = CollisionManager(scene_manager.screen)
         self.players = {}
 
         self.set_level("testmap")
@@ -31,14 +33,52 @@ class RaceScene(GameScene):
             component.update(timedelta, input_state)
 
     def draw(self, screen):
+        empty_tile = Component("Empty tile",None,0,0,128,128,0,0.3,(40,40,40))
+
+        row_index = 0
+        for tilerow in self.level["Roads"]:
+            column_index = 0
+            for tile in tilerow:
+                if tile is not None:
+                    tile.draw(
+                        screen,
+                        (settings.TILE_SIZE * settings.GAME_SCALE * column_index)
+                        + settings.TRACK_OFFSET,
+                        (settings.TILE_SIZE * settings.GAME_SCALE * row_index)
+                        + settings.TRACK_OFFSET,
+                    )
+                else:
+                    empty_tile.draw(
+                        screen,
+                        (settings.TILE_SIZE * settings.GAME_SCALE * column_index)
+                        + settings.TRACK_OFFSET,
+                        (settings.TILE_SIZE * settings.GAME_SCALE * row_index)
+                        + settings.TRACK_OFFSET,
+                    )
+                column_index += 1
+            row_index += 1
+            column_index = 0
+        row_index = 0
+
+        row_index = 0
+        for tilerow in self.level["Objects"]:
+            column_index = 0
+            for object in tilerow:
+                if object is not None:
+                    object.draw(
+                        screen,
+                        (settings.TILE_SIZE * settings.GAME_SCALE * column_index)
+                        + settings.TRACK_OFFSET,
+                        (settings.TILE_SIZE * settings.GAME_SCALE * row_index)
+                        + settings.TRACK_OFFSET,
+                    )
+                column_index += 1
+            row_index += 1
+            column_index = 0
+        row_index = 0
+
         for component in self.components:
             component.draw(screen)
-        
-        for tile in self.level['Roads']:
-            tile.draw(screen)
-        
-        for object in self.level['Objects']:
-            object.draw(screen)
 
     def set_level(self, level_name):
         self.level = self.level_manager.get_level(level_name)

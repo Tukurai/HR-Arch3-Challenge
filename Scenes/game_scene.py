@@ -1,6 +1,7 @@
 class GameScene:
-    def __init__(self, scene_manager, scene_name, components):
+    def __init__(self, scene_manager, sprite_manager, scene_name, components):
         self.scene_manager = scene_manager
+        self.sprite_manager = sprite_manager
         self.scene_name = scene_name
         self.components = components
 

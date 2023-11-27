@@ -1,7 +1,7 @@
 import os
 from typing import Union
-from Engine.component import Component
 import pygame
+from Engine.component import Component
 from Engine.spritesheet import Spritesheet
 
 
