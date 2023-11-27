@@ -1,3 +1,10 @@
+"""
+This dict represents the relative scale of the items in the "Objects" spritesheet.
+Without change, these are not on the same scale as the other spritesheets.
+By setting these 'relative' scales, we gain control over how they are scaled
+relative to the tiles, which in turn are scaled to the 'game scale'.
+"""
+
 SCALES = {
     "arrow_white.png": 0.6,
     "arrow_yellow.png": 0.6,
