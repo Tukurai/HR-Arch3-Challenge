@@ -51,7 +51,7 @@ class Component:
         sprite_to_draw = self.sprite
         if 1.0 != object_scale:
             sprite_to_draw = pygame.transform.scale_by(
-                sprite_to_draw, settings.GAME_SCALE
+                sprite_to_draw, object_scale
             )
         
         if rotation is not None:
