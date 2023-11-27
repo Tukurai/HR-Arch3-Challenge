@@ -88,6 +88,12 @@ class SoundManager():
                         sfx_library[file] = pygame.mixer.Sound(file)
                     else:
                         music_library[file] = file
+                
+                for file in glob.glob("*.ogg"):
+                    if key == "sfx":
+                        sfx_library[file] = pygame.mixer.Sound(file)
+                    else:
+                        music_library[file] = file
 
         return sfx_library, music_library
 
