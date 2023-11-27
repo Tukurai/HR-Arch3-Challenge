@@ -2,6 +2,7 @@ import math
 import pygame
 from Engine.component import Component
 from Enums.direction import Direction
+from Settings import settings
 
 
 class Car(Component):
@@ -17,6 +18,7 @@ class Car(Component):
             full_sprite.height,
             rotation,
             depth,
+            scale=settings.CAR_SCALE,
         )
         self.max_speed = max_speed
         self.current_speed = 0
@@ -31,7 +33,7 @@ class Car(Component):
         self.move(timedelta)
 
     def draw(self, screen):
-        super().draw(screen, rotation=-self.rotation)
+        super().draw(screen, rotation=-self.rotation, scale=self.scale)
 
     def handle_controls(self, direction):
         match (direction):

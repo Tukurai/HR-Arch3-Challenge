@@ -36,7 +36,7 @@ class RaceScene(GameScene):
         empty_tile = Component("Empty tile",None,0,0,128,128,0,0.3,(40,40,40))
 
         row_index = 0
-        for tilerow in self.level["Roads"]:
+        for tilerow in self.level["Ground"]:
             column_index = 0
             for tile in tilerow:
                 if tile is not None:
@@ -47,8 +47,16 @@ class RaceScene(GameScene):
                         (settings.TILE_SIZE * settings.GAME_SCALE * row_index)
                         + settings.TRACK_OFFSET,
                     )
-                else:
-                    empty_tile.draw(
+                column_index += 1
+            row_index += 1
+            column_index = 0
+        row_index = 0
+
+        for tilerow in self.level["Roads"]:
+            column_index = 0
+            for tile in tilerow:
+                if tile is not None:
+                    tile.draw(
                         screen,
                         (settings.TILE_SIZE * settings.GAME_SCALE * column_index)
                         + settings.TRACK_OFFSET,

@@ -5,7 +5,7 @@ from Settings import settings
 
 class Component:
     def __init__(
-        self, component_name, sprite, x, y, width, height, rotation, depth, color=None
+        self, component_name, sprite, x, y, width, height, rotation, depth, color=None, scale=None
     ):
         self.component_name = component_name
         self.sprite = sprite
@@ -15,6 +15,7 @@ class Component:
         self.height = height
         self.rotation = rotation
         self.depth = depth
+        self.scale = scale
         if color is not None and self.sprite is None:
             # Create a surface with dimensions 1792x896
             surface = pygame.Surface((width, height))
@@ -31,7 +32,7 @@ class Component:
     def update(self, timedelta, input_state):
         pass
 
-    def draw(self, screen, x=None, y=None, rotation=None):
+    def draw(self, screen, x=None, y=None, rotation=None, scale=None):
         drawx = self.x
         drawy = self.y
 
@@ -41,8 +42,14 @@ class Component:
         if y is not None:
             drawy = y
 
+        object_scale = settings.GAME_SCALE
+        if self.scale is not None:
+            object_scale = self.scale
+        if scale is not None:
+            object_scale = scale
+
         sprite_to_draw = self.sprite
-        if 1.0 != settings.GAME_SCALE:
+        if 1.0 != object_scale:
             sprite_to_draw = pygame.transform.scale_by(
                 sprite_to_draw, settings.GAME_SCALE
             )
