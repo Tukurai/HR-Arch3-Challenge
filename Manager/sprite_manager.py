@@ -40,7 +40,8 @@ class SpriteManager():
         current_path = os.path.dirname(os.path.dirname(__file__))
 
         self.cars_spritesheet = Spritesheet(
-            os.path.join(current_path, "Assets", "Sprites", "spritesheet_vehicles.png")
+            os.path.join(current_path, "Assets", "Sprites", "spritesheet_vehicles.png"),
+            mask_layer_amount=1
         )
         self.objects_spritesheet = Spritesheet(
             os.path.join(current_path, "Assets", "Sprites", "spritesheet_objects.png")
