@@ -20,7 +20,7 @@ class GameServer:
         asyncio.get_event_loop().run_forever()
 
 if __name__ == '__main__':
-    # Create a GameServer instance and start the server
+    # Create a Server instance and start the server
     game_server = GameServer()
     game_server.start_server()
     print("I swear I'm not blocking the main thread.")

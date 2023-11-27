@@ -3,7 +3,8 @@ import os
 import pygame
 from typing import Union
 
-from Manager.sprite_manager import SpriteManager, FullSpriteObject
+from Manager.sprite_manager import SpriteManager
+from Engine.full_sprite_object import FullSpriteObject
 
 
 class LevelManager():
@@ -39,7 +40,7 @@ class LevelManager():
             # Attention, the resulting level layer is "Ground" but receives
             # its tiles from "Roads".
             self.levels[map_name]['Ground'] = self.convert_id_array_to_objects(csv_map['Ground'],
-                                                                              "Roads")
+                                                                               "Roads")
             self.levels[map_name]['Roads'] = self.convert_id_array_to_objects(csv_map['Roads'],
                                                                               "Roads")
             self.levels[map_name]['Objects'] = self.convert_id_array_to_objects(csv_map['Objects'],
@@ -55,12 +56,10 @@ class LevelManager():
         layer_suffixes = ["_Ground.csv", "_Roads.csv", "_Objects.csv"]
         for file_name in os.listdir(self.level_path):
             for layer_name in layer_suffixes:
-                if layer_name in file_name :
+                if layer_name in file_name:
                     name = file_name.replace(layer_name, "")
                     if name not in file_names:
                         file_names.append(name)
-                else:
-                    print(f"Invalid file found: {file_name}")
         return file_names
 
     def convert_csv_to_id_array(self, map_name: str) -> dict:
