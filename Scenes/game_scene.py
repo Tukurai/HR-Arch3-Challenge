@@ -17,13 +17,12 @@ class GameScene:
         for component in self.components:
             component.draw(screen)
 
-    def scene_changed():
-        # If scene is not == "Race"
-        #   check if sound_manager is not playing current music:
-        #       play this music
-        #   else:
-        #       do nothing
-        pass
+    def scene_changed(self):
+        sound_manager = self.scene_manager.sound_manager
 
-    def play_music(self, name):
-        self.scene_manager.play_music(name)
+        if self.scene_name != "Race":
+            if sound_manager.current_playing_music == "":
+                sound_manager.play_music("mainmenu_3.wav")
+        else:
+            sound_manager.stop_music()
+            sound_manager.play_music("race.wav", volume=0.3)

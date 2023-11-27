@@ -59,6 +59,7 @@ class SoundManager():
         self.sfx_library = self.libraries[0]
         self.music_library = self.libraries[1]
 
+        self.current_playing_music = ""
         self.mixer = pygame.mixer.init()
         pygame.mixer.set_num_channels(channels)
 
@@ -128,12 +129,14 @@ class SoundManager():
             self.sfx_library[sfx_file].set_volume(current_vol + amount)
             return self.sfx_library[sfx_file].get_volume()
 
-    def play_music(self, sound_file: str, loops=-1, start=0.0, fade_ms=0):
+    def play_music(self, sound_file: str, loops=-1, start=0.0, fade_ms=0, volume=1.0):
         '''
         Loads and starts the music
         '''
         pygame.mixer.music.load(self.music_library[sound_file])
         pygame.mixer.music.play(loops, start, fade_ms)
+        pygame.mixer.music.set_volume(volume)
+        self.current_playing_music = sound_file
 
     def pause_music(self):
         '''
@@ -146,12 +149,7 @@ class SoundManager():
         Stops the music
         '''
         pygame.mixer.music.stop()
-
-    def queue_music(self, sound_file: str):
-        '''
-        Queues music to be played after the current playing music has ended
-        '''
-        pygame.mixer.music.queue(sound_file)
+        self.current_playing_music = ""
 
     def volume_music(self, amount=0):
         '''
