@@ -10,7 +10,8 @@ class FullSpriteObject(Component):
                  sprite: pygame.Surface,
                  width: int,
                  height: int,
-                 masks_layers: dict[int, pygame.Surface] = None):
+                 masks_layers: dict[int, pygame.Surface] = None,
+                 scale=None):
         super().__init__(
             component_name=file_name,
             sprite=sprite,
@@ -20,6 +21,7 @@ class FullSpriteObject(Component):
             height=height,
             rotation=0,
             depth=0.50,
+            scale=scale
         )
         self.mask_layers = masks_layers
         self.tile_id = tile_id
@@ -29,4 +31,5 @@ class FullSpriteObject(Component):
                 f"Amount of mask layers: {len(self.mask_layers)} --- "
                 f"Width: {self.width} --- "
                 f"Height: {self.height} --- "
-                f"Tile ID: {self.tile_id} --- ")
+                f"Tile ID: {self.tile_id} --- "
+                f"Scale: {self.scale}")

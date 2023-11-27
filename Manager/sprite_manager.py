@@ -3,6 +3,7 @@ import pygame
 from typing import Union
 from Engine.spritesheet import Spritesheet
 from Engine.full_sprite_object import FullSpriteObject
+from Settings.relative_scale import SCALES
 
 
 class SpriteManager:
@@ -55,12 +56,14 @@ class SpriteManager:
             height = atlas[file_name]['h']
             sprite = sprite_sheet.get_sprite(file_name)
             masks = sprite_sheet.get_mask_from_all_layers(file_name)
+            scale = SCALES.get(file_name)
 
             # Create the object
             sprite_object = FullSpriteObject(file_name,
                                              index + index_offset,
                                              sprite, width, height,
-                                             masks_layers=masks)
+                                             masks_layers=masks,
+                                             scale=scale)
 
             # Store it in two libraries, so we can look up by name and ID
             self.sprites_by_name[category][file_name] = sprite_object
