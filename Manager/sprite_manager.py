@@ -1,6 +1,6 @@
 import os
-from typing import Union
 import pygame
+from typing import Union
 from Engine.component import Component
 from Engine.spritesheet import Spritesheet
 
