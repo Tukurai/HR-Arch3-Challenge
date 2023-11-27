@@ -107,3 +107,4 @@ if __name__ == '__main__':
 
     manager = LevelManager(SpriteManager())
     level = manager.get_level("testmap")
+    print(level)
