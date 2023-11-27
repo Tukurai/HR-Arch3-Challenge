@@ -27,6 +27,7 @@ class SceneManager:
 
     def set_active_scene(self, scene):
         self.active_scene = scene
+        self.active_scene.scene_changed()
 
     def get_scene_by_name(self, scene_name):
         return next(
