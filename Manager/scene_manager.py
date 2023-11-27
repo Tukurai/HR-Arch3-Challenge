@@ -14,7 +14,7 @@ class SceneManager:
         self.screen = screen
 
         self.scenes = self.create_scenes()
-        self.active_scene = self.get_scene_by_name("Main menu")
+        self.set_active_scene(self.get_scene_by_name("Main menu"))
 
     def handle_event(self, event):
         self.active_scene.handle_event(event)
