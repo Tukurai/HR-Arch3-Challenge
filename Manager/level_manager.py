@@ -36,6 +36,10 @@ class LevelManager():
             print(f"Loading [Level] : {map_name}")
             csv_map = self.convert_csv_to_id_array(map_name)
             self.levels[map_name] = {}
+            # Attention, the resulting level layer is "Ground" but receives
+            # its tiles from "Roads".
+            self.levels[map_name]['Ground'] = self.convert_id_array_to_objects(csv_map['Ground'],
+                                                                              "Roads")
             self.levels[map_name]['Roads'] = self.convert_id_array_to_objects(csv_map['Roads'],
                                                                               "Roads")
             self.levels[map_name]['Objects'] = self.convert_id_array_to_objects(csv_map['Objects'],
@@ -63,7 +67,7 @@ class LevelManager():
         :param map_name: Name of the map you want to convert
         :return: dict{layer1:[ids],layer2:[ids], etc}
         """
-        layers = ["Roads", "Objects"]
+        layers = ["Ground", "Roads", "Objects"]
         layer_dict = {}
         for layer in layers:
             # Convert layers
