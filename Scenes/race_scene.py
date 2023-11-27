@@ -14,7 +14,7 @@ class RaceScene(GameScene):
         self.collision_manager = CollisionManager(scene_manager.screen)
         self.players = {}
 
-        self.set_level("testmap")
+        self.set_level("test_map_small")
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:

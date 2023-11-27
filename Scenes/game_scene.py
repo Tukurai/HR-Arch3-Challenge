@@ -16,3 +16,6 @@ class GameScene:
     def draw(self, screen):
         for component in self.components:
             component.draw(screen)
+
+    def play_music(self, name):
+        self.scene_manager.play_music(name)
