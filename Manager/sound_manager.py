@@ -3,13 +3,15 @@ import os
 import time
 import pygame
 
+from Settings import settings
+
 
 def main():
     # For testing:
     pygame.init()
 
     sound_manager = SoundManager()
-    sound_manager.play_music("mainmenu_3.wav")
+    sound_manager.play_music("mainmenu_2.wav")
     sound_manager.volume_music(-0.8)
     # sound_manager.play_sfx("augh.wav")
 
@@ -37,7 +39,7 @@ def main():
             if speed > 0:
                 speed -= 1
 
-        #print(speed)
+        # print(speed)
         sound_manager.play_car_sound(
             speed, previous_speed, max_speed, car_sounds)
         previous_speed = speed
@@ -49,10 +51,11 @@ class SoundManager():
         '''
         Init the sound manager with the amount of mixer channels (10 default)
         '''
+        self.mixer = pygame.mixer.init()
+        pygame.mixer.set_num_channels(channels)
+
         # Setup assets folder path and init sound libraries
         current_path = os.path.dirname(os.path.dirname(__file__))
-
-        # Init the sound libraries
         self.libraries = self.init_libraries(
             os.path.join(current_path, "Assets")
         )
@@ -60,8 +63,6 @@ class SoundManager():
         self.music_library = self.libraries[1]
 
         self.current_playing_music = ""
-        self.mixer = pygame.mixer.init()
-        pygame.mixer.set_num_channels(channels)
 
     def init_libraries(self, assets_dir):
         '''
@@ -89,7 +90,7 @@ class SoundManager():
                         sfx_library[file] = pygame.mixer.Sound(file)
                     else:
                         music_library[file] = file
-                
+
                 for file in glob.glob("*.ogg"):
                     if key == "sfx":
                         sfx_library[file] = pygame.mixer.Sound(file)
@@ -98,11 +99,12 @@ class SoundManager():
 
         return sfx_library, music_library
 
-    def play_sfx(self, sfx_file: str):
+    def play_sfx(self, sfx_file: str, volume=1.0):
         '''
         Play a sound effect on an available channel
         '''
         self.sfx_library[sfx_file].play()
+        self.volume_sfx(self.sfx_library[sfx_file], volume)
 
     def pause_sfx(self, sfx_file: str):
         '''
@@ -126,7 +128,7 @@ class SoundManager():
         if amount == 0:
             return current_vol
         else:
-            self.sfx_library[sfx_file].set_volume(current_vol + amount)
+            self.sfx_library[sfx_file].set_volume((current_vol + amount) * settings.GLOBAL_VOLUME)
             return self.sfx_library[sfx_file].get_volume()
 
     def play_music(self, sound_file: str, loops=-1, start=0.0, fade_ms=0, volume=1.0):
@@ -135,7 +137,7 @@ class SoundManager():
         '''
         pygame.mixer.music.load(self.music_library[sound_file])
         pygame.mixer.music.play(loops, start, fade_ms)
-        pygame.mixer.music.set_volume(volume)
+        pygame.mixer.music.set_volume(volume * settings.GLOBAL_VOLUME)
         self.current_playing_music = sound_file
 
     def pause_music(self):

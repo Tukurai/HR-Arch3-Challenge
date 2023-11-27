@@ -1,3 +1,5 @@
+from Settings import settings
+
 class GameScene:
     def __init__(self, scene_manager, sprite_manager, scene_name, components):
         self.scene_manager = scene_manager
@@ -20,9 +22,16 @@ class GameScene:
     def scene_changed(self):
         sound_manager = self.scene_manager.sound_manager
 
+        if settings.MUSIC_CHILD_MODE is True:
+            menu_music = "mainmenu_child.wav"
+            race_music = "race_child.wav"
+        else:
+            menu_music = "mainmenu_2.wav"
+            race_music = "race.wav"
+
         if self.scene_name != "Race":
             if sound_manager.current_playing_music == "":
-                sound_manager.play_music("mainmenu_3.wav")
+                sound_manager.play_music(menu_music)
         else:
             sound_manager.stop_music()
-            sound_manager.play_music("race.wav", volume=0.3)
+            sound_manager.play_music(race_music, volume=0.3)
