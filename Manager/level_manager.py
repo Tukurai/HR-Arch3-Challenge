@@ -52,13 +52,15 @@ class LevelManager():
         :return: Returns a list of valid file names for map layers
         """
         file_names = []
+        layer_suffixes = ["_Ground.csv", "_Roads.csv", "_Objects.csv"]
         for file_name in os.listdir(self.level_path):
-            if "_Objects" in file_name or "_Roads" in file_name:
-                name = file_name.split("_")[0]
-                if name not in file_names:
-                    file_names.append(name)
-            else:
-                print(f"Invalid file found: {file_name}")
+            for layer_name in layer_suffixes:
+                if layer_name in file_name :
+                    name = file_name.replace(layer_name, "")
+                    if name not in file_names:
+                        file_names.append(name)
+                else:
+                    print(f"Invalid file found: {file_name}")
         return file_names
 
     def convert_csv_to_id_array(self, map_name: str) -> dict:
