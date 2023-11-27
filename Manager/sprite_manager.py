@@ -73,6 +73,7 @@ class SpriteManager():
         atlas = sprite_sheet.sprite_atlas
         index_offset = 0
         if category not in self.sprites_by_name:
+            # This library doesn't exist yet, so we populate a key for the category
             self.sprites_by_name[category] = {}
             self.sprites_by_id[category] = {}
         else:
@@ -83,6 +84,7 @@ class SpriteManager():
             height = atlas[file_name]['h']
             sprite = sprite_sheet.get_sprite(file_name)
             masks = sprite_sheet.get_mask_from_all_layers(file_name)
+
             # Create the object
             sprite_object = FullSpriteObject(file_name,
                                              index + index_offset,
@@ -92,7 +94,6 @@ class SpriteManager():
             # Store it in two libraries, so we can look up by name and ID
             self.sprites_by_name[category][file_name] = sprite_object
             self.sprites_by_id[category][index] = sprite_object
-
             print(f"Loaded [FullSpriteObject]: {self.sprites_by_name[category][file_name]}")
 
     def get_road(self, sprite_id: Union[int, str]):
@@ -106,7 +107,7 @@ class SpriteManager():
 
     def get_car(self, sprite_id: Union[int, str]):
         """
-        Get a FullSpriteObject of a road tile by its ID or filename
+        Get a FullSpriteObject of a car by its ID or filename
 
         :param sprite_id: The name (str) or id (int) of the tile
         :return: FullSpriteObject
@@ -115,12 +116,21 @@ class SpriteManager():
 
     def get_object(self, sprite_id: Union[int, str]):
         """
-        Get a FullSpriteObject of a road tile by its ID or filename
+        Get a FullSpriteObject of an object tile by its ID or filename
 
         :param sprite_id: The name (str) or id (int) of the tile
         :return: FullSpriteObject
         """
         return self.get_sprite_object("Objects", sprite_id)
+
+    def get_ui_element(self, sprite_id: Union[int, str]):
+        """
+        Get a FullSpriteObject of an UI element by its ID or filename
+
+        :param sprite_id: The name (str) or id (int) of the tile
+        :return: FullSpriteObject
+        """
+        return self.get_sprite_object("UI", sprite_id)
 
     def get_sprite_object(self, category: str, sprite_id):
         if isinstance(sprite_id, str):
