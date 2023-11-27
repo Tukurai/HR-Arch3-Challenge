@@ -9,7 +9,8 @@ def main():
     pygame.init()
 
     sound_manager = SoundManager()
-    # sound_manager.play_music("mainmenu.wav")
+    sound_manager.play_music("mainmenu_2.wav")
+    sound_manager.volume_music(-0.8)
     # sound_manager.play_sfx("augh.wav")
 
     flag = False
