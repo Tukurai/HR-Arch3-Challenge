@@ -9,7 +9,7 @@ def main():
     pygame.init()
 
     sound_manager = SoundManager()
-    sound_manager.play_music("mainmenu_2.wav")
+    sound_manager.play_music("mainmenu_3.wav")
     sound_manager.volume_music(-0.8)
     # sound_manager.play_sfx("augh.wav")
 
@@ -21,8 +21,8 @@ def main():
     speed = 0
     previous_speed = 0
     max_speed = 10
-    car_sounds = ["car1_rev_up_nofade.wav", "car1_driving_nofade.wav",
-                  "car1_rev_down_nofade.wav", "car1_idle_nofade.wav"]
+    car_sounds = ["car1_rev_up.wav", "car1_driving.wav",
+                  "car1_rev_down.wav", "car1_idle.wav"]
 
     while not DONE:
         pygame.event.pump()  # process event queue

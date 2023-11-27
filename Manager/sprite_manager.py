@@ -50,17 +50,34 @@ class SpriteManager():
             os.path.join(current_path, "Assets", "Sprites", "spritesheet_tiles.png"),
             mask_layer_amount=1,
         )
+        self.blue_ui = Spritesheet(
+            os.path.join(current_path, "Assets", "Sprites", "blueSheet.png")
+        )
+        self.green_ui = Spritesheet(
+            os.path.join(current_path, "Assets", "Sprites", "greenSheet.png")
+        )
+        self.red_ui = Spritesheet(
+            os.path.join(current_path, "Assets", "Sprites", "redSheet.png")
+        )
 
         self.sprites_by_name = {}
         self.sprites_by_id = {}
         self.populate_library_items("Cars", self.cars_spritesheet)
         self.populate_library_items("Objects", self.objects_spritesheet)
         self.populate_library_items("Roads", self.roads_spritesheet)
+        self.populate_library_items("UI", self.blue_ui)
+        self.populate_library_items("UI", self.green_ui)
+        self.populate_library_items("UI", self.red_ui)
 
     def populate_library_items(self, category: str, sprite_sheet: Spritesheet):
         atlas = sprite_sheet.sprite_atlas
-        self.sprites_by_name[category] = {}
-        self.sprites_by_id[category] = {}
+        index_offset = 0
+        if category not in self.sprites_by_name:
+            self.sprites_by_name[category] = {}
+            self.sprites_by_id[category] = {}
+        else:
+            # This library is already populated, so we offset its index
+            index_offset = list(self.sprites_by_name[category].values())[-1].tile_id + 1
         for index, file_name in enumerate(atlas.keys()):
             width = atlas[file_name]['w']
             height = atlas[file_name]['h']
@@ -68,7 +85,7 @@ class SpriteManager():
             masks = sprite_sheet.get_mask_from_all_layers(file_name)
             # Create the object
             sprite_object = FullSpriteObject(file_name,
-                                             index,
+                                             index + index_offset,
                                              sprite, width, height,
                                              masks_layers=masks)
 
