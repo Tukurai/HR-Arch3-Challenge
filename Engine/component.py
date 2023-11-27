@@ -42,11 +42,12 @@ class Component:
         if y is not None:
             drawy = y
 
-        object_scale = settings.GAME_SCALE
+        object_scale = 1.0
         if self.scale is not None:
             object_scale = self.scale
         if scale is not None:
             object_scale = scale
+        object_scale *= settings.GAME_SCALE
 
         sprite_to_draw = self.sprite
         if 1.0 != object_scale:
