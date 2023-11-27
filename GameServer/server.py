@@ -14,7 +14,7 @@ class GameServer:
                 data = "your data here"  # Fetch or generate the data
                 await websocket.send(data)
 
-    def start_server(self):
+    async def start_server(self):
         start_server = websockets.serve(self.send_data, "localhost", 8765)
         asyncio.get_event_loop().run_until_complete(start_server)
         asyncio.get_event_loop().run_forever()
