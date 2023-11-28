@@ -26,8 +26,6 @@ class RaceScene(GameScene):
         for component in self.components:  # Ignoring level objs.
             component.handle_event(event)
 
-        self.collision_manager.handle_event(event)
-
         return super().handle_event(event)
 
     def update(self, timedelta, input_state):
