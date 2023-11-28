@@ -1,6 +1,7 @@
 import pygame
 from Engine.component import Component
 from Engine.text_component import TextComponent
+from Engine.button_component import ButtonComponent
 from Scenes.main_menu_scene import MainMenuScene
 from Scenes.race_scene import RaceScene
 from Scenes.high_score_scene import HighScoreScene
@@ -67,6 +68,19 @@ class SceneManager:
                         0,
                         1.00,
                     ),
+                    ButtonComponent(
+                        "PlayButton",
+                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.screen.get_width() / 2 - 80,
+                        self.screen.get_height() / 2,
+                        190,
+                        49,
+                        0,
+                        0,
+                        "PLAY",
+                        32,
+                        True
+                    )
                 ],
             ),
             CarSelectionScene(
