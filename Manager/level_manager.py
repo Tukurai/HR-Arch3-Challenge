@@ -1,10 +1,12 @@
 import csv
 import os
 import pygame
-from typing import Union
+import pprint
 
+from typing import Union
 from Manager.sprite_manager import SpriteManager
 from Engine.full_sprite_object import FullSpriteObject
+from Utilities.pretty_array_printer import print_checkpoints
 
 
 class LevelManager():
@@ -32,7 +34,7 @@ class LevelManager():
         :return:
         """
         files = self.find_files()
-        print("-------  Loading levels ---------")
+        print("\n-------  Loading levels ---------")
         for map_name in files:
             print(f"Loading [Level] : {map_name}")
             csv_map = self.convert_csv_to_id_array(map_name)
@@ -45,6 +47,8 @@ class LevelManager():
                                                                               "Roads")
             self.levels[map_name]['Objects'] = self.convert_id_array_to_objects(csv_map['Objects'],
                                                                                 "Objects")
+            self.levels[map_name]['Checkpoints'] = csv_map['Checkpoints']
+            print_checkpoints(self.levels[map_name]['Checkpoints'], map_name)
         print("------ All levels loaded -----------")
 
     def find_files(self) -> list[str]:
@@ -68,7 +72,7 @@ class LevelManager():
         :param map_name: Name of the map you want to convert
         :return: dict{layer1:[ids],layer2:[ids], etc}
         """
-        layers = ["Ground", "Roads", "Objects"]
+        layers = ["Ground", "Roads", "Objects", "Checkpoints"]
         layer_dict = {}
         for layer in layers:
             # Convert layers
@@ -107,5 +111,5 @@ if __name__ == '__main__':
     pygame.display.set_mode((1, 1))
 
     manager = LevelManager(SpriteManager())
-    level = manager.get_level("testmap")
+    level = manager.get_level("testmap_checkpoints")
     print(level)

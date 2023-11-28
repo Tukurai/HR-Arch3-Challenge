@@ -14,7 +14,7 @@ class RaceScene(GameScene):
         self.collision_manager = CollisionManager(scene_manager)
         self.players = {}
 
-        self.set_level("test_map_small")
+        self.set_level("testmap_checkpoints")
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -31,6 +31,8 @@ class RaceScene(GameScene):
     def update(self, timedelta, input_state):
         for component in self.components:
             component.update(timedelta, input_state)
+            
+        self.collision_manager.update(timedelta, input_state)
 
     def draw(self, screen):
         empty_tile = Component("Empty tile",None,0,0,128,128,0,0.3,(40,40,40))
