@@ -5,7 +5,18 @@ from Settings import settings
 
 class Component:
     def __init__(
-        self, component_name, sprite, x, y, width, height, rotation, depth, color=None, scale=None
+        self,
+        component_name,
+        sprite,
+        x,
+        y,
+        width,
+        height,
+        rotation,
+        depth,
+        color=None,
+        scale=None,
+        masks_layers: dict[int, pygame.Surface] = None,
     ):
         self.component_name = component_name
         self.sprite = sprite
@@ -16,6 +27,8 @@ class Component:
         self.rotation = rotation
         self.depth = depth
         self.scale = scale
+        self.mask_layers = masks_layers
+
         if color is not None and self.sprite is None:
             # Create a surface with dimensions 1792x896
             surface = pygame.Surface((width, height))
@@ -51,10 +64,8 @@ class Component:
 
         sprite_to_draw = self.sprite
         if 1.0 != object_scale:
-            sprite_to_draw = pygame.transform.scale_by(
-                sprite_to_draw, object_scale
-            )
-        
+            sprite_to_draw = pygame.transform.scale_by(sprite_to_draw, object_scale)
+
         if rotation is not None:
             # Create a new surface with the image, rotated
             sprite_to_draw = pygame.transform.rotate(sprite_to_draw, -self.rotation)
@@ -63,7 +74,7 @@ class Component:
             rect = sprite_to_draw.get_rect(
                 center=self.sprite.get_rect(topleft=(self.x, self.y)).center
             )
-            
+
             drawx = rect.topleft[0]
             drawy = rect.topleft[1]
 

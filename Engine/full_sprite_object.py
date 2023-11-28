@@ -23,7 +23,6 @@ class FullSpriteObject(Component):
             depth=0.50,
             scale=scale
         )
-        self.mask_layers = masks_layers
         self.tile_id = tile_id
 
     def __repr__(self):

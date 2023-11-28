@@ -11,7 +11,7 @@ class RaceScene(GameScene):
     def __init__(self, scene_manager, sprite_manager, components):
         super().__init__(scene_manager, sprite_manager, "Race", components)
         self.level_manager = LevelManager(sprite_manager)
-        self.collision_manager = CollisionManager(scene_manager.screen)
+        self.collision_manager = CollisionManager(scene_manager)
         self.players = {}
 
         self.set_level("test_map_small")

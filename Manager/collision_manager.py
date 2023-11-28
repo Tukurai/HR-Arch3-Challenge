@@ -2,9 +2,8 @@ import pygame
 
 
 class CollisionManager:
-    def __init__(self, screen):
-        self.screen = screen
-        self.collidables = []
+    def __init__(self, scene_manager):
+        self.scene_manager = scene_manager
 
     def update(self, timedelta, input_state):
         # Calculate the move of objects that move, such as cars. 
