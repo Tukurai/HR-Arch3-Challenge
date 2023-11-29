@@ -1,3 +1,5 @@
+import copy
+
 import pygame
 from Engine.component import Component
 from Manager.collision_manager import CollisionManager
@@ -65,6 +67,8 @@ class RaceScene(GameScene):
             column_index = 0
             for tile in tilerow:
                 if tile is not None:
+                    # TODO This shallow copy resolves the issue of setting different x/y settings on the same object but I'm not sure this is how we want to do it
+                    tile = copy.copy(tile)
                     tile.x = (settings.TILE_SIZE * settings.GAME_SCALE * column_index) + settings.TRACK_OFFSET
                     tile.y = (settings.TILE_SIZE * settings.GAME_SCALE * row_index)+ settings.TRACK_OFFSET
                     layer.append(tile)
