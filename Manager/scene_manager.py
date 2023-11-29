@@ -71,13 +71,26 @@ class SceneManager:
                     ButtonComponent(
                         "PlayButton",
                         self.sprite_manager.get_ui_element("blue_button00.png").sprite,
-                        self.screen.get_width() / 2 - 80,
+                        self.screen.get_width() / 2 - 95,
                         self.screen.get_height() / 2,
                         190,
                         49,
                         0,
+                        1,
+                        "Play",
+                        32,
+                        True
+                    ),
+                    ButtonComponent(
+                        "HighScoreButton",
+                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.screen.get_width() / 2 - 95,
+                        self.screen.get_height() / 2 + 86,
+                        190,
+                        49,
                         0,
-                        "PLAY",
+                        1,
+                        "Highscores",
                         32,
                         True
                     )

@@ -3,6 +3,8 @@ import pygame
 from Engine.component import Component
 from Engine.text_component import TextComponent
 
+# TODO: Center the text when the button is scaled up...
+
 class ButtonComponent(Component):
     def __init__(self,
                  file_name: str,
@@ -34,7 +36,7 @@ class ButtonComponent(Component):
             centered,
             None,
             x + (width / 2),
-            y - (height / 2),
+            y - (height / 2) + 48,
             0,
             0,
             0,
@@ -42,8 +44,7 @@ class ButtonComponent(Component):
         )
     
     def draw(self, screen, x=None, y=None, rotation=None, scale=None):
-        # This does not work yet...
-        super().draw(screen, x=self.x, y=self.y, rotation=self.rotation, scale=self.scale)
+        super().draw(screen, x=x, y=y, rotation=rotation, scale=scale)
 
         if self.text_component is not None:
             self.text_component.draw(screen)
