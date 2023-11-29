@@ -20,11 +20,13 @@ class Car(Component):
             rotation,
             depth,
             scale=settings.CAR_SCALE,
-            mask_layers=full_sprite.mask_layers
+            mask_layers=full_sprite.mask_layers,
         )
         self.max_speed = max_speed
         self.current_speed = 0
         self.drag = drag
+        self.prev_x = x
+        self.prev_y = y
 
     def handle_event(self, event):
         pass
@@ -68,6 +70,10 @@ class Car(Component):
         # Calculate the new x and y position based on the rotation.
         # In this case, we're assuming that a rotation of 0 means the car is facing up
         # (negative y direction), and rotations are in degrees.
+        # Store the current position
+        if len(collisions) > 0:
+            self.current_speed = 0
+            return
 
         # Convert rotation to radians for math functions
         rad = math.radians(self.rotation)
@@ -84,4 +90,10 @@ class Car(Component):
             self.y += dy
 
         if len(collisions) > 0:
-            print(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:({len(collisions)}) Collision(s) detected")
+            for collision in collisions:
+                print(
+                    f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:Collision with {collision.component_name} detected ({collision.x},{collision.y}) ({collision.width * collision.get_scale()}, {collision.height * collision.get_scale()})"
+                )
+
+        self.prev_x = self.x
+        self.prev_y = self.y

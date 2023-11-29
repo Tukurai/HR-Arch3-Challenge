@@ -32,15 +32,31 @@ class CollisionManager:
                 # Scaling the mask layers for collision
                 player_i_scale = players[i].get_scale()
                 scaled_surface_i = pygame.transform.scale(
-                    players[i].mask_layers[0], (players[i].width * player_i_scale, players[i].height * player_i_scale))
-                mask1 = pygame.mask.from_surface(scaled_surface_i)
-
+                    players[i].mask_layers[0],
+                    (
+                        players[i].width * player_i_scale,
+                        players[i].height * player_i_scale,
+                    ),
+                )
+                # Apply rotation to the mask
+                rotated_surface_i = pygame.transform.rotate(
+                    scaled_surface_i, -players[i].rotation
+                )
+                mask1 = pygame.mask.from_surface(rotated_surface_i)
 
                 player_j_scale = players[j].get_scale()
                 scaled_surface_j = pygame.transform.scale(
-                    players[j].mask_layers[0], (players[j].width * player_j_scale, players[j].height * player_j_scale)
+                    players[j].mask_layers[0],
+                    (
+                        players[j].width * player_j_scale,
+                        players[j].height * player_j_scale,
+                    ),
                 )
-                mask2 = pygame.mask.from_surface(scaled_surface_j)
+                # Apply rotation to the mask
+                rotated_surface_j = pygame.transform.rotate(
+                    scaled_surface_j, -players[j].rotation
+                )
+                mask2 = pygame.mask.from_surface(rotated_surface_j)
 
                 offset_x = players[j].x - players[i].x
                 offset_y = players[j].y - players[i].y
@@ -56,9 +72,14 @@ class CollisionManager:
                 # Scaling the mask layers for collision
                 player_scale = player.get_scale()
                 player_surface = pygame.transform.scale(
-                    player.mask_layers[0], (player.width * player_scale, player.height * player_scale)
+                    player.mask_layers[0],
+                    (player.width * player_scale, player.height * player_scale),
                 )
-                player_mask = pygame.mask.from_surface(player_surface)
+                # Apply rotation to the mask
+                rotated_player_surface = pygame.transform.rotate(
+                    player_surface, -player.rotation
+                )
+                player_mask = pygame.mask.from_surface(rotated_player_surface)
 
                 obj_scale = obj.get_scale()
                 obj_surface = pygame.transform.scale(
