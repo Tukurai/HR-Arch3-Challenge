@@ -28,19 +28,25 @@ class TestEngine:
 class FakeAsyncClient:
     def __init__(self, msg_q):
         self.msg_q: asyncio.Queue = msg_q
+        self.running = False
 
     async def do_operation(self):
-        while True:
+        self.running = True
+        while self.running:
             await asyncio.sleep(randint(0, 10000) / 20000)
             await self.msg_q.put(randint(0, 1000))
+        print("We're done")
 
     def run(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(self.do_operation())
-        loop.close()
+        asyncio.run(self.do_operation())
+
+    def stop(self):
+        self.running = False
 
 
 if __name__ == '__main__':
     test = TestEngine()
     test.run()
+    asyncio.sleep(5)
+    print("We've reached this far")
+    test.msg_client.stop()

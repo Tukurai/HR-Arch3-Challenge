@@ -16,7 +16,8 @@ class SpriteManager:
             mask_layer_amount=1
         )
         self.objects_spritesheet = Spritesheet(
-            os.path.join(current_path, "Assets", "Sprites", "spritesheet_objects.png")
+            os.path.join(current_path, "Assets", "Sprites", "spritesheet_objects.png"),
+            mask_layer_amount=1
         )
         self.roads_spritesheet = Spritesheet(
             os.path.join(current_path, "Assets", "Sprites", "spritesheet_tiles.png"),
