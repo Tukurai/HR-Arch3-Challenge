@@ -1,3 +1,4 @@
+import datetime
 import math
 import pygame
 from Engine.component import Component
@@ -81,3 +82,6 @@ class Car(Component):
 
         if self.y + dy <= 1080 - self.height and self.y + dy >= 0:
             self.y += dy
+
+        if len(collisions) > 0:
+            print(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:({len(collisions)}) Collision(s) detected")
