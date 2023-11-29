@@ -19,7 +19,7 @@ class Car(Component):
             rotation,
             depth,
             scale=settings.CAR_SCALE,
-            masks_layers=full_sprite.masks_layers
+            mask_layers=full_sprite.mask_layers
         )
         self.max_speed = max_speed
         self.current_speed = 0

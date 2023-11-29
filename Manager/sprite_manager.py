@@ -62,7 +62,7 @@ class SpriteManager:
             sprite_object = FullSpriteObject(file_name,
                                              index + index_offset,
                                              sprite, width, height,
-                                             masks_layers=masks,
+                                             mask_layers=masks,
                                              scale=scale)
 
             # Store it in two libraries, so we can look up by name and ID

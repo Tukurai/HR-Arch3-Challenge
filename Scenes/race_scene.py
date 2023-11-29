@@ -11,7 +11,7 @@ class RaceScene(GameScene):
     def __init__(self, scene_manager, sprite_manager, components):
         super().__init__(scene_manager, sprite_manager, "Race", components)
         self.level_manager = LevelManager(sprite_manager)
-        self.collision_manager = CollisionManager(scene_manager)
+        self.collision_manager = CollisionManager(scene_manager, self)
         self.players = {}
 
         self.set_level("testmap_checkpoints")
@@ -35,63 +35,59 @@ class RaceScene(GameScene):
         self.collision_manager.update(timedelta, input_state)
 
     def draw(self, screen):
-        empty_tile = Component("Empty tile",None,0,0,128,128,0,0.3,(40,40,40))
+        for tile in self.level["Ground"]:
+            tile.draw(screen)
 
-        row_index = 0
-        for tilerow in self.level["Ground"]:
-            column_index = 0
-            for tile in tilerow:
-                if tile is not None:
-                    tile.draw(
-                        screen,
-                        (settings.TILE_SIZE * settings.GAME_SCALE * column_index)
-                        + settings.TRACK_OFFSET,
-                        (settings.TILE_SIZE * settings.GAME_SCALE * row_index)
-                        + settings.TRACK_OFFSET,
-                    )
-                column_index += 1
-            row_index += 1
-            column_index = 0
-        row_index = 0
+        for tile in self.level["Roads"]:
+            tile.draw(screen)
 
-        for tilerow in self.level["Roads"]:
-            column_index = 0
-            for tile in tilerow:
-                if tile is not None:
-                    tile.draw(
-                        screen,
-                        (settings.TILE_SIZE * settings.GAME_SCALE * column_index)
-                        + settings.TRACK_OFFSET,
-                        (settings.TILE_SIZE * settings.GAME_SCALE * row_index)
-                        + settings.TRACK_OFFSET,
-                    )
-                column_index += 1
-            row_index += 1
-            column_index = 0
-        row_index = 0
-
-        row_index = 0
-        for tilerow in self.level["Objects"]:
-            column_index = 0
-            for object in tilerow:
-                if object is not None:
-                    object.draw(
-                        screen,
-                        (settings.TILE_SIZE * settings.GAME_SCALE * column_index)
-                        + settings.TRACK_OFFSET,
-                        (settings.TILE_SIZE * settings.GAME_SCALE * row_index)
-                        + settings.TRACK_OFFSET,
-                    )
-                column_index += 1
-            row_index += 1
-            column_index = 0
-        row_index = 0
+        for tile in self.level["Objects"]:
+            tile.draw(screen)
 
         for component in self.components:
             component.draw(screen)
 
     def set_level(self, level_name):
-        self.level = self.level_manager.get_level(level_name)
+        level = self.level_manager.get_level(level_name)
+        
+        self.level = {
+            "Ground": self.get_level_layer(level, "Ground"),
+            "Roads": self.get_level_layer(level, "Roads"),
+            "Objects" : self.get_level_layer(level, "Objects"),
+            "Checkpoints" : self.get_level_checkpoints(level, "Checkpoints")
+        }
+
+    def get_level_layer(self, level, layer_name):
+        layer = []
+
+        row_index = 0
+        for tilerow in level[layer_name]:
+            column_index = 0
+            for tile in tilerow:
+                if tile is not None:
+                    tile.x = (settings.TILE_SIZE * settings.GAME_SCALE * column_index) + settings.TRACK_OFFSET
+                    tile.y = (settings.TILE_SIZE * settings.GAME_SCALE * row_index)+ settings.TRACK_OFFSET
+                    layer.append(tile)
+                column_index += 1
+            row_index += 1
+            column_index = 0
+
+        return layer
+    
+    def get_level_checkpoints(self, level, layer_name):
+        checkpoints = []
+
+        row_index = 0
+        for tilerow in level[layer_name]:
+            column_index = 0
+            for tile in tilerow:
+                if tile is not None:
+                    checkpoints.append((column_index, row_index))
+                column_index += 1
+            row_index += 1
+            column_index = 0
+
+        return checkpoints
 
     def add_player(self, player_car):
         player_car.x = 960
