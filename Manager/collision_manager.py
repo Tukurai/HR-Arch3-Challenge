@@ -72,7 +72,6 @@ class CollisionManager:
                 if player_mask.overlap(obj_mask, (offset_x, offset_y)):
                     # Collision detected, add to collisions dict
                     collisions[player].append(obj)
-                    print("Collision detected")
 
 
 if __name__ == "__main__":
