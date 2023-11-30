@@ -81,9 +81,8 @@ class Car(Component):
             self.y = self.prev_y
             return
         
-        if self.current_speed != 0:
-            drive_car = pygame.event.Event(DRIVE_CAR_EVENT, car=self)
-            pygame.event.post(drive_car)
+        drive_car = pygame.event.Event(DRIVE_CAR_EVENT, car=self)
+        pygame.event.post(drive_car)
 
         # Convert rotation to radians for math functions
         rad = math.radians(self.rotation)

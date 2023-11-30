@@ -194,9 +194,9 @@ class SoundManager:
                 event.car.prev_speed,
                 event.car.max_speed,
                 [
-                    "car1_rev_up.wav",
+                    "car1_revup.wav",
                     "car1_driving.wav",
-                    "car1_rev_down.wav",
+                    "car1_revdown.wav",
                     "car1_idle.wav",
                 ],
             )
@@ -207,6 +207,16 @@ class SoundManager:
     # Returns the assigned mixer track:
 
     def play_car_sound(self, speed, previous_speed, max_speed, sound_files: list):
+        if speed < 0:
+            speed = speed * -1
+            max_speed = max_speed / 2
+        
+        if previous_speed < 0:
+            previous_speed = previous_speed * -1
+        
+        for sound_file in sound_files:
+            self.volume_sfx(sound_file, 2 * settings.GLOBAL_VOLUME)
+
         rev_up = self.sfx_library[sound_files[0]]
         driving = self.sfx_library[sound_files[1]]
         rev_down = self.sfx_library[sound_files[2]]
