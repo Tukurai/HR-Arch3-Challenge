@@ -27,7 +27,7 @@ class CarSelectionScene(GameScene):
                     self.scene_manager.set_active_scene(race_scene)
 
         return super().handle_event(event)
-    
+
     def get_key_mapping(number):
         match number:
             case 1:
