@@ -2,6 +2,7 @@ import glob
 import os
 import time
 import pygame
+from Engine.car import DRIVE_CAR_EVENT
 
 from Settings import settings
 
@@ -17,14 +18,18 @@ def main():
 
     flag = False
     DONE = False
-    screen = pygame.display.set_mode((500, 500))   # 1180, 216
+    screen = pygame.display.set_mode((500, 500))  # 1180, 216
     count = 0
 
     speed = 0
     previous_speed = 0
     max_speed = 10
-    car_sounds = ["car1_rev_up.wav", "car1_driving.wav",
-                  "car1_rev_down.wav", "car1_idle.wav"]
+    car_sounds = [
+        "car1_rev_up.wav",
+        "car1_driving.wav",
+        "car1_rev_down.wav",
+        "car1_idle.wav",
+    ]
 
     while not DONE:
         pygame.event.pump()  # process event queue
@@ -32,7 +37,7 @@ def main():
         keys = pygame.key.get_pressed()
         # print("%d"%count,keys)
         count += 1
-        if keys[ord('w')]:  # And if the key is K_DOWN:
+        if keys[ord("w")]:  # And if the key is K_DOWN:
             if speed < max_speed:
                 speed += 1
         else:
@@ -40,35 +45,32 @@ def main():
                 speed -= 1
 
         # print(speed)
-        sound_manager.play_car_sound(
-            speed, previous_speed, max_speed, car_sounds)
+        sound_manager.play_car_sound(speed, previous_speed, max_speed, car_sounds)
         previous_speed = speed
         time.sleep(0.1)
 
 
-class SoundManager():
+class SoundManager:
     def __init__(self, channels=10):
-        '''
+        """
         Init the sound manager with the amount of mixer channels (10 default)
-        '''
+        """
         self.mixer = pygame.mixer.init()
         pygame.mixer.set_num_channels(channels)
 
         # Setup assets folder path and init sound libraries
         current_path = os.path.dirname(os.path.dirname(__file__))
-        self.libraries = self.init_libraries(
-            os.path.join(current_path, "Assets")
-        )
+        self.libraries = self.init_libraries(os.path.join(current_path, "Assets"))
         self.sfx_library = self.libraries[0]
         self.music_library = self.libraries[1]
 
         self.current_playing_music = ""
 
     def init_libraries(self, assets_dir):
-        '''
+        """
         Init the sound libraries\n
         Uses the \Assets\Music and \Assets\SFX folders!
-        '''
+        """
         # Dict for library: key = str, value = dict
         sfx_library = {}
         music_library = {}
@@ -76,7 +78,7 @@ class SoundManager():
         # Paths for sound folders
         paths = {
             "sfx": os.path.join(assets_dir, "SFX"),
-            "music": os.path.join(assets_dir, "Music")
+            "music": os.path.join(assets_dir, "Music"),
         }
 
         for key, value in paths.items():
@@ -100,64 +102,66 @@ class SoundManager():
         return sfx_library, music_library
 
     def play_sfx(self, sfx_file: str, volume=1.0):
-        '''
+        """
         Play a sound effect on an available channel
-        '''
+        """
         self.sfx_library[sfx_file].play()
         self.volume_sfx(self.sfx_library[sfx_file], volume)
 
     def pause_sfx(self, sfx_file: str):
-        '''
+        """
         Pause a sound effect
-        '''
+        """
         self.sfx_library[sfx_file].pause()
 
     def stop_sfx(self, sfx_file: str):
-        '''
+        """
         Stop a sound effect
-        '''
+        """
         self.sfx_library[sfx_file].stop()
 
     def volume_sfx(self, sfx_file: str, amount=0):
-        '''
+        """
         amount 0 will get the current volume\n
         higher or lower will also change the current volume
-        '''
+        """
         current_vol = self.sfx_library[sfx_file].get_volume()
 
         if amount == 0:
             return current_vol
         else:
-            self.sfx_library[sfx_file].set_volume((current_vol + amount) * settings.GLOBAL_VOLUME)
+            self.sfx_library[sfx_file].set_volume(
+                (current_vol + amount) * settings.GLOBAL_VOLUME
+            )
             return self.sfx_library[sfx_file].get_volume()
 
     def play_music(self, sound_file: str, loops=-1, start=0.0, fade_ms=0, volume=1.0):
-        '''
+        """
         Loads and starts the music
-        '''
+        """
         pygame.mixer.music.load(self.music_library[sound_file])
         pygame.mixer.music.play(loops, start, fade_ms)
         pygame.mixer.music.set_volume(volume * settings.GLOBAL_VOLUME)
         self.current_playing_music = sound_file
 
     def pause_music(self):
-        '''
+        """
         Pauses the music
-        '''
+        """
         pygame.mixer.music.pause()
 
     def stop_music(self):
-        '''
+        """
         Stops the music
-        '''
+        """
         pygame.mixer.music.stop()
         self.current_playing_music = ""
 
     def volume_music(self, amount=0):
-        '''
+        """
         amount 0 will get the current volume\n
         higher or lower will also change the current volume
-        '''
+        """
         current_vol = pygame.mixer.music.get_volume()
 
         if amount == 0:
@@ -167,18 +171,35 @@ class SoundManager():
             return pygame.mixer.music.get_volume()
 
     def pause_all(self):
-        '''
+        """
         Pauses all sound playback (mixer and music)
-        '''
+        """
         pygame.mixer.pause()
         pygame.mixer.music.pause()
 
     def resume_all(self):
-        '''
+        """
         Resumes all sound playback (mixer and music)
-        '''
+        """
         pygame.mixer.unpause()
         pygame.mixer.music.unpause()
+
+    def handle_event(self, event):
+        """
+        Handles the sound manager events
+        """
+        if event.type == DRIVE_CAR_EVENT:
+            self.play_car_sound(
+                event.car.current_speed,
+                event.car.prev_speed,
+                event.car.max_speed,
+                [
+                    "car1_rev_up.wav",
+                    "car1_driving.wav",
+                    "car1_rev_down.wav",
+                    "car1_idle.wav",
+                ],
+            )
 
     # TODO: Add method for car sounds
     # Function assigns car sound sequence to any free mixer track
@@ -206,7 +227,11 @@ class SoundManager():
             self.stop_car_sound(sound_files)
             rev_down.play()
 
-        elif speed == max_speed and previous_speed == speed and driving.get_num_channels() == 0:
+        elif (
+            speed == max_speed
+            and previous_speed == speed
+            and driving.get_num_channels() == 0
+        ):
             print("play driving")
             self.stop_car_sound(sound_files)
             driving.play(-1)

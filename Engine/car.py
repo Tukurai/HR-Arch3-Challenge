@@ -5,6 +5,7 @@ from Engine.component import Component
 from Enums.direction import Direction
 from Settings import settings
 
+DRIVE_CAR_EVENT = pygame.USEREVENT + 1
 
 class Car(Component):
     def __init__(
@@ -21,8 +22,9 @@ class Car(Component):
             mask_layers=full_sprite.mask_layers,
         )
         self.max_speed = max_speed
-        self.current_speed = 0
         self.drag = drag
+        self.current_speed = 0
+        self.prev_speed = 0
         self.prev_x = 0
         self.prev_y = 0
 
@@ -40,9 +42,9 @@ class Car(Component):
     def handle_controls(self, direction):
         match (direction):
             case Direction.UP:
-                self.current_speed = self.speed_limiter(self.current_speed + 3)
+                self.set_current_speed(self.speed_limiter(self.current_speed + 3))
             case Direction.DOWN:
-                self.current_speed = self.speed_limiter(self.current_speed - 2)
+                self.set_current_speed(self.speed_limiter(self.current_speed - 2))
             case Direction.LEFT:
                 if self.current_speed != 0:
                     self.rotation = (
@@ -57,12 +59,16 @@ class Car(Component):
     def apply_drag(self):
         # Apply drag - decrease current speed based on drag property
         if self.current_speed > 0:
-            self.current_speed = max(0, self.current_speed - self.drag)
+            self.set_current_speed(max(0, self.current_speed - self.drag))
         elif self.current_speed < 0:
-            self.current_speed = min(0, self.current_speed + self.drag)
+            self.set_current_speed(min(0, self.current_speed + self.drag))
 
     def speed_limiter(self, speed):
         return min(self.max_speed, max(-(self.max_speed / 2), speed))
+    
+    def set_current_speed(self, speed):
+        self.prev_speed = self.current_speed
+        self.current_speed = speed
 
     def move(self, timedelta, collisions):  # Override the default with player controls.
         # Calculate the new x and y position based on the rotation.
@@ -70,10 +76,14 @@ class Car(Component):
         # (negative y direction), and rotations are in degrees.
         # Store the current position
         if len(collisions) > 0:
-            self.current_speed = 0
+            self.set_current_speed(0)
             self.x = self.prev_x
             self.y = self.prev_y
             return
+        
+        if self.current_speed != 0:
+            drive_car = pygame.event.Event(DRIVE_CAR_EVENT, car=self)
+            pygame.event.post(drive_car)
 
         # Convert rotation to radians for math functions
         rad = math.radians(self.rotation)

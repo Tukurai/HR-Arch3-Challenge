@@ -19,6 +19,7 @@ class SceneManager:
 
     def handle_event(self, event):
         self.active_scene.handle_event(event)
+        self.sound_manager.handle_event(event)
 
     def update(self, timedelta, input_state):
         self.active_scene.update(timedelta, input_state)
