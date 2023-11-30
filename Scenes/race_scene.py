@@ -72,35 +72,69 @@ class RaceScene(GameScene):
             + settings.TRACK_OFFSET
             + (scaled_tile_size / 2)
         )
-
+        debug_pointer = Component(
+            "Debug pointer", None, x - 5, y - 5, 10, 10, 0, 1.00, color=(255, 0, 0)
+        )
         direction = self.get_direction(starting_position, first_checkpoint)
-        
-        # update all players, set rotation based on direction, 0 up, 90 right, 180 down, 270 left  
-        for player in self.players:  
-            player.rotation = direction.value * 90  # assuming Direction.UP == 0, RIGHT == 1, DOWN == 2, LEFT == 3  
 
-        # TODO: make it put the cars on track 2 by 2.
-        distance_factor = 1.5  # Adjust this value to increase or decrease the distance between cars
+        match direction:
+            case Direction.UP:
+                y += 40 * settings.GAME_SCALE
+            case Direction.DOWN:
+                y -= 40 * settings.GAME_SCALE
+            case Direction.LEFT:
+                x += 40 * settings.GAME_SCALE
+            case Direction.RIGHT:
+                x -= 40 * settings.GAME_SCALE
 
-        for i, player in enumerate(self.players):
-            pair_index = i // 2
-            in_pair_index = i % 2
+        # update all players, set rotation based on direction, 0 up, 90 right, 180 down, 270 left
+        for player in self.players:
+            player.rotation = direction.value * 90
+
+        # set starting positions
+        for index in range(6):
+            # Your code here
+            pair_index = index % 2
+            row_index = index // 2
+            pair_offset = 50 * settings.GAME_SCALE * settings.CAR_SCALE
+            row_offset = 140 * settings.GAME_SCALE * settings.CAR_SCALE
+            debug_car_pointer = copy.copy(debug_pointer)
+            debug_x = 0
+            debug_y = 0
 
             if direction in (Direction.UP, Direction.DOWN):
-                offset_x = (pair_index % 2) * scaled_tile_size / 2
-                offset_y = (pair_index * scaled_tile_size / 4 + in_pair_index * scaled_tile_size / 2) * distance_factor
+                if pair_index == 0:
+                    debug_x = -pair_offset
+                else:
+                    debug_x = pair_offset
                 if direction == Direction.UP:
-                    offset_y = -offset_y
+                    debug_y = row_offset * row_index
+                else:
+                    debug_y = -row_offset * row_index
             else:  # Direction.LEFT, Direction.RIGHT
-                offset_x = (pair_index * scaled_tile_size / 4 + in_pair_index * scaled_tile_size / 2) * distance_factor
-                offset_y = (pair_index % 2) * scaled_tile_size / 2
                 if direction == Direction.LEFT:
-                    offset_x = -offset_x
+                    debug_x = row_offset * row_index
+                else:
+                    debug_x = -row_offset * row_index
+                if pair_index == 0:
+                    debug_y = pair_offset
+                else:
+                    debug_y = -pair_offset
 
-            player.x = x + offset_x
-            player.y = y + offset_y
+            debug_car_pointer.x = x + debug_x - 5
+            debug_car_pointer.y = y + debug_y - 5
+            self.components.append(debug_car_pointer)
 
-    def get_direction(self,checkpoint_a, checkpoint_b):
+            if len(self.players) >= index + 1:
+                car = self.players[index]
+                if direction in (Direction.UP, Direction.DOWN):
+                    car.x = x + debug_x - (car.height * car.scale / 2)
+                    car.y = y + debug_y - (car.width * car.scale / 2)
+                else:
+                    car.x = x + debug_x - (car.width * car.scale / 2)
+                    car.y = y + debug_y - (car.height * car.scale / 2)
+
+    def get_direction(self, checkpoint_a, checkpoint_b):
         x1, y1 = checkpoint_a
         x2, y2 = checkpoint_b
 
@@ -151,12 +185,10 @@ class RaceScene(GameScene):
 
         return {k: checkpoints[k] for k in sorted(checkpoints)}
 
-    def add_player(self, player_car):
-        player_car.x = 960
-        player_car.y = 540
-        self.players.append(player_car)
-        self.components.append(player_car)
-        
+    def add_players(self, players):
+        self.players += players
+        self.components += players
+
         self.set_starting_positions(
             self.level["Checkpoints"][0], self.level["Checkpoints"][1]
         )

@@ -22,8 +22,7 @@ class CarSelectionScene(GameScene):
                 if len(self.selected_cars) >= self.cars_needed:
                     race_scene = self.scene_manager.get_scene_by_name("Race")
                     race_scene.clear_race()
-                    for car in self.selected_cars:
-                        race_scene.add_player(car)                
+                    race_scene.add_players(self.selected_cars)                
 
                     self.scene_manager.set_active_scene(race_scene)
 
