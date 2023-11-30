@@ -15,7 +15,7 @@ class RaceScene(GameScene):
         super().__init__(scene_manager, sprite_manager, "Race", components)
         self.level_manager = LevelManager(sprite_manager)
         self.collision_manager = CollisionManager(scene_manager, self)
-        self.players = {}
+        self.players = []
 
         self.set_level("testmap_checkpoints")
 
@@ -76,20 +76,29 @@ class RaceScene(GameScene):
         direction = self.get_direction(starting_position, first_checkpoint)
         
         # update all players, set rotation based on direction, 0 up, 90 right, 180 down, 270 left  
-        for player in self.players.values():  
+        for player in self.players:  
             player.rotation = direction.value * 90  # assuming Direction.UP == 0, RIGHT == 1, DOWN == 2, LEFT == 3  
 
         # TODO: make it put the cars on track 2 by 2.
-        for i, player in enumerate(self.players.values()):  
-            if direction in (Direction.UP, Direction.DOWN):  
-                offset_x = (i % 2) * scaled_tile_size / 2  
-                offset_y = (i // 2) * scaled_tile_size / 8  
-            else:  # Direction.LEFT, Direction.RIGHT  
-                offset_x = (i // 2) * scaled_tile_size / 8  
-                offset_y = (i % 2) * scaled_tile_size / 2  
-            
-            player.x = x + offset_x  
-            player.y = y + offset_y  
+        distance_factor = 1.5  # Adjust this value to increase or decrease the distance between cars
+
+        for i, player in enumerate(self.players):
+            pair_index = i // 2
+            in_pair_index = i % 2
+
+            if direction in (Direction.UP, Direction.DOWN):
+                offset_x = (pair_index % 2) * scaled_tile_size / 2
+                offset_y = (pair_index * scaled_tile_size / 4 + in_pair_index * scaled_tile_size / 2) * distance_factor
+                if direction == Direction.UP:
+                    offset_y = -offset_y
+            else:  # Direction.LEFT, Direction.RIGHT
+                offset_x = (pair_index * scaled_tile_size / 4 + in_pair_index * scaled_tile_size / 2) * distance_factor
+                offset_y = (pair_index % 2) * scaled_tile_size / 2
+                if direction == Direction.LEFT:
+                    offset_x = -offset_x
+
+            player.x = x + offset_x
+            player.y = y + offset_y
 
     def get_direction(self,checkpoint_a, checkpoint_b):
         x1, y1 = checkpoint_a
@@ -145,7 +154,7 @@ class RaceScene(GameScene):
     def add_player(self, player_car):
         player_car.x = 960
         player_car.y = 540
-        self.players[player_car.player_name] = player_car
+        self.players.append(player_car)
         self.components.append(player_car)
         
         self.set_starting_positions(
@@ -156,4 +165,4 @@ class RaceScene(GameScene):
         self.components = [
             component for component in self.components if not isinstance(component, Car)
         ]
-        self.players = {}
+        self.players = []

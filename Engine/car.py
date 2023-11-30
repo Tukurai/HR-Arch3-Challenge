@@ -73,6 +73,8 @@ class Car(Component):
         # Store the current position
         if len(collisions) > 0:
             self.current_speed = 0
+            self.x = self.prev_x
+            self.y = self.prev_y
             return
 
         # Convert rotation to radians for math functions

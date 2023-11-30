@@ -11,7 +11,7 @@ class CollisionManager:
         # Calculate them against objects that are not itself.
 
         level = self.race_scene.level
-        players = self.race_scene.players.values()
+        players = self.race_scene.players
 
         # Initialize collisions dictionary
         collisions = {player: [] for player in players}

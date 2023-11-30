@@ -24,6 +24,12 @@ class PlayerCar(Car):
         )
         self.player_name = player_name
         self.controls = controls
+        self.reverse_controls = None
+        if controls is not None:
+            self.set_controls(controls)
+    
+    def set_controls(self, controls):
+        self.controls = controls
         self.reverse_controls = {v: k for k, v in controls.items()}
 
     def handle_event(self, event):
