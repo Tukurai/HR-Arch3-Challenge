@@ -56,24 +56,38 @@ class Component:
             drawy = y
 
         object_scale = self.get_scale(scale)
-
         sprite_to_draw = self.sprite
-        if 1.0 != object_scale:
-            sprite_to_draw = pygame.transform.scale_by(sprite_to_draw, object_scale)
+        sprite_to_draw = pygame.transform.scale(
+            sprite_to_draw,
+            (
+                int(self.width * object_scale),
+                int(self.height * object_scale),
+            ),
+        )
 
         if rotation is not None:
-            # Create a new surface with the image, rotated
+            old_center = sprite_to_draw.get_rect().center
             sprite_to_draw = pygame.transform.rotate(sprite_to_draw, -self.rotation)
-
-            # Calculate the new upper left corner position of the rotated car
-            rect = sprite_to_draw.get_rect(
-                center=self.sprite.get_rect(topleft=(self.x, self.y)).center
-            )
-
-            drawx = rect.topleft[0]
-            drawy = rect.topleft[1]
+            rect = sprite_to_draw.get_rect()
+            rect.center = old_center
+            drawx += (self.width * object_scale) // 2 - rect.width // 2
+            drawy += (self.height * object_scale) // 2 - rect.height // 2
 
         screen.blit(sprite_to_draw, (drawx, drawy))
+
+        if self.mask_layers is not None:
+            mask_scale = self.get_scale()
+            mask_scaled_surface = pygame.transform.scale(
+                self.mask_layers[0],
+                (
+                    int(self.width * mask_scale),
+                    int(self.height * mask_scale),
+                ),
+            )
+            mask_rotated_surface = pygame.transform.rotate(
+                mask_scaled_surface, -self.rotation
+            )
+            screen.blit(mask_rotated_surface, (drawx, drawy))
 
     def get_scale(self, scale=None):
         object_scale = 1.0
