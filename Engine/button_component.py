@@ -39,6 +39,10 @@ class ButtonComponent(Component):
             0,
             1.00
         )
+        self.mouse_collision = self.get_button_collision()
+
+    def get_button_collision(self):
+        return pygame.Rect(self.x, self.y, self.width, self.height).collidepoint(pygame.mouse.get_pos())
     
     def draw(self, screen, pos=None, scale=None):
         super().draw(screen, pos, scale=scale)

@@ -45,7 +45,8 @@ def main():
                 speed -= 1
 
         # print(speed)
-        sound_manager.play_car_sound(speed, previous_speed, max_speed, car_sounds)
+        sound_manager.play_car_sound(
+            speed, previous_speed, max_speed, car_sounds)
         previous_speed = speed
         time.sleep(0.1)
 
@@ -60,7 +61,8 @@ class SoundManager:
 
         # Setup assets folder path and init sound libraries
         current_path = os.path.dirname(os.path.dirname(__file__))
-        self.libraries = self.init_libraries(os.path.join(current_path, "Assets"))
+        self.libraries = self.init_libraries(
+            os.path.join(current_path, "Assets"))
         self.sfx_library = self.libraries[0]
         self.music_library = self.libraries[1]
 
@@ -210,10 +212,10 @@ class SoundManager:
         if speed < 0:
             speed = speed * -1
             max_speed = max_speed / 2
-        
+
         if previous_speed < 0:
             previous_speed = previous_speed * -1
-        
+
         for sound_file in sound_files:
             self.volume_sfx(sound_file, 2 * settings.GLOBAL_VOLUME)
 
