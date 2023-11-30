@@ -73,7 +73,7 @@ class RaceScene(GameScene):
             + (scaled_tile_size / 2)
         )
         debug_pointer = Component(
-            "Debug pointer", None, x - 5, y - 5, 10, 10, 0, 1.00, color=(255, 0, 0)
+            "Debug pointer", None, (x - 5, y - 5), 10, 10, 0, 1.00, color=(255, 0, 0)
         )
         direction = self.get_direction(starting_position, first_checkpoint)
 

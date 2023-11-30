@@ -9,8 +9,7 @@ class ButtonComponent(Component):
     def __init__(self,
                  file_name: str,
                  sprite: pygame.Surface,
-                 x: int,
-                 y: int,
+                 pos: tuple[int, int],
                  width: int,
                  height: int,
                  depth=0.50,
@@ -21,8 +20,7 @@ class ButtonComponent(Component):
         super().__init__(
             component_name=file_name,
             sprite=sprite,
-            x=x,
-            y=y,
+            pos=pos,
             width=width,
             height=height,
             rotation=0,
@@ -35,16 +33,15 @@ class ButtonComponent(Component):
             font_size,
             centered,
             None,
-            x + (width / 2),
-            y - (height / 2) + 48,
+            pos + ((width / 2), (height / 2) + 48),
             0,
             0,
             0,
             1.00
         )
     
-    def draw(self, screen, x=None, y=None, rotation=None, scale=None):
-        super().draw(screen, x=x, y=y, rotation=rotation, scale=scale)
+    def draw(self, screen, pos=None, scale=None):
+        super().draw(screen, pos, scale=scale)
 
         if self.text_component is not None:
             self.text_component.draw(screen)

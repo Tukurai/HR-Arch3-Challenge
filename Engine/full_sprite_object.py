@@ -15,8 +15,7 @@ class FullSpriteObject(Component):
         super().__init__(
             component_name=file_name,
             sprite=sprite,
-            x=0,
-            y=0,
+            pos=(0,0),
             width=width,
             height=height,
             rotation=0,

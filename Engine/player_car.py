@@ -14,13 +14,10 @@ class PlayerCar(Car):
         drag,
         component_name,
         full_sprite,
-        x,
-        y,
-        rotation,
         depth,
     ):
         super().__init__(
-            max_speed, drag, component_name, full_sprite, x, y, rotation, depth
+            max_speed, drag, component_name, full_sprite, depth
         )
         self.player_name = player_name
         self.controls = controls
