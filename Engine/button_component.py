@@ -3,7 +3,7 @@ import pygame
 from Engine.component import Component
 from Engine.text_component import TextComponent
 
-# TODO: Center the text when the button is scaled up...
+BUTTON_COLLISION = pygame.USEREVENT + 2
 
 class ButtonComponent(Component):
     def __init__(self,
@@ -39,7 +39,11 @@ class ButtonComponent(Component):
             0,
             1.00
         )
-        self.mouse_collision = self.get_button_collision()
+
+    def update(self, timedelta, input_state):
+        if self.get_button_collision() is True:
+            button_collision = pygame.event.Event(BUTTON_COLLISION, button=self)
+            pygame.event.post(button_collision)
 
     def get_button_collision(self):
         return pygame.Rect(self.x, self.y, self.width, self.height).collidepoint(pygame.mouse.get_pos())
