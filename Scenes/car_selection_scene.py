@@ -28,13 +28,6 @@ class CarSelectionScene(GameScene):
 
         return super().handle_event(event)
 
-    def update(self, timedelta, input_state):
-        sound_manager = self.scene_manager.sound_manager
-
-        for car in self.selected_cars:
-            sound_manager.play_car_sound(car.current_speed, previous_speed)
-            previous_speed = car.current_speed
-
     def get_key_mapping(number):
         match number:
             case 1:
