@@ -8,16 +8,14 @@ from Settings import settings
 
 class Car(Component):
     def __init__(
-        self, max_speed, drag, component_name, full_sprite, x, y, rotation, depth
+        self, max_speed, drag, component_name, full_sprite, depth
     ):
         super().__init__(
             component_name,
             full_sprite.sprite,
-            x,
-            y,
+            (0,0),
             full_sprite.width,
             full_sprite.height,
-            rotation,
             depth,
             scale=settings.CAR_SCALE,
             mask_layers=full_sprite.mask_layers,
@@ -25,8 +23,8 @@ class Car(Component):
         self.max_speed = max_speed
         self.current_speed = 0
         self.drag = drag
-        self.prev_x = x
-        self.prev_y = y
+        self.prev_x = 0
+        self.prev_y = 0
 
     def handle_event(self, event):
         pass
@@ -37,7 +35,7 @@ class Car(Component):
         self.move(timedelta)
 
     def draw(self, screen):
-        super().draw(screen, rotation=-self.rotation, scale=self.scale)
+        super().draw(screen)
 
     def handle_controls(self, direction):
         match (direction):

@@ -10,14 +10,13 @@ class TextComponent(Component):
         font_size,
         centered,
         sprite,
-        x,
-        y,
+        pos: tuple[int, int],
         width,
         height,
         rotation,
         depth,
     ):
-        super().__init__(component_name, sprite, x, y, width, height, rotation, depth)
+        super().__init__(component_name, sprite, pos, width, height, rotation, depth)
         self.text = text
         self.font_size = font_size
         self.centered = centered

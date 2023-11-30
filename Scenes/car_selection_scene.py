@@ -62,9 +62,6 @@ class CarSelectionScene(GameScene):
                 1.0,
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_black_small_1.png"),
-                0,
-                0,
-                0,
                 1.10,
             ),
             pygame.K_2: PlayerCar(
@@ -74,9 +71,6 @@ class CarSelectionScene(GameScene):
                 1.0,
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_red_small_1.png"),
-                0,
-                0,
-                0,
                 1.10,
             ),
             pygame.K_3: PlayerCar(
@@ -86,9 +80,6 @@ class CarSelectionScene(GameScene):
                 1.0,
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_yellow_small_1.png"),
-                0,
-                0,
-                0,
                 1.10,
             ),
             pygame.K_4: PlayerCar(
@@ -98,9 +89,6 @@ class CarSelectionScene(GameScene):
                 1.0,
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_green_small_1.png"),
-                0,
-                0,
-                0,
                 1.10,
             ),
             pygame.K_5: PlayerCar(
@@ -110,9 +98,6 @@ class CarSelectionScene(GameScene):
                 1.0,
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_blue_small_1.png"),
-                0,
-                0,
-                0,
                 1.10,
             ),
         }

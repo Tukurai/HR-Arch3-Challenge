@@ -1,27 +1,28 @@
 import pygame
-
+from typing import Tuple
 from Settings import settings
 
 
 class Component:
+    """Base class for all components that need to be rendered, and have need for update and event handling"""
+
     def __init__(
         self,
-        component_name,
-        sprite,
-        x,
-        y,
-        width,
-        height,
-        rotation,
-        depth,
-        color=None,
-        scale=None,
+        component_name: str,
+        sprite: pygame.Surface,
+        pos: Tuple[int, int],
+        width: float,
+        height: float,
+        rotation: float = 0,
+        depth: float = 0.50,
+        color: Tuple[int, int, int] = None,
+        scale: float = None,
         mask_layers: dict[int, pygame.Surface] = None,
     ):
         self.component_name = component_name
         self.sprite = sprite
-        self.x = x
-        self.y = y
+        self.x = pos[0]
+        self.y = pos[1]
         self.width = width
         self.height = height
         self.rotation = rotation
@@ -40,23 +41,43 @@ class Component:
             self.sprite = surface
 
     def handle_event(self, event):
+        """Handles the events passed down from the engine"""
         pass
 
     def update(self, timedelta, input_state):
+        """Updates the component, generally overridden by the child class"""
         pass
 
-    def draw(self, screen, x=None, y=None, rotation=None, scale=None):
-        drawx = self.x
-        drawy = self.y
+    def draw(self, screen, pos=None, scale=None):
+        """Draws the sprite to the screen, if x, y, rotation or scale are not None, it will override the objects values"""
+        draw_pos = (self.x, self.y)
 
-        if x is not None:
-            drawx = x
+        if pos is not None:
+            draw_pos = pos
 
-        if y is not None:
-            drawy = y
+        sprite = self.get_scaled_rotated_sprite_or_mask(self.sprite, scale)
+        screen.blit(sprite[0], draw_pos + sprite[1])
 
+        if self.mask_layers is not None:
+            mask = self.get_scaled_rotated_sprite_or_mask(self.mask_layers[0], scale)
+            screen.blit(mask[0], draw_pos + mask[1])
+
+    def get_scale(self, scale: float = None) -> float:
+        """Returns the scale of the object, this has an order of precedence: scale parameter, object scale, default scale"""
+        object_scale = 1.0
+        if self.scale is not None:
+            object_scale = self.scale
+        if scale is not None:
+            object_scale = scale
+        object_scale *= settings.GAME_SCALE
+        return object_scale
+    
+    def get_scaled_rotated_sprite_or_mask(
+        self, sprite_or_mask: pygame.Surface , scale: float = None
+    ) -> Tuple[pygame.Surface, Tuple[int, int]]:
+        """Returns a scaled and rotated sprite or mask surface, also return the center offset as a tuple (x, y)"""
         object_scale = self.get_scale(scale)
-        sprite_to_draw = self.sprite
+        sprite_to_draw = sprite_or_mask
         sprite_to_draw = pygame.transform.scale(
             sprite_to_draw,
             (
@@ -65,35 +86,14 @@ class Component:
             ),
         )
 
-        if rotation is not None:
+        center_offset_x = 0
+        center_offset_y = 0
+        if self.rotation is not None:
             old_center = sprite_to_draw.get_rect().center
             sprite_to_draw = pygame.transform.rotate(sprite_to_draw, -self.rotation)
             rect = sprite_to_draw.get_rect()
             rect.center = old_center
-            drawx += (self.width * object_scale) // 2 - rect.width // 2
-            drawy += (self.height * object_scale) // 2 - rect.height // 2
-
-        screen.blit(sprite_to_draw, (drawx, drawy))
-
-        if self.mask_layers is not None:
-            mask_scale = self.get_scale()
-            mask_scaled_surface = pygame.transform.scale(
-                self.mask_layers[0],
-                (
-                    int(self.width * mask_scale),
-                    int(self.height * mask_scale),
-                ),
-            )
-            mask_rotated_surface = pygame.transform.rotate(
-                mask_scaled_surface, -self.rotation
-            )
-            screen.blit(mask_rotated_surface, (drawx, drawy))
-
-    def get_scale(self, scale=None):
-        object_scale = 1.0
-        if self.scale is not None:
-            object_scale = self.scale
-        if scale is not None:
-            object_scale = scale
-        object_scale *= settings.GAME_SCALE
-        return object_scale
+            center_offset_x += (self.width * object_scale) // 2 - rect.width // 2
+            center_offset_y += (self.height * object_scale) // 2 - rect.height // 2
+        
+        return (sprite_to_draw, (center_offset_x, center_offset_y))
