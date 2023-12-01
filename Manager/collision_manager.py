@@ -30,38 +30,20 @@ class CollisionManager:
         for i in range(len(players)):
             for j in range(i + 1, len(players)):
                 # Scaling the mask layers for collision
-                player_i_scale = players[i].get_scale()
-                scaled_surface_i = pygame.transform.scale(
-                    players[i].mask_layers[0],
-                    (
-                        players[i].width * player_i_scale,
-                        players[i].height * player_i_scale,
-                    ),
+                mask_i = pygame.mask.from_surface(
+                    players[i].get_scaled_rotated_sprite_or_mask(
+                        players[i].mask_layers[0]
+                    )[0]
                 )
-                # Apply rotation to the mask
-                rotated_surface_i = pygame.transform.rotate(
-                    scaled_surface_i, -players[i].rotation
-                )
-                mask1 = pygame.mask.from_surface(rotated_surface_i)
 
-                player_j_scale = players[j].get_scale()
-                scaled_surface_j = pygame.transform.scale(
-                    players[j].mask_layers[0],
-                    (
-                        players[j].width * player_j_scale,
-                        players[j].height * player_j_scale,
-                    ),
+                mask_j = pygame.mask.from_surface(
+                    players[j].get_scaled_rotated_sprite_or_mask(
+                        players[j].mask_layers[0]
+                    )[0]
                 )
-                # Apply rotation to the mask
-                rotated_surface_j = pygame.transform.rotate(
-                    scaled_surface_j, -players[j].rotation
-                )
-                mask2 = pygame.mask.from_surface(rotated_surface_j)
-
-                offset_x = players[j].x - players[i].x
-                offset_y = players[j].y - players[i].y
-
-                if mask1.overlap(mask2, (offset_x, offset_y)):
+                if mask_i.overlap(
+                    mask_j, (players[j].x - players[i].x, players[j].y - players[i].y)
+                ):
                     # Collision detected, add to collisions dict
                     collisions[players[i]].append(players[j])
                     collisions[players[j]].append(players[i])
@@ -69,28 +51,19 @@ class CollisionManager:
     def check_road_objects_collision(self, level, players, collisions):
         for player in players:
             for obj in level["Objects"] + level["Roads"]:
-                # Scaling the mask layers for collision
-                player_scale = player.get_scale()
-                player_surface = pygame.transform.scale(
-                    player.mask_layers[0],
-                    (player.width * player_scale, player.height * player_scale),
+                player_mask = pygame.mask.from_surface(
+                    player.get_scaled_rotated_sprite_or_mask(
+                        player.mask_layers[0]
+                    )[0]
                 )
-                # Apply rotation to the mask
-                rotated_player_surface = pygame.transform.rotate(
-                    player_surface, -player.rotation
+
+                obj_mask = pygame.mask.from_surface(
+                    obj.get_scaled_rotated_sprite_or_mask(
+                        obj.mask_layers[0]
+                    )[0]
                 )
-                player_mask = pygame.mask.from_surface(rotated_player_surface)
 
-                obj_scale = obj.get_scale()
-                obj_surface = pygame.transform.scale(
-                    obj.mask_layers[0], (obj.width * obj_scale, obj.height * obj_scale)
-                )
-                obj_mask = pygame.mask.from_surface(obj_surface)
-
-                offset_x = obj.x - player.x
-                offset_y = obj.y - player.y
-
-                if player_mask.overlap(obj_mask, (offset_x, offset_y)):
+                if player_mask.overlap(obj_mask, (obj.x - player.x, obj.y - player.y)):
                     # Collision detected, add to collisions dict
                     collisions[player].append(obj)
 

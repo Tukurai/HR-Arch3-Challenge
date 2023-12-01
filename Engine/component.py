@@ -22,7 +22,7 @@ class Component:
         self.component_name = component_name
         self.sprite = sprite
         self.x = pos[0]
-        self.y = pos[1]
+        self.y =    pos[1]
         self.width = width
         self.height = height
         self.rotation = rotation
@@ -89,11 +89,13 @@ class Component:
         center_offset_x = 0
         center_offset_y = 0
         if self.rotation is not None:
-            old_center = sprite_to_draw.get_rect().center
+            # Create a new surface with the image, rotated
             sprite_to_draw = pygame.transform.rotate(sprite_to_draw, -self.rotation)
+            # Calculate the new upper left corner position of the rotated car
             rect = sprite_to_draw.get_rect()
-            rect.center = old_center
-            center_offset_x += (self.width * object_scale) // 2 - rect.width // 2
-            center_offset_y += (self.height * object_scale) // 2 - rect.height // 2
-        
+            original_rect = self.sprite.get_rect(topleft=(self.x, self.y))
+
+            center_offset_x = original_rect.centerx - rect.centerx
+            center_offset_y = original_rect.centery - rect.centery
+
         return (sprite_to_draw, (center_offset_x, center_offset_y))
