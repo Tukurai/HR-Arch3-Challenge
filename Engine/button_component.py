@@ -33,7 +33,7 @@ class ButtonComponent(Component):
             font_size,
             centered,
             None,
-            pos + ((width / 2), (height / 2) + 48),
+            pos,
             0,
             0,
             0,

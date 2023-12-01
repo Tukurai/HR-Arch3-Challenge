@@ -3,6 +3,7 @@ from Manager.scene_manager import SceneManager
 from Manager.sound_manager import SoundManager
 from Manager.sprite_manager import SpriteManager
 from Engine.input_state import InputState
+from Scenes.main_menu_scene import USER_QUIT
 import pygame
 
 
@@ -20,7 +21,7 @@ class GameEngine:
 
     def handle_events(self):
         for event in pygame.event.get():  # Handle the close window event.
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or event.type == USER_QUIT:
                 pygame.quit()
                 sys.exit()
             else:

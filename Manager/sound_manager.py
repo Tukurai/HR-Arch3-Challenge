@@ -225,17 +225,17 @@ class SoundManager:
         idle = self.sfx_library[sound_files[3]]
 
         if speed == 0 and idle.get_num_channels() == 0:
-            print("play idle")
+            #print("play idle")
             self.stop_car_sound(sound_files)
             idle.play(-1)
 
         elif speed > 0 and previous_speed < speed and rev_up.get_num_channels() == 0:
-            print("play rev_up")
+            #print("play rev_up")
             self.stop_car_sound(sound_files)
             rev_up.play()
 
         elif speed > 0 and previous_speed > speed and rev_down.get_num_channels() == 0:
-            print("play rev_down")
+            #print("play rev_down")
             self.stop_car_sound(sound_files)
             rev_down.play()
 
@@ -244,7 +244,7 @@ class SoundManager:
             and previous_speed == speed
             and driving.get_num_channels() == 0
         ):
-            print("play driving")
+            #print("play driving")
             self.stop_car_sound(sound_files)
             driving.play(-1)
 
