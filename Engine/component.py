@@ -22,7 +22,7 @@ class Component:
         self.component_name = component_name
         self.sprite = sprite
         self.x = pos[0]
-        self.y =    pos[1]
+        self.y = pos[1]
         self.width = width
         self.height = height
         self.rotation = rotation
@@ -71,9 +71,9 @@ class Component:
             object_scale = scale
         object_scale *= settings.GAME_SCALE
         return object_scale
-    
+
     def get_scaled_rotated_sprite_or_mask(
-        self, sprite_or_mask: pygame.Surface , scale: float = None
+        self, sprite_or_mask: pygame.Surface, scale: float = None
     ) -> Tuple[pygame.Surface, Tuple[int, int]]:
         """Returns a scaled and rotated sprite or mask surface, also return the center offset as a tuple (x, y)"""
         object_scale = self.get_scale(scale)
