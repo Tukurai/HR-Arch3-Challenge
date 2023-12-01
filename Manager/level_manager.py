@@ -1,11 +1,11 @@
 import csv
 import os
 import pygame
-import pprint
 
 from typing import Union
 from Manager.sprite_manager import SpriteManager
 from Engine.full_sprite_object import FullSpriteObject
+from Settings import settings
 from Utilities.pretty_array_printer import print_checkpoints
 
 
@@ -25,8 +25,7 @@ class LevelManager():
         """
         if name in self.levels.keys():
             return self.levels[name]
-        else:
-            print(f"Error -- LevelManager.get_level():  Level {name} not found!")
+        elif(settings.DEBUG_MODE): print(f"Error -- LevelManager.get_level():  Level {name} not found!")
 
     def load_levels(self):
         """
@@ -34,9 +33,9 @@ class LevelManager():
         :return:
         """
         files = self.find_files()
-        print("\n-------  Loading levels ---------")
+        if(settings.DEBUG_MODE): print("\n-------  Loading levels ---------")
         for map_name in files:
-            print(f"Loading [Level] : {map_name}")
+            if(settings.DEBUG_MODE): print(f"Loading [Level] : {map_name}")
             csv_map = self.convert_csv_to_id_array(map_name)
             self.levels[map_name] = {}
             # Attention, the resulting level layer is "Ground" but receives
@@ -48,8 +47,9 @@ class LevelManager():
             self.levels[map_name]['Objects'] = self.convert_id_array_to_objects(csv_map['Objects'],
                                                                                 "Objects")
             self.levels[map_name]['Checkpoints'] = csv_map['Checkpoints']
-            print_checkpoints(self.levels[map_name]['Checkpoints'], map_name)
-        print("------ All levels loaded -----------")
+            if(settings.DEBUG_MODE): print_checkpoints(self.levels[map_name]['Checkpoints'], map_name)
+        
+        if(settings.DEBUG_MODE): print("------ All levels loaded -----------")
 
     def find_files(self) -> list[str]:
         """
@@ -77,7 +77,7 @@ class LevelManager():
         for layer in layers:
             # Convert layers
             layer_path = os.path.join(self.level_path, f"{map_name}_{layer}.csv")
-            print(f"Converting '{layer}' layer from: {layer_path}")
+            if(settings.DEBUG_MODE): print(f"Converting '{layer}' layer from: {layer_path}")
             with open(layer_path, newline='') as file:
                 reader = csv.reader(file)
                 array_2d = [list(map(int, row)) for row in reader]
@@ -112,4 +112,4 @@ if __name__ == '__main__':
 
     manager = LevelManager(SpriteManager())
     level = manager.get_level("testmap_checkpoints")
-    print(level)
+    if(settings.DEBUG_MODE): print(level)

@@ -35,7 +35,7 @@ def main():
         pygame.event.pump()  # process event queue
         # It gets the states of all keyboard keys.
         keys = pygame.key.get_pressed()
-        # print("%d"%count,keys)
+        if(settings.DEBUG_MODE): print("%d"%count,keys)
         count += 1
         if keys[ord("w")]:  # And if the key is K_DOWN:
             if speed < max_speed:
@@ -44,7 +44,7 @@ def main():
             if speed > 0:
                 speed -= 1
 
-        # print(speed)
+        if(settings.DEBUG_MODE): print(speed)
         sound_manager.play_car_sound(
             speed, previous_speed, max_speed, car_sounds)
         previous_speed = speed
@@ -225,17 +225,17 @@ class SoundManager:
         idle = self.sfx_library[sound_files[3]]
 
         if speed == 0 and idle.get_num_channels() == 0:
-            #print("play idle")
+            if(settings.DEBUG_MODE): print("play idle")
             self.stop_car_sound(sound_files)
             idle.play(-1)
 
         elif speed > 0 and previous_speed < speed and rev_up.get_num_channels() == 0:
-            #print("play rev_up")
+            if(settings.DEBUG_MODE): print("play rev_up")
             self.stop_car_sound(sound_files)
             rev_up.play()
 
         elif speed > 0 and previous_speed > speed and rev_down.get_num_channels() == 0:
-            #print("play rev_down")
+            if(settings.DEBUG_MODE): print("play rev_down")
             self.stop_car_sound(sound_files)
             rev_down.play()
 
@@ -244,7 +244,7 @@ class SoundManager:
             and previous_speed == speed
             and driving.get_num_channels() == 0
         ):
-            #print("play driving")
+            if(settings.DEBUG_MODE): print("play driving")
             self.stop_car_sound(sound_files)
             driving.play(-1)
 

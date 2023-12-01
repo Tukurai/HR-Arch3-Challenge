@@ -1,55 +1,54 @@
 import asyncio
-import json
-import time
-
-import websockets
 import threading
+import time
+from random import randint
+
+from Settings import settings
 
 
-class WebSocketClient:
-    def __init__(self, uri):
-        self.uri = uri
-        self.loop = asyncio.new_event_loop()
-        self.thread = threading.Thread(target=self.start_loop, args=(self.loop,))
-        self.thread.start()
+class TestEngine:
+    def __init__(self):
+        self.msg_q = asyncio.Queue()
+        self.msg_client = FakeAsyncClient(self.msg_q)
+        # Start a new thread that runs the event loop
+        threading.Thread(target=self.msg_client.run, daemon=True).start()
 
-    def start_loop(self, loop):
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(self.connect())
-
-    async def connect(self):
-        async with websockets.connect(self.uri) as websocket:
-            await self.listen(websocket)
-
-    async def listen(self, websocket):
-        async for message in websocket:
-            print(f"Received message: {message}")
-
-    def send_message(self, message):
-        asyncio.run_coroutine_threadsafe(self._send(message), self.loop)
-
-    async def _send(self, message):
-        async with websockets.connect(self.uri) as websocket:
-            await websocket.send(message)
-
-    def close(self):
-        self.loop.call_soon_threadsafe(self.loop.stop)
-        self.thread.join()
-
-
-# Example usage
-if __name__ == "__main__":
-    client = WebSocketClient("wss://socketsbay.com/wss/v2/1/demo/")
-
-    # Example sending a message
-    client.send_message(json.dumps({"action": "greet", "params": {"name": "Alice"}}))
-
-    # Simulate main program running
-    try:
+    def run(self):
         while True:
-            print("Main loop doing stuff")
-            # Example sending a message
-            client.send_message(json.dumps({"action": "greet", "params": {"name": "Alice"}}))
-            time.sleep(1)
-    except KeyboardInterrupt:
-        client.close()
+            self.handle_events()
+
+    def handle_events(self):
+        if(settings.DEBUG_MODE): print("Handling this frame's events")
+        # The event handling here needs to be adjusted to work properly with asyncio.Queue
+        while not self.msg_q.empty():
+            item = self.msg_q.get_nowait()
+            if(settings.DEBUG_MODE): print(item)
+            self.msg_q.task_done()
+        time.sleep(1)
+
+
+class FakeAsyncClient:
+    def __init__(self, msg_q):
+        self.msg_q: asyncio.Queue = msg_q
+        self.running = False
+
+    async def do_operation(self):
+        self.running = True
+        while self.running:
+            await asyncio.sleep(randint(0, 10000) / 20000)
+            await self.msg_q.put(randint(0, 1000))
+        if(settings.DEBUG_MODE): print("We're done")
+
+    def run(self):
+        asyncio.run(self.do_operation())
+
+    def stop(self):
+        self.running = False
+
+
+if __name__ == '__main__':
+    test = TestEngine()
+    test.run()
+    asyncio.sleep(5)
+    if(settings.DEBUG_MODE): print("We've reached this far")
+    test.msg_client.stop()

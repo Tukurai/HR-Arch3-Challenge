@@ -6,6 +6,8 @@ from Engine.input_state import InputState
 from Scenes.main_menu_scene import USER_QUIT
 import pygame
 
+from Settings import settings
+
 
 class GameEngine:
     def __init__(self, game):
@@ -42,4 +44,4 @@ class GameEngine:
 
 
 if __name__ == "__main__":
-    print("Ran game_engine.py directly. Start application from game.py.")
+    if(settings.DEBUG_MODE): print("Ran game_engine.py directly. Start application from game.py.")

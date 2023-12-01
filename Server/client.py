@@ -1,5 +1,6 @@
 import json
 import time
+from Settings import settings
 from Server.base_client import BaseWebSocketClient
 from server_game_data import ServerGameData
 
@@ -33,18 +34,17 @@ class WebSocketClient(BaseWebSocketClient):
 
 # Example usage
 if __name__ == "__main__":
-    client = WebSocketClient("wss://socketsbay.com/wss/v2/1/demo/", logging=True)
+    client = WebSocketClient("wss://socketsbay.com/wss/v2/1/demo/")
 
     # Example sending a message
-    client.send_message(
-        json.dumps({"action": "request_latest_players", "params": {"name": "This player name"}}))
+    client.send_message(json.dumps({"action": "request_latest_players", "params": {"name": "This player name"}}))
 
     # Simulate main program running
     try:
         while True:
-            print("Main loop doing stuff")
+            if(settings.DEBUG_MODE): print("Main loop doing stuff")
             # Example sending a message
             client.send_message(json.dumps({"action": "greet", "params": {"name": "Alice"}}))
-            time.sleep(2)
+            time.sleep(1)
     except KeyboardInterrupt:
         client.close()
