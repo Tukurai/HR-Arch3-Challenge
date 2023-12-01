@@ -1,7 +1,8 @@
 class ServerGameData:
+
     def __init__(self):
         self.latest_players: list[str] = []
-        self.highscores: list[int] = []
+        self.highscores: list[(str, int)] = []
         self.max_amount_of_players = 5
         self.max_amount_of_highscores = 10
 
