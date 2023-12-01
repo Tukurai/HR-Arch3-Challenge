@@ -6,6 +6,7 @@ from Scenes.main_menu_scene import MainMenuScene
 from Scenes.race_scene import RaceScene
 from Scenes.high_score_scene import HighScoreScene
 from Scenes.car_selection_scene import CarSelectionScene
+from Settings import settings
 
 
 class SceneManager:
@@ -227,4 +228,4 @@ class SceneManager:
 
 
 if __name__ == "__main__":
-    print("Ran scene_manager.py directly. Start application from game.py.")
+    if(settings.DEBUG_MODE): print("Ran scene_manager.py directly. Start application from game.py.")

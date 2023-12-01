@@ -7,14 +7,13 @@ from Settings import settings
 
 DRIVE_CAR_EVENT = pygame.USEREVENT + 1
 
+
 class Car(Component):
-    def __init__(
-        self, max_speed, drag, component_name, full_sprite, depth
-    ):
+    def __init__(self, max_speed, drag, component_name, full_sprite, depth):
         super().__init__(
             component_name,
             full_sprite.sprite,
-            (0,0),
+            (0, 0),
             full_sprite.width,
             full_sprite.height,
             depth,
@@ -65,7 +64,7 @@ class Car(Component):
 
     def speed_limiter(self, speed):
         return min(self.max_speed, max(-(self.max_speed / 2), speed))
-    
+
     def set_current_speed(self, speed):
         self.prev_speed = self.current_speed
         self.current_speed = speed
@@ -78,7 +77,7 @@ class Car(Component):
         if len(collisions) > 0:
             self.set_current_speed(0)
             return
-        
+
         drive_car = pygame.event.Event(DRIVE_CAR_EVENT, car=self)
         pygame.event.post(drive_car)
 
@@ -98,9 +97,7 @@ class Car(Component):
 
         if len(collisions) > 0:
             for collision in collisions:
-                print(
-                    f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:Collision with {collision.component_name} detected ({collision.x},{collision.y}) ({collision.width * collision.get_scale()}, {collision.height * collision.get_scale()})"
-                )
+                if(settings.DEBUG_MODE): print(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:Collision with {collision.component_name} detected ({collision.x},{collision.y}) ({collision.width * collision.get_scale()}, {collision.height * collision.get_scale()})")
 
         self.prev_x = self.x
         self.prev_y = self.y

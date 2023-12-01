@@ -1,6 +1,7 @@
 import asyncio
 import json
 import time
+from Settings import settings
 import websockets
 import threading
 
@@ -31,7 +32,7 @@ class WebSocketClient:
 
     async def listen(self, websocket):
         async for message in websocket:
-            print(f"Received message: {message}")
+            if(settings.DEBUG_MODE): print(f"Received message: {message}")
 
     def send_message(self, message):
         asyncio.run_coroutine_threadsafe(self._send(message), self.loop)
@@ -82,7 +83,7 @@ if __name__ == "__main__":
     # Simulate main program running
     try:
         while True:
-            print("Main loop doing stuff")
+            if(settings.DEBUG_MODE): print("Main loop doing stuff")
             # Example sending a message
             client.send_message(json.dumps({"action": "greet", "params": {"name": "Alice"}}))
             time.sleep(1)

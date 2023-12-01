@@ -1,4 +1,5 @@
 import asyncio
+from Settings import settings
 import websockets
 
 class GameServer:
@@ -23,4 +24,4 @@ if __name__ == '__main__':
     # Create a Server instance and start the server
     game_server = GameServer()
     game_server.start_server()
-    print("I swear I'm not blocking the main thread.")
+    if(settings.DEBUG_MODE): print("I swear I'm not blocking the main thread.")

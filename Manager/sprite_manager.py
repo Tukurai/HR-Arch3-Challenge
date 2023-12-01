@@ -3,6 +3,7 @@ import pygame
 from typing import Union
 from Engine.spritesheet import Spritesheet
 from Engine.full_sprite_object import FullSpriteObject
+from Settings import settings
 from Settings.relative_scale import SCALES
 
 
@@ -69,7 +70,7 @@ class SpriteManager:
             # Store it in two libraries, so we can look up by name and ID
             self.sprites_by_name[category][file_name] = sprite_object
             self.sprites_by_id[category][index] = sprite_object
-            print(f"Loaded [FullSpriteObject]: {self.sprites_by_name[category][file_name]}")
+            if(settings.DEBUG_MODE): print(f"Loaded [FullSpriteObject]: {self.sprites_by_name[category][file_name]}")
 
     def get_road(self, sprite_id: Union[int, str]):
         """
@@ -111,13 +112,11 @@ class SpriteManager:
         if isinstance(sprite_id, str):
             if sprite_id in self.sprites_by_name[category]:
                 return self.sprites_by_name[category][sprite_id]
-            else:
-                print(f"Error, '{sprite_id}' not found in Sprite Library ({category}) (by name).")
+            elif(settings.DEBUG_MODE): print(f"Error, '{sprite_id}' not found in Sprite Library ({category}) (by name).")
         if isinstance(sprite_id, int):
             if sprite_id in self.sprites_by_id[category]:
                 return self.sprites_by_id[category][sprite_id]
-            else:
-                print(f"Error, '{sprite_id}' not found in Sprite Library ({category}) (by ID/Int).")
+            elif(settings.DEBUG_MODE): print(f"Error, '{sprite_id}' not found in Sprite Library ({category}) (by ID/Int).")
 
 
 if __name__ == '__main__':

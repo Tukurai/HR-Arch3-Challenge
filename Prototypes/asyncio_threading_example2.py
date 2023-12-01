@@ -3,6 +3,8 @@ import threading
 import time
 from random import randint
 
+from Settings import settings
+
 
 class TestEngine:
     def __init__(self):
@@ -16,11 +18,11 @@ class TestEngine:
             self.handle_events()
 
     def handle_events(self):
-        print("Handling this frame's events")
+        if(settings.DEBUG_MODE): print("Handling this frame's events")
         # The event handling here needs to be adjusted to work properly with asyncio.Queue
         while not self.msg_q.empty():
             item = self.msg_q.get_nowait()
-            print(item)
+            if(settings.DEBUG_MODE): print(item)
             self.msg_q.task_done()
         time.sleep(1)
 
@@ -35,7 +37,7 @@ class FakeAsyncClient:
         while self.running:
             await asyncio.sleep(randint(0, 10000) / 20000)
             await self.msg_q.put(randint(0, 1000))
-        print("We're done")
+        if(settings.DEBUG_MODE): print("We're done")
 
     def run(self):
         asyncio.run(self.do_operation())
@@ -48,5 +50,5 @@ if __name__ == '__main__':
     test = TestEngine()
     test.run()
     asyncio.sleep(5)
-    print("We've reached this far")
+    if(settings.DEBUG_MODE): print("We've reached this far")
     test.msg_client.stop()

@@ -3,6 +3,8 @@ import threading
 import time
 from random import randint
 
+from Settings import settings
+
 
 class TestEngine:
     def __init__(self):
@@ -16,11 +18,11 @@ class TestEngine:
             self.handle_events()
 
     def handle_events(self):
-        print("Handling this frame's events")
+        if(settings.DEBUG_MODE): print("Handling this frame's events")
         # The event handling here needs to be adjusted to work properly with asyncio.Queue
         while not self.msg_q.empty():
             item = self.msg_q.get_nowait()
-            print(item)
+            if(settings.DEBUG_MODE): print(item)
             self.msg_q.task_done()
         time.sleep(1)
 

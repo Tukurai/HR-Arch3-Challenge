@@ -1,6 +1,7 @@
 import pygame
 from Engine.button_component import BUTTON_COLLISION
 from Scenes.game_scene import GameScene
+from Settings import settings
 
 USER_QUIT = pygame.USEREVENT + 3
 
@@ -32,6 +33,6 @@ class MainMenuScene(GameScene):
                     user_quit = pygame.event.Event(USER_QUIT, quit=True)
                     pygame.event.post(user_quit)
 
-                print(f"Button {event.button.component_name} clicked!")
+                if(settings.DEBUG_MODE): print(f"Button {event.button.component_name} clicked!")
 
         return super().handle_event(event)

@@ -2,6 +2,7 @@ import pygame
 
 from Engine.component import Component
 from Engine.text_component import TextComponent
+from Settings import settings
 
 COLOR_ACTIVE = pygame.Color("gray96")
 COLOR_INACTIVE = pygame.Color('gray77')
@@ -60,7 +61,7 @@ class TextBoxComponent(Component):
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if event.key == pygame.K_RETURN:
-                    print(f"{self.text.component_name}: {self.text.text}")
+                    if(settings.DEBUG_MODE): print(f"{self.text.component_name}: {self.text.text}")
                     self.text.text = ''
                 elif event.key == pygame.K_BACKSPACE:
                     self.text.text = self.text[:-1]

@@ -1,5 +1,7 @@
 import pygame
 
+from Settings import settings
+
 
 class CollisionManager:
     def __init__(self, scene_manager, race_scene):
@@ -69,4 +71,4 @@ class CollisionManager:
 
 
 if __name__ == "__main__":
-    print("Ran collision_manager.py directly. Start application from game.py.")
+    if(settings.DEBUG_MODE): print("Ran collision_manager.py directly. Start application from game.py.")

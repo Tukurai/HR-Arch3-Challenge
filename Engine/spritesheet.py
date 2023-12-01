@@ -1,6 +1,8 @@
 import pygame
 import xml.etree.ElementTree as ET
 
+from Settings import settings
+
 
 class Spritesheet:
     def __init__(self, filename, mask_layer_amount=0):
@@ -10,7 +12,7 @@ class Spritesheet:
         self.sprite_atlas = self.load_atlas()
 
     def load_sprite_sheet(self, filename):
-        print(f"Loaded [Spritesheet]:  {filename}")
+        if(settings.DEBUG_MODE): print(f"Loaded [Spritesheet]:  {filename}")
         return pygame.image.load(filename).convert()
 
     def load_mask_layers(self, mask_layers_amount=1) -> dict[int, pygame.Surface]:
@@ -18,7 +20,7 @@ class Spritesheet:
         for layer in range(mask_layers_amount):
             mask_file_name = self.file_name.replace(".png", f"_mask{layer}.png")
             mask_layers[layer] = pygame.image.load(mask_file_name).convert()
-            print(f"Loaded [Mask Layer] :  {mask_file_name}")
+            if(settings.DEBUG_MODE): print(f"Loaded [Mask Layer] :  {mask_file_name}")
         return mask_layers
 
     def load_atlas(self) -> dict:
