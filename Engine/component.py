@@ -58,9 +58,9 @@ class Component:
         sprite = self.get_scaled_rotated_sprite_or_mask(self.sprite, scale)
         screen.blit(sprite[0], draw_pos + sprite[1])
 
-        if self.mask_layers is not None:
-            mask = self.get_scaled_rotated_sprite_or_mask(self.mask_layers[0], scale)
-            screen.blit(mask[0], draw_pos + mask[1])
+        # if self.mask_layers is not None: # Draw mask layers for debugging
+        #    mask = self.get_scaled_rotated_sprite_or_mask(self.mask_layers[0], scale)
+        #    screen.blit(mask[0], draw_pos + mask[1])
 
     def get_scale(self, scale: float = None) -> float:
         """Returns the scale of the object, this has an order of precedence: scale parameter, object scale, default scale"""
@@ -71,6 +71,16 @@ class Component:
             object_scale = scale
         object_scale *= settings.GAME_SCALE
         return object_scale
+    
+    def get_scaled_height(self, scale: float = None) -> float:
+        """Returns the scaled height of the object"""
+        object_scale = self.get_scale(scale)
+        return self.height * object_scale
+    
+    def get_scaled_width(self, scale: float = None) -> float:
+        """Returns the scaled width of the object"""
+        object_scale = self.get_scale(scale)
+        return self.width * object_scale
 
     def get_scaled_rotated_sprite_or_mask(
         self, sprite_or_mask: pygame.Surface, scale: float = None

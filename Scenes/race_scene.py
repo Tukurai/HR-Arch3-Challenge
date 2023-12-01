@@ -17,7 +17,7 @@ class RaceScene(GameScene):
         self.collision_manager = CollisionManager(scene_manager, self)
         self.players = []
 
-        self.set_level("testmap_checkpoints")
+        self.set_level("map_right")
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -25,6 +25,16 @@ class RaceScene(GameScene):
                 self.scene_manager.set_active_scene(
                     self.scene_manager.get_scene_by_name("High score")
                 )
+            elif event.key == pygame.K_1:
+                self.change_level("map_right")
+            elif event.key == pygame.K_2:
+                self.change_level("map_down")
+            elif event.key == pygame.K_3:
+                self.change_level("map_left")
+            elif event.key == pygame.K_4:
+                self.change_level("map_up")
+            elif event.key == pygame.K_5:
+                self.change_level("map_complex")
 
         for component in self.components:  # Ignoring level objs.
             component.handle_event(event)
@@ -49,6 +59,14 @@ class RaceScene(GameScene):
 
         for component in self.components:
             component.draw(screen)
+
+    def change_level(self, level_name):
+        '''Change the level internally and update the players to the new level.'''
+        cached_players = self.players
+        self.clear_race()
+        self.set_level(level_name)
+        self.add_players(cached_players)
+
 
     def set_level(self, level_name):
         level = self.level_manager.get_level(level_name)
@@ -123,16 +141,23 @@ class RaceScene(GameScene):
 
             debug_car_pointer.x = x + debug_x - 5
             debug_car_pointer.y = y + debug_y - 5
-            self.components.append(debug_car_pointer)
+            # self.components.append(debug_car_pointer) # Uncomment to see debug pointers
 
             if len(self.players) >= index + 1:
                 car = self.players[index]
-                if direction in (Direction.UP, Direction.DOWN):
-                    car.x = x + debug_x - (car.height * car.scale / 2)
-                    car.y = y + debug_y - (car.width * car.scale / 2)
-                else:
-                    car.x = x + debug_x - (car.width * car.scale / 2)
-                    car.y = y + debug_y - (car.height * car.scale / 2)
+                match direction: # Set the car position based on the direction (fuck magic numbers)
+                    case Direction.UP:
+                        car.x = debug_car_pointer.x + 13 - (car.get_scaled_height() / 2)
+                        car.y = debug_car_pointer.y - 13 - (car.get_scaled_width() / 2)
+                    case Direction.DOWN:
+                        car.x = debug_car_pointer.x + 13 - (car.get_scaled_height() / 2)
+                        car.y = debug_car_pointer.y - 13 - (car.get_scaled_width() / 2)  
+                    case Direction.LEFT:
+                        car.x = debug_car_pointer.x + 8 - (car.get_scaled_width() / 2)
+                        car.y = debug_car_pointer.y + 13 - (car.get_scaled_height() / 2)
+                    case Direction.RIGHT:
+                        car.x = debug_car_pointer.x - 13 - (car.get_scaled_width() / 2)
+                        car.y = debug_car_pointer.y + 13 - (car.get_scaled_height() / 2)
 
     def get_direction(self, checkpoint_a, checkpoint_b):
         x1, y1 = checkpoint_a
