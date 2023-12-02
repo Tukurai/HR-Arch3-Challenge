@@ -26,13 +26,9 @@ class WebSocketServer(BaseWebSocketClient):
         :return:
         """
         return {
-            "echo": self.handle_echo,
             "register_player": self.handle_register_player,
             "register_highscore": self.handle_register_highscore,
         }
-
-    def handle_echo(self, message):
-        raise NotImplementedError("This method (handle_echo) is not yet implemented")
 
     def handle_register_player(self, message):
         raise NotImplementedError("This method (handle_register_player) is not yet implemented")
@@ -62,3 +58,10 @@ class WebSocketServer(BaseWebSocketClient):
             # Remove the websocket from the list when it disconnects
             if websocket in self.active_connections:
                 self.active_connections.remove(websocket)
+
+    def close(self):
+        server_storage.store_data(GameDataType.HIGH_SCORES, self.game_data.highscores)
+        server_storage.store_data(GameDataType.LATEST_ACTIVE_PLAYERS,
+                                  self.game_data.latest_players)
+        self.loop.call_soon_threadsafe(self.loop.stop)
+        self.thread.join()
