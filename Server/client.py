@@ -22,7 +22,7 @@ class WebSocketClient(BaseWebSocketClient):
         pass
 
     ###########################
-    # Business Logic Methods
+    # Handle Incoming Msg Methods
     ###########################
 
     def handle_active_players_msg(self, message):
@@ -30,6 +30,14 @@ class WebSocketClient(BaseWebSocketClient):
 
     def handle_highscore_msg(self, message):
         raise NotImplementedError("This method (handle_highscore) is not yet implemented")
+
+    ###########################
+    # Outgoing Msg Methods
+    ###########################
+
+
+
+
 
 
 # Example usage
