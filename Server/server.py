@@ -8,8 +8,9 @@ from server_game_data import ServerGameData
 
 
 class WebSocketServer(BaseWebSocketClient):
-    def __init__(self, uri):
-        super().__init__(uri)
+    def __init__(self):
+        super().__init__()
+        self.uri = None # Server does not need a uri
         self.game_data = ServerGameData()
         self.game_data.highscores = server_storage.retrieve_data(GameDataType.HIGH_SCORES)
         self.game_data.latest_players = server_storage.retrieve_data(
@@ -66,3 +67,31 @@ class WebSocketServer(BaseWebSocketClient):
                                   self.game_data.latest_players)
         self.loop.call_soon_threadsafe(self.loop.stop)
         self.thread.join()
+
+"""
+Using screen or tmux
+
+If you use screen or tmux, you can start a script inside a screen or tmux session, which keeps running even if you disconnect. Later, you can reattach to the session to see the output:
+
+    Start a new screen session:
+
+    bash
+
+screen -S my_script_session
+
+Run your script:
+
+bash
+
+python script.py
+
+Detach from the screen session with Ctrl-A followed by D.
+
+Reattach to the session later with:
+
+bash
+
+    screen -r my_script_session
+
+For tmux, the commands are similar.
+"""

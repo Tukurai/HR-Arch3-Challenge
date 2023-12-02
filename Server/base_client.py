@@ -8,14 +8,19 @@ from abc import ABC, abstractmethod
 
 
 class BaseWebSocketClient(ABC):
-    def __init__(self, uri= None):
+    def __init__(self, uri: str = None, port: str = None):
+        # Server Settings from settings file
         self.uri = uri if uri else settings.SERVER_URI
-        self.logging = settings.DEBUG_MODE
+        self.port = port if port else settings.SERVER_PORT
+        self.logging = settings.SERVER_DEBUG_MODE
+
         # Message Router
         self.message_router = self.setup_message_router()
         if not self.message_router:
             raise Exception("Message router not set up. Please add actions and their "
                             "corresponding methods.")
+
+        # Asyncio and Threading startup
         self.loop = asyncio.new_event_loop()
         self.thread = threading.Thread(target=self.start_loop, args=(self.loop,))
         self.thread.start()
@@ -53,7 +58,7 @@ class BaseWebSocketClient(ABC):
         asyncio.run_coroutine_threadsafe(self._send(message), self.loop)
 
     async def _send(self, message):
-        async with websockets.connect(self.uri) as websocket:
+        async with websockets.connect(f"{self.uri}:{self.port}") as websocket:
             await websocket.send(message)
 
     def close(self):

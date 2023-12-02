@@ -6,8 +6,8 @@ from server_game_data import ServerGameData
 
 
 class WebSocketClient(BaseWebSocketClient):
-    def __init__(self, uri, player_name: str, logging=False):
-        super().__init__(uri, logging)
+    def __init__(self, player_name: str, uri=None):
+        super().__init__(uri)
         self.game_data = ServerGameData()
         self.player_name = player_name
 
@@ -46,11 +46,7 @@ class WebSocketClient(BaseWebSocketClient):
 
 # Example usage
 if __name__ == "__main__":
-    client = WebSocketClient("wss://socketsbay.com/wss/v2/1/demo/")
-
-    # Example sending a message
-    client.send_message(
-        json.dumps({"action": "request_latest_players", "params": {"name": "This player name"}}))
+    client = WebSocketClient("Salih_TEST")
 
     # Simulate main program running
     try:
