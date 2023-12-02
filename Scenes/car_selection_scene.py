@@ -50,7 +50,7 @@ class CarSelectionScene(GameScene):
     def get_car_selection(self):
         return {
             pygame.K_1: PlayerCar(
-                "Player",
+                "Player1",
                 None,
                 180,
                 1.0,
@@ -59,7 +59,7 @@ class CarSelectionScene(GameScene):
                 1.10,
             ),
             pygame.K_2: PlayerCar(
-                "Player",
+                "Player2",
                 None,
                 240,
                 1.0,
@@ -68,7 +68,7 @@ class CarSelectionScene(GameScene):
                 1.10,
             ),
             pygame.K_3: PlayerCar(
-                "Player",
+                "Player3",
                 None,
                 220,
                 1.0,
@@ -77,7 +77,7 @@ class CarSelectionScene(GameScene):
                 1.10,
             ),
             pygame.K_4: PlayerCar(
-                "Player",
+                "Player4",
                 None,
                 160,
                 1.0,
@@ -86,7 +86,7 @@ class CarSelectionScene(GameScene):
                 1.10,
             ),
             pygame.K_5: PlayerCar(
-                "Player",
+                "Player5",
                 None,
                 280,
                 1.0,
