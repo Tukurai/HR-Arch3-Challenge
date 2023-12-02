@@ -1,4 +1,5 @@
 import copy
+import math
 
 import pygame
 from Engine.button_component import BUTTON_CLICK
@@ -93,15 +94,99 @@ class RaceScene(GameScene):
 
     def drive_car(self, car):
         direction = self.get_direction(
-            self.level["Checkpoints"][car.current_checkpoint], self.level["Checkpoints"][car.next_checkpoint])
+            self.level["Checkpoints"][car.current_checkpoint],
+            self.level["Checkpoints"][car.next_checkpoint],
+        )
         ideal_rotation = direction.value * 90
 
-        if self.fastest_rotation_direction(car.rotation, ideal_rotation) > 0:
-            car.handle_controls(Direction.RIGHT)
-        else:
-            car.handle_controls(Direction.LEFT)
+        next_next_checkpoint = self.get_next_checkpoint(car.next_checkpoint)
+        next_next_direction = self.get_direction(
+            self.level["Checkpoints"][car.next_checkpoint],
+            self.level["Checkpoints"][next_next_checkpoint],
+        )
 
-        car.handle_controls(Direction.UP)
+        # Determine the center of the checkpoint, or the ideal turning point, this requires me to know the next checkpoint.
+        scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE
+        small_offset = scaled_tile_size * 0.47
+        large_offset = scaled_tile_size * 0.53
+        center_offset = scaled_tile_size * 0.5
+        target_pos_offset = (0, 0)
+        match direction:
+            case Direction.UP:
+                match next_next_direction:
+                    case Direction.RIGHT:
+                        target_pos_offset = (large_offset, large_offset)
+                    case Direction.LEFT:
+                        target_pos_offset = (small_offset, large_offset)
+                    case Direction.UP:
+                        target_pos_offset = (center_offset, center_offset)
+            case Direction.DOWN:
+                match next_next_direction:
+                    case Direction.RIGHT:
+                        target_pos_offset = (large_offset, small_offset)
+                    case Direction.LEFT:
+                        target_pos_offset = (small_offset, small_offset)
+                    case Direction.DOWN:
+                        target_pos_offset = (center_offset, center_offset)
+            case Direction.LEFT:
+                match next_next_direction:
+                    case Direction.UP:
+                        target_pos_offset = (large_offset, small_offset)
+                    case Direction.DOWN:
+                        target_pos_offset = (large_offset, large_offset)
+                    case Direction.LEFT:
+                        target_pos_offset = (center_offset, center_offset)
+            case Direction.RIGHT:
+                match next_next_direction:
+                    case Direction.UP:
+                        target_pos_offset = (small_offset, small_offset)
+                    case Direction.DOWN:
+                        target_pos_offset = (small_offset, large_offset)
+                    case Direction.RIGHT:
+                        target_pos_offset = (center_offset, center_offset)
+
+        x = (
+            (self.level["Checkpoints"][car.next_checkpoint][0] * scaled_tile_size)
+            + settings.TRACK_OFFSET
+            + target_pos_offset[0]
+        )
+        y = (
+            (self.level["Checkpoints"][car.next_checkpoint][1] * scaled_tile_size)
+            + settings.TRACK_OFFSET
+            + target_pos_offset[1]
+        )
+
+        ideal_rotation = self.calculate_rotation(car.x, car.y, x, y)
+        rotation_difference = self.fastest_rotation_direction(car.rotation, ideal_rotation)
+
+        turning = False
+        if  rotation_difference > 3:
+            car.handle_controls(Direction.RIGHT)
+            turning = True
+        elif rotation_difference < -3:
+            car.handle_controls(Direction.LEFT)
+            turning = True
+
+        if (abs(car.x - x) <= scaled_tile_size
+            and abs(car.y - y) <= scaled_tile_size
+            and turning
+        ):
+            if car.current_speed > 100:
+                car.handle_controls(Direction.DOWN)
+            elif car.current_speed > 60:
+                car.apply_drag()
+            else:
+                car.handle_controls(Direction.UP)
+        else:
+            car.handle_controls(Direction.UP)
+
+    def calculate_rotation(self, current_x, current_y, target_x, target_y):
+        dx = target_x - current_x
+        dy = target_y - current_y
+        radians = math.atan2(dy, dx)
+        degrees = math.degrees(radians)
+        adjusted_degrees = (90 + degrees) % 360
+        return adjusted_degrees
 
     def fastest_rotation_direction(self, current_rotation, target_rotation):
         difference = (target_rotation - current_rotation) % 360
@@ -133,8 +218,7 @@ class RaceScene(GameScene):
                 180,
                 1.0,
                 "Player Car",
-                self.scene_manager.sprite_manager.get_car(
-                    "car_black_small_1.png"),
+                self.scene_manager.sprite_manager.get_car("car_black_small_1.png"),
                 1.10,
             )
             self.players.append(ai_car)
@@ -192,25 +276,17 @@ class RaceScene(GameScene):
                 # Set the car position based on the direction (fuck magic numbers)
                 match direction:
                     case Direction.UP:
-                        car.x = debug_car_pointer.x + 13 - \
-                            (car.get_scaled_height() / 2)
-                        car.y = debug_car_pointer.y - 13 - \
-                            (car.get_scaled_width() / 2)
+                        car.x = debug_car_pointer.x + 13 - (car.get_scaled_height() / 2)
+                        car.y = debug_car_pointer.y - 13 - (car.get_scaled_width() / 2)
                     case Direction.DOWN:
-                        car.x = debug_car_pointer.x + 13 - \
-                            (car.get_scaled_height() / 2)
-                        car.y = debug_car_pointer.y - 13 - \
-                            (car.get_scaled_width() / 2)
+                        car.x = debug_car_pointer.x + 13 - (car.get_scaled_height() / 2)
+                        car.y = debug_car_pointer.y - 13 - (car.get_scaled_width() / 2)
                     case Direction.LEFT:
-                        car.x = debug_car_pointer.x + 8 - \
-                            (car.get_scaled_width() / 2)
-                        car.y = debug_car_pointer.y + 13 - \
-                            (car.get_scaled_height() / 2)
+                        car.x = debug_car_pointer.x + 8 - (car.get_scaled_width() / 2)
+                        car.y = debug_car_pointer.y + 13 - (car.get_scaled_height() / 2)
                     case Direction.RIGHT:
-                        car.x = debug_car_pointer.x - 13 - \
-                            (car.get_scaled_width() / 2)
-                        car.y = debug_car_pointer.y + 13 - \
-                            (car.get_scaled_height() / 2)
+                        car.x = debug_car_pointer.x - 13 - (car.get_scaled_width() / 2)
+                        car.y = debug_car_pointer.y + 13 - (car.get_scaled_height() / 2)
 
     def get_direction(self, checkpoint_a, checkpoint_b):
         x1, y1 = checkpoint_a
@@ -307,6 +383,12 @@ class RaceScene(GameScene):
         car.y = checkpoint.y + offset_y + checkpoint.height / 2
         car.rotation = rotation.value * 90
 
+    def get_next_checkpoint(self, current_checkpoint):
+        next_checkpoint = current_checkpoint + 1
+        if next_checkpoint >= len(self.level["Checkpoints"]):
+            next_checkpoint = 0
+        return next_checkpoint
+
     def update_checkpoints(self, car):
         mask_car = pygame.mask.from_surface(
             car.get_scaled_rotated_sprite_or_mask(car.mask_layers[0])[0]
@@ -321,16 +403,17 @@ class RaceScene(GameScene):
             mask_car, (car.x - checkpoint.x, car.y - checkpoint.y)
         ):
             car.current_checkpoint = car.next_checkpoint
-            car.next_checkpoint += 1
-            if car.next_checkpoint >= len(self.level["Checkpoints"]):
-                car.next_checkpoint = 0
+            car.next_checkpoint = self.get_next_checkpoint(car.current_checkpoint)
 
             if car.current_checkpoint == 0:
                 car.lap += 1
                 if car.lap >= 3:
                     # get all players that are an instance of playercar
                     player_cars = [
-                        player for player in self.players if isinstance(player, PlayerCar)]
+                        player
+                        for player in self.players
+                        if isinstance(player, PlayerCar)
+                    ]
                     progress_to_next_scene = True
                     for player in player_cars:
                         if player.lap < 3:
