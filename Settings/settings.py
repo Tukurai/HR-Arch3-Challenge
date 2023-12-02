@@ -8,7 +8,7 @@ TILE_SIZE = 128
 # Track offset. Used to offset the first tile for the race track.
 TRACK_OFFSET = 64
 # Set the global volume 0 -> 1
-GLOBAL_VOLUME = 0.2
+GLOBAL_VOLUME = 0
 # Sets the music to child mode or not
 MUSIC_CHILD_MODE = False
 # Debug mode

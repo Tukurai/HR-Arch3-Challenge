@@ -1,6 +1,7 @@
 import copy
 
 import pygame
+from Engine.button_component import BUTTON_CLICK
 from Engine.component import Component
 from Engine.player_car import PlayerCar
 from Enums.direction import Direction
@@ -22,11 +23,7 @@ class RaceScene(GameScene):
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                self.scene_manager.set_active_scene(
-                    self.scene_manager.get_scene_by_name("High score")
-                )
-            elif event.key == pygame.K_1:
+            if event.key == pygame.K_1:
                 self.change_level("map_right")
             elif event.key == pygame.K_2:
                 self.change_level("map_down")
@@ -38,6 +35,13 @@ class RaceScene(GameScene):
                 self.change_level("map_complex")
         elif event.type == RESET_CAR_EVENT:
             self.reset_car_to_checkpoint(event.car)
+
+        if event.type == BUTTON_CLICK:
+            print(event)
+            if event.button.component_name == "EndRaceButton":
+                self.scene_manager.set_active_scene(
+                    self.scene_manager.get_scene_by_name("High score")
+                )
 
         for component in self.components:  # Ignoring level objs.
             component.handle_event(event)
@@ -68,7 +72,8 @@ class RaceScene(GameScene):
         for component in self.components:
             component.draw(screen)
 
-        if settings.DEBUG_MODE: self.draw_checkpoints(screen)
+        if settings.DEBUG_MODE:
+            self.draw_checkpoints(screen)
 
     def change_level(self, level_name):
         """Change the level internally and update the players to the new level."""
@@ -86,11 +91,12 @@ class RaceScene(GameScene):
             "Objects": self.get_level_layer(level, "Objects"),
             "Checkpoints": self.get_level_checkpoints(level, "Checkpoints"),
         }
-    
+
     def drive_car(self, car):
-        direction = self.get_direction(self.level["Checkpoints"][car.current_checkpoint], self.level["Checkpoints"][car.next_checkpoint])
+        direction = self.get_direction(
+            self.level["Checkpoints"][car.current_checkpoint], self.level["Checkpoints"][car.next_checkpoint])
         ideal_rotation = direction.value * 90
-        
+
         if self.fastest_rotation_direction(car.rotation, ideal_rotation) > 0:
             car.handle_controls(Direction.RIGHT)
         else:
@@ -128,7 +134,8 @@ class RaceScene(GameScene):
                 180,
                 1.0,
                 "Player Car",
-                self.scene_manager.sprite_manager.get_car("car_black_small_1.png"),
+                self.scene_manager.sprite_manager.get_car(
+                    "car_black_small_1.png"),
                 1.10,
             )
             self.players.append(ai_car)
@@ -183,19 +190,28 @@ class RaceScene(GameScene):
 
             if len(self.players) >= index + 1:
                 car = self.players[index]
-                match direction:  # Set the car position based on the direction (fuck magic numbers)
+                # Set the car position based on the direction (fuck magic numbers)
+                match direction:
                     case Direction.UP:
-                        car.x = debug_car_pointer.x + 13 - (car.get_scaled_height() / 2)
-                        car.y = debug_car_pointer.y - 13 - (car.get_scaled_width() / 2)
+                        car.x = debug_car_pointer.x + 13 - \
+                            (car.get_scaled_height() / 2)
+                        car.y = debug_car_pointer.y - 13 - \
+                            (car.get_scaled_width() / 2)
                     case Direction.DOWN:
-                        car.x = debug_car_pointer.x + 13 - (car.get_scaled_height() / 2)
-                        car.y = debug_car_pointer.y - 13 - (car.get_scaled_width() / 2)
+                        car.x = debug_car_pointer.x + 13 - \
+                            (car.get_scaled_height() / 2)
+                        car.y = debug_car_pointer.y - 13 - \
+                            (car.get_scaled_width() / 2)
                     case Direction.LEFT:
-                        car.x = debug_car_pointer.x + 8 - (car.get_scaled_width() / 2)
-                        car.y = debug_car_pointer.y + 13 - (car.get_scaled_height() / 2)
+                        car.x = debug_car_pointer.x + 8 - \
+                            (car.get_scaled_width() / 2)
+                        car.y = debug_car_pointer.y + 13 - \
+                            (car.get_scaled_height() / 2)
                     case Direction.RIGHT:
-                        car.x = debug_car_pointer.x - 13 - (car.get_scaled_width() / 2)
-                        car.y = debug_car_pointer.y + 13 - (car.get_scaled_height() / 2)
+                        car.x = debug_car_pointer.x - 13 - \
+                            (car.get_scaled_width() / 2)
+                        car.y = debug_car_pointer.y + 13 - \
+                            (car.get_scaled_height() / 2)
 
     def get_direction(self, checkpoint_a, checkpoint_b):
         x1, y1 = checkpoint_a
@@ -312,14 +328,15 @@ class RaceScene(GameScene):
 
             if car.current_checkpoint == 0:
                 car.lap += 1
-                if car.lap >= 3 :
+                if car.lap >= 3:
                     # get all players that are an instance of playercar
-                    player_cars = [player for player in self.players if isinstance(player, PlayerCar)]
+                    player_cars = [
+                        player for player in self.players if isinstance(player, PlayerCar)]
                     progress_to_next_scene = True
                     for player in player_cars:
                         if player.lap < 3:
                             progress_to_next_scene = False
-                    
+
                     if progress_to_next_scene:
                         self.scene_manager.set_active_scene(
                             self.scene_manager.get_scene_by_name("High score")

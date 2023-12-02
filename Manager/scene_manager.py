@@ -106,28 +106,12 @@ class SceneManager:
                         True,
                     ),
                     ButtonComponent(
-                        "SettingsButton",
-                        self.sprite_manager.get_ui_element(
-                            "blue_button00.png").sprite,
-                        (
-                            self.screen.get_width() / 2 - 95,
-                            self.screen.get_height() / 2 + 85,
-                        ),
-                        190,
-                        49,
-                        0,
-                        1,
-                        "Settings",
-                        32,
-                        True,
-                    ),
-                    ButtonComponent(
                         "QuitButton",
                         self.sprite_manager.get_ui_element(
                             "blue_button00.png").sprite,
                         (
                             self.screen.get_width() / 2 - 95,
-                            self.screen.get_height() / 2 + 170,
+                            self.screen.get_height() / 2 + 85,
                         ),
                         190,
                         49,
@@ -167,6 +151,24 @@ class SceneManager:
                         0,
                         0,
                         1.00,
+                    ),
+                    ButtonComponent(
+                        "BackButton",
+                        self.sprite_manager.get_ui_element(
+                            "blue_button00.png").sprite,
+                        (
+                            self.screen.get_width() - self.sprite_manager.get_ui_element(
+                            "blue_button00.png").width - 20 ,
+                            self.screen.get_height() - self.sprite_manager.get_ui_element(
+                            "blue_button00.png").height - 20,
+                        ),
+                        190,
+                        49,
+                        0,
+                        1,
+                        "Back to main menu",
+                        24,
+                        True,
                     ),
                     TextBox(
                         "NameTextBox",
@@ -301,6 +303,24 @@ class SceneManager:
                         0,
                         1.00,
                     ),
+                    ButtonComponent(
+                        "EndRaceButton",
+                        self.sprite_manager.get_ui_element(
+                            "blue_button00.png").sprite,
+                        (
+                            self.screen.get_width() - self.sprite_manager.get_ui_element(
+                            "blue_button00.png").width - 20 ,
+                            self.screen.get_height() - self.sprite_manager.get_ui_element(
+                            "blue_button00.png").height - 20,
+                        ),
+                        190,
+                        49,
+                        0,
+                        1,
+                        "End Race",
+                        24,
+                        True,
+                    ),
                 ],
             ),
             HighScoreScene(
@@ -319,18 +339,23 @@ class SceneManager:
                         0,
                         1.00,
                     ),
-                    TextComponent(
-                        "Instruction",
-                        "Press Enter to to back to the main menu",
+                    ButtonComponent(
+                        "BackButton",
+                        self.sprite_manager.get_ui_element(
+                            "blue_button00.png").sprite,
+                        (
+                            self.screen.get_width() - self.sprite_manager.get_ui_element(
+                            "blue_button00.png").width - 20 ,
+                            self.screen.get_height() - self.sprite_manager.get_ui_element(
+                            "blue_button00.png").height - 20,
+                        ),
+                        190,
+                        49,
+                        0,
+                        1,
+                        "Back to main menu",
                         24,
                         True,
-                        None,
-                        (self.screen.get_width() / 2,
-                         self.screen.get_height() - 60),
-                        0,
-                        0,
-                        0,
-                        1.00,
                     ),
                 ],
             ),

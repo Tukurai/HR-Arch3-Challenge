@@ -207,11 +207,6 @@ class SoundManager:
                     self.car_sounds[event.car.player_name]
                 )
 
-    # TODO: Add method for car sounds
-    # Function assigns car sound sequence to any free mixer track
-    # List of 3 sound files: rev_up, steady(repeatable) and rev_down.
-    # Returns the assigned mixer track:
-
     def play_car_sound(self, speed, previous_speed, max_speed, sound_files: list):
         if speed < 0:
             speed = speed * -1
@@ -221,7 +216,7 @@ class SoundManager:
             previous_speed = previous_speed * -1
 
         for sound_file in sound_files:
-            self.volume_sfx(sound_file, settings.GLOBAL_VOLUME)
+            self.volume_sfx(sound_file, 1)
 
         rev_up = self.sfx_library[sound_files[0]]
         driving = self.sfx_library[sound_files[1]]

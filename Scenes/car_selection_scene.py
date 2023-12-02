@@ -1,7 +1,6 @@
 import copy
 import pygame
-from Engine.button_component import BUTTON_COLLISION
-from Engine.text_box import TEXT_BOX_INPUT
+from Engine.button_component import BUTTON_CLICK
 from Engine.player_car import PlayerCar
 from Enums.direction import Direction
 from Scenes.game_scene import GameScene
@@ -15,26 +14,38 @@ class CarSelectionScene(GameScene):
         self.selected_cars = []
         self.cars_needed = 1
         self.player_name = ""
+        self.car_buttons = []
 
     def handle_event(self, event):
-        if event.type == BUTTON_COLLISION:
-            if pygame.mouse.get_pressed()[0]:
-                if event.button.component_name in self.car_selection:
-                    car = copy.copy(self.car_selection[event.button.component_name])
-                    car.player_name = f"Player_{len(self.selected_cars)+1}"
-                    car.set_controls(CarSelectionScene.get_key_mapping(len(self.selected_cars)+1))
-                    self.selected_cars.append(car)
+        if event.type == BUTTON_CLICK:
+            self.car_buttons.append(event.button)
 
-                    if len(self.selected_cars) >= self.cars_needed:
-                        race_scene = self.scene_manager.get_scene_by_name("Race")
-                        race_scene.clear_race()
-                        race_scene.add_players(self.selected_cars)                
+            if event.button.component_name in self.car_selection:
+                car = copy.copy(self.car_selection[event.button.component_name])
+                car.player_name = f"Player_{len(self.selected_cars)+1}"
+                car.set_controls(CarSelectionScene.get_key_mapping(len(self.selected_cars)+1))
+                self.selected_cars.append(car)
+                event.button.selected = True
 
-                        self.scene_manager.set_active_scene(race_scene)
+                if len(self.selected_cars) >= self.cars_needed:
+                    race_scene = self.scene_manager.get_scene_by_name("Race")
+                    race_scene.clear_race()
+                    race_scene.add_players(self.selected_cars)
 
-                if(settings.DEBUG_MODE): print(f"Button {event.button.component_name} clicked!")
+                    self.scene_manager.set_active_scene(race_scene)
+            
+            elif event.button.component_name == "BackButton":
+                self.scene_manager.set_active_scene(self.scene_manager.get_scene_by_name("Main menu"))
+
+            if(settings.DEBUG_MODE): print(f"Button {event.button.component_name} clicked!")
 
         return super().handle_event(event)
+    
+    def scene_changed(self):
+        for button in self.car_buttons:
+            button.reset()
+
+        return super().scene_changed()
 
 
     def get_key_mapping(number):

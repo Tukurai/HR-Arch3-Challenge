@@ -3,7 +3,7 @@ import pygame
 from Engine.component import Component
 from Engine.text_component import TextComponent
 
-BUTTON_COLLISION = pygame.USEREVENT + 2
+BUTTON_CLICK = pygame.USEREVENT + 5
 
 class ButtonComponent(Component):
     def __init__(self,
@@ -16,7 +16,8 @@ class ButtonComponent(Component):
                  scale=None,
                  text=None,
                  font_size=0,
-                 centered=True):
+                 centered=True,
+                 hover_color=(200, 200, 200)):
         super().__init__(
             component_name=file_name,
             sprite=sprite,
@@ -39,18 +40,44 @@ class ButtonComponent(Component):
             0,
             1.00
         )
+        self.hover_color = hover_color
+        self.hovered = False
+        self.selected = False
+    
+    def update(self, delta_time, user_input):
+        pass
 
-    def update(self, timedelta, input_state):
+    def handle_event(self, event):
         if self.get_button_collision() is True:
-            button_collision = pygame.event.Event(BUTTON_COLLISION, button=self)
-            pygame.event.post(button_collision)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                button_collision = pygame.event.Event(BUTTON_CLICK, button=self)
+                pygame.event.post(button_collision)
+
+            self.hovered = True
+        elif self.selected is False:
+            self.hovered = False
+        
+        return super().handle_event(event)
 
     def get_button_collision(self):
         return pygame.Rect(self.x, self.y, self.width, self.height).collidepoint(pygame.mouse.get_pos())
+
+    def get_color(self):
+        if self.hovered is True:
+            return self.hover_color
+        else:
+            return pygame.Color(100, 100, 100)
+    
+    def reset(self):
+        self.hovered = False
+        self.selected = False
     
     def draw(self, screen, pos=None, scale=None):
         super().draw(screen, pos, scale=scale)
 
         if self.text_component is not None:
             self.text_component.draw(screen)
+
+        if self.hovered is True:
+            pygame.draw.rect(screen, self.get_color(), (self.x, self.y, self.width, self.height), 1)
 
