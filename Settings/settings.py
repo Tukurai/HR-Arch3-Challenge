@@ -19,3 +19,7 @@ SERVER_URI = "86.80.116.182"
 SERVER_PORT = "8765"
 # Server Logging bool
 SERVER_DEBUG_MODE = True
+# Player to player collision
+PLAYER_TO_PLAYER_COLLISION = False
+# max number of players
+MAX_PLAYERS = 2

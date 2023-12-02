@@ -19,7 +19,8 @@ class CollisionManager:
         collisions = {player: [] for player in players}
 
         # Check collision against other players
-        self.check_players_collision(players, collisions)
+        if settings.PLAYER_TO_PLAYER_COLLISION:
+            self.check_players_collision(players, collisions)
 
         # Check collision against road and objects
         self.check_road_objects_collision(level, players, collisions)

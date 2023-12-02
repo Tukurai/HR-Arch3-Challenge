@@ -15,16 +15,15 @@ class PlayerCar(Car):
         component_name,
         full_sprite,
         depth,
+        tolerance=30,
     ):
-        super().__init__(
-            max_speed, drag, component_name, full_sprite, depth
-        )
+        super().__init__(max_speed, drag, component_name, full_sprite, depth, tolerance)
         self.player_name = player_name
         self.controls = controls
         self.reverse_controls = None
         if controls is not None:
             self.set_controls(controls)
-    
+
     def set_controls(self, controls):
         self.controls = controls
         self.reverse_controls = {v: k for k, v in controls.items()}

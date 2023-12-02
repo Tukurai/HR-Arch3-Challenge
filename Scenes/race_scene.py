@@ -196,7 +196,7 @@ class RaceScene(GameScene):
 
     def set_starting_positions(self, starting_position, first_checkpoint):
         scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE
-        max_players = 2
+        max_players = settings.MAX_PLAYERS
 
         x = (
             (starting_position[0] * scaled_tile_size)

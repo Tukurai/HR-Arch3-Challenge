@@ -23,7 +23,9 @@ class CarSelectionScene(GameScene):
             if event.button.component_name in self.car_selection:
                 car = copy.copy(self.car_selection[event.button.component_name])
                 car.player_name = f"Player_{len(self.selected_cars)+1}"
-                car.set_controls(CarSelectionScene.get_key_mapping(len(self.selected_cars)+1))
+                car.set_controls(
+                    CarSelectionScene.get_key_mapping(len(self.selected_cars) + 1)
+                )
                 self.selected_cars.append(car)
                 event.button.selected = True
 
@@ -33,20 +35,22 @@ class CarSelectionScene(GameScene):
                     race_scene.add_players(self.selected_cars)
 
                     self.scene_manager.set_active_scene(race_scene)
-            
-            elif event.button.component_name == "BackButton":
-                self.scene_manager.set_active_scene(self.scene_manager.get_scene_by_name("Main menu"))
 
-            if(settings.DEBUG_MODE): print(f"Button {event.button.component_name} clicked!")
+            elif event.button.component_name == "BackButton":
+                self.scene_manager.set_active_scene(
+                    self.scene_manager.get_scene_by_name("Main menu")
+                )
+
+            if settings.DEBUG_MODE:
+                print(f"Button {event.button.component_name} clicked!")
 
         return super().handle_event(event)
-    
+
     def scene_changed(self):
         for button in self.car_buttons:
             button.reset()
 
         return super().scene_changed()
-
 
     def get_key_mapping(number):
         match number:
@@ -76,6 +80,7 @@ class CarSelectionScene(GameScene):
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_black_small_1.png"),
                 1.10,
+                30,
             ),
             "car2": PlayerCar(
                 "Player2",
@@ -85,6 +90,7 @@ class CarSelectionScene(GameScene):
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_red_small_1.png"),
                 1.10,
+                25,
             ),
             "car3": PlayerCar(
                 "Player3",
@@ -94,6 +100,7 @@ class CarSelectionScene(GameScene):
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_yellow_small_1.png"),
                 1.10,
+                27,
             ),
             "car4": PlayerCar(
                 "Player4",
@@ -103,6 +110,7 @@ class CarSelectionScene(GameScene):
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_green_small_1.png"),
                 1.10,
+                35,
             ),
             "car5": PlayerCar(
                 "Player5",
@@ -112,5 +120,6 @@ class CarSelectionScene(GameScene):
                 "Player Car",
                 self.scene_manager.sprite_manager.get_car("car_blue_small_1.png"),
                 1.10,
+                20,
             ),
         }

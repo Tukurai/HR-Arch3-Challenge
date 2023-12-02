@@ -10,7 +10,7 @@ RESET_CAR_EVENT = pygame.USEREVENT + 2
 
 
 class Car(Component):
-    def __init__(self, max_speed, drag, component_name, full_sprite, depth):
+    def __init__(self, max_speed, drag, component_name, full_sprite, depth, tolerance=30):
         super().__init__(
             component_name,
             full_sprite.sprite,
@@ -28,6 +28,7 @@ class Car(Component):
         self.prev_x = 0
         self.prev_y = 0
 
+        self.tolerance = tolerance
         self.current_checkpoint = 0
         self.next_checkpoint = 1
         self.lap = 0
@@ -110,7 +111,7 @@ class Car(Component):
             if self.timeout > 0:
                 self.timeout -= 1
 
-        if self.timeout > 30:
+        if self.timeout > self.tolerance:
             self.reset_to_last_checkpoint()
 
         self.prev_x = self.x
