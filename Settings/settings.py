@@ -12,4 +12,4 @@ GLOBAL_VOLUME = 0.2
 # Sets the music to child mode or not
 MUSIC_CHILD_MODE = False
 # Debug mode
-DEBUG_MODE = False
+DEBUG_MODE = True

@@ -2,6 +2,7 @@ import pygame
 from Engine.component import Component
 from Engine.text_component import TextComponent
 from Engine.button_component import ButtonComponent
+from Engine.text_box import TextBox
 from Scenes.main_menu_scene import MainMenuScene
 from Scenes.race_scene import RaceScene
 from Scenes.high_score_scene import HighScoreScene
@@ -58,7 +59,8 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "SinglePlayer",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_ui_element(
+                            "blue_button00.png").sprite,
                         (
                             self.screen.get_width() / 2 - 95,
                             self.screen.get_height() / 2 - 170,
@@ -73,7 +75,8 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "MultiPlayer",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_ui_element(
+                            "blue_button00.png").sprite,
                         (
                             self.screen.get_width() / 2 - 95,
                             self.screen.get_height() / 2 - 85,
@@ -88,7 +91,8 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "HighScoreButton",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_ui_element(
+                            "blue_button00.png").sprite,
                         (
                             self.screen.get_width() / 2 - 95,
                             self.screen.get_height() / 2,
@@ -103,7 +107,8 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "SettingsButton",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_ui_element(
+                            "blue_button00.png").sprite,
                         (
                             self.screen.get_width() / 2 - 95,
                             self.screen.get_height() / 2 + 85,
@@ -118,7 +123,8 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "QuitButton",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_ui_element(
+                            "blue_button00.png").sprite,
                         (
                             self.screen.get_width() / 2 - 95,
                             self.screen.get_height() / 2 + 170,
@@ -151,15 +157,118 @@ class SceneManager:
                     ),
                     TextComponent(
                         "Instruction",
-                        "Press 1, 2, 3, 4 or 5 to choose",
+                        "Enter your name, hit enter and select a car",
                         24,
                         True,
                         None,
-                        (self.screen.get_width() / 2, self.screen.get_height() - 60),
+                        (self.screen.get_width() / 2,
+                         self.screen.get_height() - 60),
                         0,
                         0,
                         0,
                         1.00,
+                    ),
+                    TextBox(
+                        "NameTextBox",
+                        (self.screen.get_width() / 2 - 95,
+                         self.screen.get_height() / 2 - 255),
+                        190,
+                        49,
+                        text="Enter your name",
+                        font_size=32,
+                        saved_text_display=TextComponent(
+                            "PlayerName",
+                            "Player Name: ",
+                            24,
+                            True,
+                            None,
+                            (self.screen.get_width() / 2,
+                             (self.screen.get_height() / 2) - 185),
+                            0,
+                            0,
+                            0,
+                            1.00,
+                        ),
+                    ),
+                    ButtonComponent(
+                        "car1",
+                        self.sprite_manager.get_car(
+                            "car_black_small_1.png").sprite,
+                        ((self.screen.get_width() / 2) - (self.sprite_manager.get_car(
+                            "car_black_small_1.png").width / 2) - 200, self.screen.get_height() / 2),
+                        self.sprite_manager.get_car(
+                            "car_black_small_1.png").width,
+                        self.sprite_manager.get_car(
+                            "car_black_small_1.png").height,
+                        0,
+                        1.00,
+                        "",
+                        1,
+                        True,
+                    ),
+                    ButtonComponent(
+                        "car2",
+                        self.sprite_manager.get_car(
+                            "car_red_small_1.png").sprite,
+                        ((self.screen.get_width() / 2) - (self.sprite_manager.get_car(
+                            "car_red_small_1.png").width / 2) - 100, self.screen.get_height() / 2),
+                        self.sprite_manager.get_car(
+                            "car_red_small_1.png").width,
+                        self.sprite_manager.get_car(
+                            "car_red_small_1.png").height,
+                        0,
+                        1.00,
+                        "",
+                        1,
+                        True,
+                    ),
+                    ButtonComponent(
+                        "car3",
+                        self.sprite_manager.get_car(
+                            "car_yellow_small_1.png").sprite,
+                        ((self.screen.get_width() / 2) - (self.sprite_manager.get_car(
+                            "car_yellow_small_1.png").width / 2), self.screen.get_height() / 2),
+                        self.sprite_manager.get_car(
+                            "car_yellow_small_1.png").width,
+                        self.sprite_manager.get_car(
+                            "car_yellow_small_1.png").height,
+                        0,
+                        1.00,
+                        "",
+                        1,
+                        True,
+                    ),
+                    ButtonComponent(
+                        "car4",
+                        self.sprite_manager.get_car(
+                            "car_green_small_1.png").sprite,
+                        ((self.screen.get_width() / 2) - (self.sprite_manager.get_car(
+                            "car_green_small_1.png").width / 2) + 100, self.screen.get_height() / 2),
+                        self.sprite_manager.get_car(
+                            "car_green_small_1.png").width,
+                        self.sprite_manager.get_car(
+                            "car_green_small_1.png").height,
+                        0,
+                        1.00,
+                        "",
+                        1,
+                        True,
+                    ),
+                    ButtonComponent(
+                        "car5",
+                        self.sprite_manager.get_car(
+                            "car_blue_small_1.png").sprite,
+                        ((self.screen.get_width() / 2) - (self.sprite_manager.get_car(
+                            "car_blue_small_1.png").width / 2) + 200, self.screen.get_height() / 2),
+                        self.sprite_manager.get_car(
+                            "car_blue_small_1.png").width,
+                        self.sprite_manager.get_car(
+                            "car_blue_small_1.png").height,
+                        0,
+                        1.00,
+                        "",
+                        1,
+                        True,
                     ),
                 ],
             ),
@@ -185,7 +294,8 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        (self.screen.get_width() / 2, self.screen.get_height() - 60),
+                        (self.screen.get_width() / 2,
+                         self.screen.get_height() - 60),
                         0,
                         0,
                         0,
@@ -215,7 +325,8 @@ class SceneManager:
                         24,
                         True,
                         None,
-                        (self.screen.get_width() / 2, self.screen.get_height() - 60),
+                        (self.screen.get_width() / 2,
+                         self.screen.get_height() - 60),
                         0,
                         0,
                         0,
@@ -228,4 +339,5 @@ class SceneManager:
 
 
 if __name__ == "__main__":
-    if(settings.DEBUG_MODE): print("Ran scene_manager.py directly. Start application from game.py.")
+    if (settings.DEBUG_MODE):
+        print("Ran scene_manager.py directly. Start application from game.py.")
