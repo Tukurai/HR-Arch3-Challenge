@@ -38,7 +38,7 @@ class Car(Component):
 
     def update(self, timedelta, input_state):
         self.apply_drag()  # Only do this if the car is not actively moving backward of forward.
-        
+
         self.handle_controls(Direction.UP)
 
     def draw(self, screen):
@@ -58,7 +58,7 @@ class Car(Component):
             case Direction.RIGHT:
                 if self.current_speed != 0:
                     self.rotation = (
-                        self.rotation + 2
+                        self.rotation + 3
                     ) % 360  # Rotate 5 degrees to the right
 
     def apply_drag(self):

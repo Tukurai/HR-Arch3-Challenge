@@ -65,8 +65,7 @@ class RaceScene(GameScene):
         for component in self.components:
             component.draw(screen)
 
-        self.draw_checkpoints(screen)
-        # if settings.DEBUG_MODE:
+        if settings.DEBUG_MODE: self.draw_checkpoints(screen)
 
     def change_level(self, level_name):
         """Change the level internally and update the players to the new level."""
