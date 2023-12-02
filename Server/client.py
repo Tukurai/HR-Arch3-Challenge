@@ -22,7 +22,7 @@ class WebSocketClient(BaseWebSocketClient):
         pass
 
     ###########################
-    # Business Logic Methods
+    # Handle Incoming Msg Methods
     ###########################
 
     def handle_active_players_msg(self, message):
@@ -31,18 +31,23 @@ class WebSocketClient(BaseWebSocketClient):
     def handle_highscore_msg(self, message):
         raise NotImplementedError("This method (handle_highscore) is not yet implemented")
 
+    ###########################
+    # Outgoing Msg Methods
+    ###########################
+
 
 # Example usage
 if __name__ == "__main__":
     client = WebSocketClient("wss://socketsbay.com/wss/v2/1/demo/")
 
     # Example sending a message
-    client.send_message(json.dumps({"action": "request_latest_players", "params": {"name": "This player name"}}))
+    client.send_message(
+        json.dumps({"action": "request_latest_players", "params": {"name": "This player name"}}))
 
     # Simulate main program running
     try:
         while True:
-            if(settings.DEBUG_MODE): print("Main loop doing stuff")
+            if (settings.DEBUG_MODE): print("Main loop doing stuff")
             # Example sending a message
             client.send_message(json.dumps({"action": "greet", "params": {"name": "Alice"}}))
             time.sleep(1)

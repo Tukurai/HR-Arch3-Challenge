@@ -15,5 +15,3 @@ class GameServerClient:
     # Function to run the client in a separate thread
     def start_client(self, queue):
         asyncio.new_event_loop().run_until_complete(self.client(queue))
-
-

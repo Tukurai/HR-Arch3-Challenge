@@ -3,6 +3,7 @@ import os
 import time
 import pygame
 from Engine.car import DRIVE_CAR_EVENT
+from Engine.player_car import PlayerCar
 
 from Settings import settings
 
@@ -24,18 +25,13 @@ def main():
     speed = 0
     previous_speed = 0
     max_speed = 10
-    car_sounds = [
-        "car1_rev_up.wav",
-        "car1_driving.wav",
-        "car1_rev_down.wav",
-        "car1_idle.wav",
-    ]
 
     while not DONE:
         pygame.event.pump()  # process event queue
         # It gets the states of all keyboard keys.
         keys = pygame.key.get_pressed()
-        if(settings.DEBUG_MODE): print("%d"%count,keys)
+        if (settings.DEBUG_MODE):
+            print("%d" % count, keys)
         count += 1
         if keys[ord("w")]:  # And if the key is K_DOWN:
             if speed < max_speed:
@@ -44,9 +40,10 @@ def main():
             if speed > 0:
                 speed -= 1
 
-        if(settings.DEBUG_MODE): print(speed)
+        if (settings.DEBUG_MODE):
+            print(speed)
         sound_manager.play_car_sound(
-            speed, previous_speed, max_speed, car_sounds)
+            speed, previous_speed, max_speed, sound_manager.car_sounds)
         previous_speed = speed
         time.sleep(0.1)
 
@@ -63,9 +60,20 @@ class SoundManager:
         current_path = os.path.dirname(os.path.dirname(__file__))
         self.libraries = self.init_libraries(
             os.path.join(current_path, "Assets"))
+        
         self.sfx_library = self.libraries[0]
         self.music_library = self.libraries[1]
 
+        self.car_sounds = {
+            "Player_1": ["car1_revup.wav",
+                        "car1_driving.wav",
+                        "car1_revdown.wav",
+                        "car1_idle.wav"],
+            "Player_2": ["car2_revup.wav",
+                        "car2_driving.wav",
+                        "car2_revdown.wav",
+                        "car2_idle.wav"],
+        }
         self.current_playing_music = ""
 
     def init_libraries(self, assets_dir):
@@ -191,17 +199,13 @@ class SoundManager:
         Handles the sound manager events
         """
         if event.type == DRIVE_CAR_EVENT:
-            self.play_car_sound(
-                event.car.current_speed,
-                event.car.prev_speed,
-                event.car.max_speed,
-                [
-                    "car1_revup.wav",
-                    "car1_driving.wav",
-                    "car1_revdown.wav",
-                    "car1_idle.wav",
-                ],
-            )
+            if type(event.car) == PlayerCar:
+                self.play_car_sound(
+                    event.car.current_speed,
+                    event.car.prev_speed,
+                    event.car.max_speed,
+                    self.car_sounds[event.car.player_name]
+                )
 
     # TODO: Add method for car sounds
     # Function assigns car sound sequence to any free mixer track
@@ -217,7 +221,7 @@ class SoundManager:
             previous_speed = previous_speed * -1
 
         for sound_file in sound_files:
-            self.volume_sfx(sound_file, 2 * settings.GLOBAL_VOLUME)
+            self.volume_sfx(sound_file, settings.GLOBAL_VOLUME)
 
         rev_up = self.sfx_library[sound_files[0]]
         driving = self.sfx_library[sound_files[1]]
@@ -225,17 +229,20 @@ class SoundManager:
         idle = self.sfx_library[sound_files[3]]
 
         if speed == 0 and idle.get_num_channels() == 0:
-            if(settings.DEBUG_MODE): print("play idle")
+            if (settings.DEBUG_MODE):
+                print("play idle")
             self.stop_car_sound(sound_files)
             idle.play(-1)
 
         elif speed > 0 and previous_speed < speed and rev_up.get_num_channels() == 0:
-            if(settings.DEBUG_MODE): print("play rev_up")
+            if (settings.DEBUG_MODE):
+                print("play rev_up")
             self.stop_car_sound(sound_files)
             rev_up.play()
 
         elif speed > 0 and previous_speed > speed and rev_down.get_num_channels() == 0:
-            if(settings.DEBUG_MODE): print("play rev_down")
+            if (settings.DEBUG_MODE):
+                print("play rev_down")
             self.stop_car_sound(sound_files)
             rev_down.play()
 
@@ -244,7 +251,8 @@ class SoundManager:
             and previous_speed == speed
             and driving.get_num_channels() == 0
         ):
-            if(settings.DEBUG_MODE): print("play driving")
+            if (settings.DEBUG_MODE):
+                print("play driving")
             self.stop_car_sound(sound_files)
             driving.play(-1)
 
