@@ -43,7 +43,7 @@ def main():
         if (settings.DEBUG_MODE):
             print(speed)
         sound_manager.play_car_sound(
-            speed, previous_speed, max_speed, car_sounds)
+            speed, previous_speed, max_speed, sound_manager.car_sounds)
         previous_speed = speed
         time.sleep(0.1)
 
