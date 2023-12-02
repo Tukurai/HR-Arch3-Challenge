@@ -68,30 +68,6 @@ class WebSocketServer(BaseWebSocketClient):
         self.loop.call_soon_threadsafe(self.loop.stop)
         self.thread.join()
 
-"""
-Using screen or tmux
-
-If you use screen or tmux, you can start a script inside a screen or tmux session, which keeps running even if you disconnect. Later, you can reattach to the session to see the output:
-
-    Start a new screen session:
-
-    bash
-
-screen -S my_script_session
-
-Run your script:
-
-bash
-
-python script.py
-
-Detach from the screen session with Ctrl-A followed by D.
-
-Reattach to the session later with:
-
-bash
-
-    screen -r my_script_session
-
-For tmux, the commands are similar.
-"""
+if __name__ == '__main__':
+    for i in range(10):
+        print("Starting server but not really.")
