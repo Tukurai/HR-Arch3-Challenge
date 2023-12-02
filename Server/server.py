@@ -1,9 +1,9 @@
 import asyncio
-import server_game_data
 
 from Server import server_storage
 from Server.base_client import BaseWebSocketClient
 from Server.data_categories import GameDataType
+from Server.server_game_data import ServerGameData
 from Settings import settings
 
 
@@ -11,7 +11,7 @@ class WebSocketServer(BaseWebSocketClient):
     def __init__(self):
         super().__init__()
         self.uri = None # Server does not need a uri
-        self.game_data = server_game_data.ServerGameData()
+        self.game_data = ServerGameData()
         self.game_data.highscores = server_storage.retrieve_data(GameDataType.HIGH_SCORES)
         self.game_data.latest_players = server_storage.retrieve_data(
             GameDataType.LATEST_ACTIVE_PLAYERS)
