@@ -12,4 +12,10 @@ GLOBAL_VOLUME = 0.2
 # Sets the music to child mode or not
 MUSIC_CHILD_MODE = False
 # Debug mode
-DEBUG_MODE = True
+DEBUG_MODE = False
+# Server URL for websockets
+SERVER_URI = "86.80.116.182"
+# Server port for websockets
+SERVER_PORT = "8765"
+# Server Logging bool
+SERVER_DEBUG_MODE = True

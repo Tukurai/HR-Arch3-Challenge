@@ -52,11 +52,11 @@ class Car(Component):
             case Direction.LEFT:
                 if self.current_speed != 0:
                     self.rotation_direction = Direction.LEFT
-                    self.rotation = (self.rotation - 3) % 360
+                    self.rotation = (self.rotation - 2) % 360
             case Direction.RIGHT:
                 if self.current_speed != 0:
                     self.rotation_direction = Direction.RIGHT
-                    self.rotation = (self.rotation + 3) % 360
+                    self.rotation = (self.rotation + 2) % 360
 
     def apply_drag(self):
         # Apply drag - decrease current speed based on drag property

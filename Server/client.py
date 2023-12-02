@@ -6,9 +6,10 @@ from server_game_data import ServerGameData
 
 
 class WebSocketClient(BaseWebSocketClient):
-    def __init__(self, uri, logging=False):
-        super().__init__(uri, logging)
+    def __init__(self, player_name: str, uri=None):
+        super().__init__(uri)
         self.game_data = ServerGameData()
+        self.player_name = player_name
 
     ###########################
     # Setup Methods
@@ -35,14 +36,17 @@ class WebSocketClient(BaseWebSocketClient):
     # Outgoing Msg Methods
     ###########################
 
+    def send_initial_msg(self):
+        self.send_message(json.dumps({"action": "register_player", "params": {"name": self.player_name}}))
+
+    def send_highscore_msg(self, highscore: int):
+        self.send_message(json.dumps({"action": "register_highscore", "params": {
+            "name": self.player_name,
+            "highscore": highscore}}))
 
 # Example usage
 if __name__ == "__main__":
-    client = WebSocketClient("wss://socketsbay.com/wss/v2/1/demo/")
-
-    # Example sending a message
-    client.send_message(
-        json.dumps({"action": "request_latest_players", "params": {"name": "This player name"}}))
+    client = WebSocketClient("Salih_TEST")
 
     # Simulate main program running
     try:
