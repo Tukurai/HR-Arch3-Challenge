@@ -6,7 +6,7 @@ from Enums.direction import Direction
 from Settings import settings
 
 DRIVE_CAR_EVENT = pygame.USEREVENT + 1
-
+RESET_CAR_EVENT = pygame.USEREVENT + 2
 
 class Car(Component):
     def __init__(self, max_speed, drag, component_name, full_sprite, depth):
@@ -26,14 +26,20 @@ class Car(Component):
         self.prev_speed = 0
         self.prev_x = 0
         self.prev_y = 0
+        
+        self.current_checkpoint = 0
+        self.next_checkpoint = 1
+        self.lap = 0
+        self.penalties = 0
+        self.timeout = 0
 
     def handle_event(self, event):
         pass
 
     def update(self, timedelta, input_state):
         self.apply_drag()  # Only do this if the car is not actively moving backward of forward.
-
-        self.move(timedelta)
+        
+        self.handle_controls(Direction.UP)
 
     def draw(self, screen):
         super().draw(screen)
@@ -73,10 +79,6 @@ class Car(Component):
         # Calculate the new x and y position based on the rotation.
         # In this case, we're assuming that a rotation of 0 means the car is facing up
         # (negative y direction), and rotations are in degrees.
-        # Store the current position
-        if len(collisions) > 0:
-            self.set_current_speed(0)
-            return
 
         drive_car = pygame.event.Event(DRIVE_CAR_EVENT, car=self)
         pygame.event.post(drive_car)
@@ -97,7 +99,24 @@ class Car(Component):
 
         if len(collisions) > 0:
             for collision in collisions:
+                if isinstance(collision, Car):
+                    self.current_speed *= 0.2
+                else:
+                    self.timeout += 1
+                    self.current_speed *= 0.9
+
                 if(settings.DEBUG_MODE): print(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:Collision with {collision.component_name} detected ({collision.x},{collision.y}) ({collision.width * collision.get_scale()}, {collision.height * collision.get_scale()})")
+
+        if self.timeout > 30:
+            self.reset_to_last_checkpoint()
 
         self.prev_x = self.x
         self.prev_y = self.y
+
+    def reset_to_last_checkpoint(self):
+        self.penalties += 1
+        self.timeout = 0
+        self.current_speed = 0
+
+        reset_car = pygame.event.Event(RESET_CAR_EVENT, car=self)
+        pygame.event.post(reset_car)

@@ -1,3 +1,4 @@
+import copy
 import pygame
 from Engine.player_car import PlayerCar
 from Enums.direction import Direction
@@ -14,7 +15,7 @@ class CarSelectionScene(GameScene):
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key in self.car_selection:
-                car = self.car_selection[event.key]
+                car = copy.copy(self.car_selection[event.key])
                 car.player_name = f"Player_{len(self.selected_cars)+1}"
                 car.set_controls(CarSelectionScene.get_key_mapping(len(self.selected_cars)+1))
                 self.selected_cars.append(car)

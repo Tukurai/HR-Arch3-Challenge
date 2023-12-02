@@ -5,7 +5,7 @@ from Engine.component import Component
 from Enums.direction import Direction
 from Manager.collision_manager import CollisionManager
 from Manager.level_manager import LevelManager
-from Engine.car import Car
+from Engine.car import RESET_CAR_EVENT, Car
 from Scenes.game_scene import GameScene
 from Settings import settings
 
@@ -35,6 +35,8 @@ class RaceScene(GameScene):
                 self.change_level("map_up")
             elif event.key == pygame.K_5:
                 self.change_level("map_complex")
+        elif event.type == RESET_CAR_EVENT:
+            self.reset_car_to_checkpoint(event.car)
 
         for component in self.components:  # Ignoring level objs.
             component.handle_event(event)
@@ -44,6 +46,9 @@ class RaceScene(GameScene):
     def update(self, timedelta, input_state):
         for component in self.components:
             component.update(timedelta, input_state)
+
+        for car in self.players:
+            self.update_checkpoints(car)
 
         self.collision_manager.update(timedelta, input_state)
 
@@ -60,13 +65,15 @@ class RaceScene(GameScene):
         for component in self.components:
             component.draw(screen)
 
+        self.draw_checkpoints(screen)
+        # if settings.DEBUG_MODE:
+
     def change_level(self, level_name):
-        '''Change the level internally and update the players to the new level.'''
+        """Change the level internally and update the players to the new level."""
         cached_players = self.players
         self.clear_race()
         self.set_level(level_name)
         self.add_players(cached_players)
-
 
     def set_level(self, level_name):
         level = self.level_manager.get_level(level_name)
@@ -80,6 +87,8 @@ class RaceScene(GameScene):
 
     def set_starting_positions(self, starting_position, first_checkpoint):
         scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE
+        max_players = 4
+
         x = (
             (starting_position[0] * scaled_tile_size)
             + settings.TRACK_OFFSET
@@ -94,6 +103,17 @@ class RaceScene(GameScene):
             "Debug pointer", None, (x - 5, y - 5), 10, 10, 0, 1.00, color=(255, 0, 0)
         )
         direction = self.get_direction(starting_position, first_checkpoint)
+
+        while len(self.players) < max_players:
+            ai_car = Car(
+                180,
+                1.0,
+                "Player Car",
+                self.scene_manager.sprite_manager.get_car("car_black_small_1.png"),
+                1.10,
+            )
+            self.players.append(ai_car)
+            self.components.append(ai_car)
 
         match direction:
             case Direction.UP:
@@ -110,8 +130,7 @@ class RaceScene(GameScene):
             player.rotation = direction.value * 90
 
         # set starting positions
-        for index in range(6):
-            # Your code here
+        for index in range(max_players):
             pair_index = index % 2
             row_index = index // 2
             pair_offset = 50 * settings.GAME_SCALE * settings.CAR_SCALE
@@ -145,13 +164,13 @@ class RaceScene(GameScene):
 
             if len(self.players) >= index + 1:
                 car = self.players[index]
-                match direction: # Set the car position based on the direction (fuck magic numbers)
+                match direction:  # Set the car position based on the direction (fuck magic numbers)
                     case Direction.UP:
                         car.x = debug_car_pointer.x + 13 - (car.get_scaled_height() / 2)
                         car.y = debug_car_pointer.y - 13 - (car.get_scaled_width() / 2)
                     case Direction.DOWN:
                         car.x = debug_car_pointer.x + 13 - (car.get_scaled_height() / 2)
-                        car.y = debug_car_pointer.y - 13 - (car.get_scaled_width() / 2)  
+                        car.y = debug_car_pointer.y - 13 - (car.get_scaled_width() / 2)
                     case Direction.LEFT:
                         car.x = debug_car_pointer.x + 8 - (car.get_scaled_width() / 2)
                         car.y = debug_car_pointer.y + 13 - (car.get_scaled_height() / 2)
@@ -223,3 +242,104 @@ class RaceScene(GameScene):
             component for component in self.components if not isinstance(component, Car)
         ]
         self.players = []
+
+    def reset_car_to_checkpoint(self, car):
+        checkpoint = self.get_checkpoint_component(
+            self.level["Checkpoints"][car.current_checkpoint]
+        )
+
+        rotation = self.get_direction(
+            self.level["Checkpoints"][car.current_checkpoint],
+            self.level["Checkpoints"][car.next_checkpoint],
+        )
+
+        offset_x = 0
+        offset_y = 0
+        match rotation:
+            case Direction.UP:
+                offset_x = -10
+                offset_y = -32
+            case Direction.DOWN:
+                offset_x = -10
+                offset_y = 0
+            case Direction.LEFT:
+                offset_x = -32
+                offset_y = -10
+            case Direction.RIGHT:
+                offset_x = -2
+                offset_y = -10
+
+        car.x = checkpoint.x + offset_x + checkpoint.width / 2
+        car.y = checkpoint.y + offset_y + checkpoint.height / 2
+        car.rotation = rotation.value * 90
+
+    def update_checkpoints(self, car):
+        mask_car = pygame.mask.from_surface(
+            car.get_scaled_rotated_sprite_or_mask(car.mask_layers[0])[0]
+        )
+
+        checkpoint = self.get_checkpoint_component(
+            self.level["Checkpoints"][car.next_checkpoint]
+        )
+        mask_checkpoint = pygame.mask.from_surface(checkpoint.sprite)
+
+        if mask_checkpoint.overlap(
+            mask_car, (car.x - checkpoint.x, car.y - checkpoint.y)
+        ):
+            car.current_checkpoint = car.next_checkpoint
+            car.next_checkpoint += 1
+            if car.next_checkpoint >= len(self.level["Checkpoints"]):
+                car.next_checkpoint = 0
+                car.lap += 1
+
+    def get_checkpoint_component(self, checkpoint):
+        scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE
+        x = (
+            (checkpoint[0] * scaled_tile_size)
+            + settings.TRACK_OFFSET
+            + (scaled_tile_size / 2)
+        )
+        y = (
+            (checkpoint[1] * scaled_tile_size)
+            + settings.TRACK_OFFSET
+            + (scaled_tile_size / 2)
+        )
+
+        debug_pointer = Component(
+            "Debug pointer", None, (x - 5, y - 5), 10, 10, 0, 1.00, color=(255, 0, 0)
+        )
+
+        checkpoint_component = Component(
+            "Debug pointer",
+            None,
+            (x - scaled_tile_size / 2, y - scaled_tile_size / 2),
+            scaled_tile_size,
+            scaled_tile_size,
+            0,
+            1.00,
+            color=(255, 255, 255),
+        )
+        return checkpoint_component
+
+    def get_checkpoint_debug_component(self, checkpoint):
+        scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE
+        x = (
+            (checkpoint[0] * scaled_tile_size)
+            + settings.TRACK_OFFSET
+            + (scaled_tile_size / 2)
+        )
+        y = (
+            (checkpoint[1] * scaled_tile_size)
+            + settings.TRACK_OFFSET
+            + (scaled_tile_size / 2)
+        )
+
+        debug_pointer = Component(
+            "Debug pointer", None, (x - 5, y - 5), 10, 10, 0, 1.00, color=(255, 0, 0)
+        )
+        return debug_pointer
+
+    def draw_checkpoints(self, screen):
+        for checkpoint in self.level["Checkpoints"].values():
+            self.get_checkpoint_debug_component(checkpoint).draw(screen)
+            # self.get_checkpoint_component(checkpoint).draw(screen)
