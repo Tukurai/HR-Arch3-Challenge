@@ -3,8 +3,8 @@ import asyncio
 from Server import server_storage
 from Server.base_client import BaseWebSocketClient
 from Server.data_categories import GameDataType
+from Server.server_game_data import ServerGameData
 from Settings import settings
-from server_game_data import ServerGameData
 
 
 class WebSocketServer(BaseWebSocketClient):
