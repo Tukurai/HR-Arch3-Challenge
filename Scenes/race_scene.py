@@ -37,7 +37,6 @@ class RaceScene(GameScene):
             self.reset_car_to_checkpoint(event.car)
 
         if event.type == BUTTON_CLICK:
-            print(event)
             if event.button.component_name == "EndRaceButton":
                 self.scene_manager.set_active_scene(
                     self.scene_manager.get_scene_by_name("High score")
