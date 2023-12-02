@@ -8,8 +8,8 @@ from server_game_data import ServerGameData
 
 
 class WebSocketServer(BaseWebSocketClient):
-    def __init__(self, uri, logging=False):
-        super().__init__(uri, logging)
+    def __init__(self, uri):
+        super().__init__(uri)
         self.game_data = ServerGameData()
         self.game_data.highscores = server_storage.retrieve_data(GameDataType.HIGH_SCORES)
         self.game_data.latest_players = server_storage.retrieve_data(
@@ -26,15 +26,16 @@ class WebSocketServer(BaseWebSocketClient):
         :return:
         """
         return {
-            "register_player": self.handle_register_player,
             "register_highscore": self.handle_register_highscore,
+            "handshake": self.handle_handshake,
         }
 
-    def handle_register_player(self, message):
-        raise NotImplementedError("This method (handle_register_player) is not yet implemented")
-
     def handle_register_highscore(self, message):
-        raise NotImplementedError("This method (handle_register_highscore) is not yet implemented")
+        self.game_data.ingest_highscore(message["params"]["name"],
+                                        message["params"]["highscore"])
+
+    def handle_handshake(self, message):
+        self.game_data.ingest_player(message["params"]["name"])
 
     ###########################
     # Server Specific Methods

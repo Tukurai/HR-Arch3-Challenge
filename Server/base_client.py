@@ -3,13 +3,14 @@ import json
 import time
 import websockets
 import threading
+from Settings import settings
 from abc import ABC, abstractmethod
 
 
 class BaseWebSocketClient(ABC):
-    def __init__(self, uri, logging=False):
-        self.uri = uri
-        self.logging = logging
+    def __init__(self, uri= None):
+        self.uri = uri if uri else settings.SERVER_URI
+        self.logging = settings.DEBUG_MODE
         # Message Router
         self.message_router = self.setup_message_router()
         if not self.message_router:
@@ -40,8 +41,9 @@ class BaseWebSocketClient(ABC):
         loop.run_until_complete(self.connect())
 
     async def connect(self):
-        async with websockets.connect(self.uri) as websocket:
-            await self.listen(websocket)
+        if self.uri:
+            async with websockets.connect(self.uri) as websocket:
+                await self.listen(websocket)
 
     async def listen(self, websocket):
         async for message in websocket:

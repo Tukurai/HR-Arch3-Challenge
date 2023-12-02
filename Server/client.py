@@ -6,9 +6,10 @@ from server_game_data import ServerGameData
 
 
 class WebSocketClient(BaseWebSocketClient):
-    def __init__(self, uri, logging=False):
+    def __init__(self, uri, player_name: str, logging=False):
         super().__init__(uri, logging)
         self.game_data = ServerGameData()
+        self.player_name = player_name
 
     ###########################
     # Setup Methods
@@ -35,6 +36,13 @@ class WebSocketClient(BaseWebSocketClient):
     # Outgoing Msg Methods
     ###########################
 
+    def send_initial_msg(self):
+        self.send_message(json.dumps({"action": "register_player", "params": {"name": self.player_name}}))
+
+    def send_highscore_msg(self, highscore: int):
+        self.send_message(json.dumps({"action": "register_highscore", "params": {
+            "name": self.player_name,
+            "highscore": highscore}}))
 
 # Example usage
 if __name__ == "__main__":

@@ -13,3 +13,5 @@ GLOBAL_VOLUME = 0.2
 MUSIC_CHILD_MODE = False
 # Debug mode
 DEBUG_MODE = False
+# Server URL for websockets
+SERVER_URI = "86.80.116.182"
