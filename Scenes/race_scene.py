@@ -2,6 +2,7 @@ import copy
 
 import pygame
 from Engine.component import Component
+from Engine.player_car import PlayerCar
 from Enums.direction import Direction
 from Manager.collision_manager import CollisionManager
 from Manager.level_manager import LevelManager
@@ -49,6 +50,8 @@ class RaceScene(GameScene):
 
         for car in self.players:
             self.update_checkpoints(car)
+            if not isinstance(car, PlayerCar):
+                self.drive_car(car)
 
         self.collision_manager.update(timedelta, input_state)
 
@@ -83,10 +86,27 @@ class RaceScene(GameScene):
             "Objects": self.get_level_layer(level, "Objects"),
             "Checkpoints": self.get_level_checkpoints(level, "Checkpoints"),
         }
+    
+    def drive_car(self, car):
+        direction = self.get_direction(self.level["Checkpoints"][car.current_checkpoint], self.level["Checkpoints"][car.next_checkpoint])
+        ideal_rotation = direction.value * 90
+        
+        if self.fastest_rotation_direction(car.rotation, ideal_rotation) > 0:
+            car.handle_controls(Direction.RIGHT)
+        else:
+            car.handle_controls(Direction.LEFT)
+
+        car.handle_controls(Direction.UP)
+
+    def fastest_rotation_direction(self, current_rotation, target_rotation):
+        difference = (target_rotation - current_rotation) % 360
+        if difference > 180:
+            difference -= 360
+        return difference
 
     def set_starting_positions(self, starting_position, first_checkpoint):
         scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE
-        max_players = 4
+        max_players = 2
 
         x = (
             (starting_position[0] * scaled_tile_size)
@@ -289,7 +309,21 @@ class RaceScene(GameScene):
             car.next_checkpoint += 1
             if car.next_checkpoint >= len(self.level["Checkpoints"]):
                 car.next_checkpoint = 0
+
+            if car.current_checkpoint == 0:
                 car.lap += 1
+                if car.lap >= 3 :
+                    # get all players that are an instance of playercar
+                    player_cars = [player for player in self.players if isinstance(player, PlayerCar)]
+                    progress_to_next_scene = True
+                    for player in player_cars:
+                        if player.lap < 3:
+                            progress_to_next_scene = False
+                    
+                    if progress_to_next_scene:
+                        self.scene_manager.set_active_scene(
+                            self.scene_manager.get_scene_by_name("High score")
+                        )
 
     def get_checkpoint_component(self, checkpoint):
         scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE

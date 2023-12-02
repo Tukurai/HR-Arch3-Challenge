@@ -8,6 +8,7 @@ from Settings import settings
 DRIVE_CAR_EVENT = pygame.USEREVENT + 1
 RESET_CAR_EVENT = pygame.USEREVENT + 2
 
+
 class Car(Component):
     def __init__(self, max_speed, drag, component_name, full_sprite, depth):
         super().__init__(
@@ -26,7 +27,7 @@ class Car(Component):
         self.prev_speed = 0
         self.prev_x = 0
         self.prev_y = 0
-        
+
         self.current_checkpoint = 0
         self.next_checkpoint = 1
         self.lap = 0
@@ -37,9 +38,7 @@ class Car(Component):
         pass
 
     def update(self, timedelta, input_state):
-        self.apply_drag()  # Only do this if the car is not actively moving backward of forward.
-
-        self.handle_controls(Direction.UP)
+        pass
 
     def draw(self, screen):
         super().draw(screen)
@@ -52,14 +51,12 @@ class Car(Component):
                 self.set_current_speed(self.speed_limiter(self.current_speed - 2))
             case Direction.LEFT:
                 if self.current_speed != 0:
-                    self.rotation = (
-                        self.rotation - 2
-                    ) % 360  # Rotate 5 degrees to the left
+                    self.rotation_direction = Direction.LEFT
+                    self.rotation = (self.rotation - 3) % 360
             case Direction.RIGHT:
                 if self.current_speed != 0:
-                    self.rotation = (
-                        self.rotation + 3
-                    ) % 360  # Rotate 5 degrees to the right
+                    self.rotation_direction = Direction.RIGHT
+                    self.rotation = (self.rotation + 3) % 360
 
     def apply_drag(self):
         # Apply drag - decrease current speed based on drag property
@@ -105,7 +102,13 @@ class Car(Component):
                     self.timeout += 1
                     self.current_speed *= 0.9
 
-                if(settings.DEBUG_MODE): print(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:Collision with {collision.component_name} detected ({collision.x},{collision.y}) ({collision.width * collision.get_scale()}, {collision.height * collision.get_scale()})")
+                if settings.DEBUG_MODE:
+                    print(
+                        f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:Collision with {collision.component_name} detected ({collision.x},{collision.y}) ({collision.width * collision.get_scale()}, {collision.height * collision.get_scale()})"
+                    )
+        else:
+            if self.timeout > 0:
+                self.timeout -= 1
 
         if self.timeout > 30:
             self.reset_to_last_checkpoint()
