@@ -77,7 +77,6 @@ class Car(Component):
         # Calculate the new x and y position based on the rotation.
         # In this case, we're assuming that a rotation of 0 means the car is facing up
         # (negative y direction), and rotations are in degrees.
-
         drive_car = pygame.event.Event(DRIVE_CAR_EVENT, car=self)
         pygame.event.post(drive_car)
 

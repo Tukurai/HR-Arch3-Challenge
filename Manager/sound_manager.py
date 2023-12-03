@@ -60,20 +60,21 @@ class SoundManager:
         current_path = os.path.dirname(os.path.dirname(__file__))
         self.libraries = self.init_libraries(
             os.path.join(current_path, "Assets"))
-        
+
         self.sfx_library = self.libraries[0]
         self.music_library = self.libraries[1]
 
         self.car_sounds = {
             "Player_1": ["car1_revup.wav",
-                        "car1_driving.wav",
-                        "car1_revdown.wav",
-                        "car1_idle.wav"],
+                         "car1_driving.wav",
+                         "car1_revdown.wav",
+                         "car1_idle.wav"],
             "Player_2": ["car2_revup.wav",
-                        "car2_driving.wav",
-                        "car2_revdown.wav",
-                        "car2_idle.wav"],
+                         "car2_driving.wav",
+                         "car2_revdown.wav",
+                         "car2_idle.wav"],
         }
+
         self.current_playing_music = ""
 
     def init_libraries(self, assets_dir):
@@ -130,6 +131,13 @@ class SoundManager:
         """
         self.sfx_library[sfx_file].stop()
 
+    def stop_all_sfx(self):
+        """
+        Stop all sound effects
+        """
+        for key, value in self.sfx_library.items():
+            value.stop()
+
     def volume_sfx(self, sfx_file: str, amount=0):
         """
         amount 0 will get the current volume\n
@@ -141,7 +149,7 @@ class SoundManager:
             return current_vol
         else:
             self.sfx_library[sfx_file].set_volume(
-                (current_vol + amount) * settings.GLOBAL_VOLUME
+                amount * settings.GLOBAL_VOLUME
             )
             return self.sfx_library[sfx_file].get_volume()
 
@@ -216,7 +224,7 @@ class SoundManager:
             previous_speed = previous_speed * -1
 
         for sound_file in sound_files:
-            self.volume_sfx(sound_file, 1)
+            self.volume_sfx(sound_file, 0.3)
 
         rev_up = self.sfx_library[sound_files[0]]
         driving = self.sfx_library[sound_files[1]]

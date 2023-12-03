@@ -30,8 +30,11 @@ class GameScene:
             race_music = "race.wav"
 
         if self.scene_name != "Race":
+            sound_manager.stop_all_sfx()
+
             if sound_manager.current_playing_music != menu_music:
                 sound_manager.play_music(menu_music)
         else:
             sound_manager.stop_music()
             sound_manager.play_music(race_music, volume=0.3)
+
