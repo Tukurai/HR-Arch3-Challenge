@@ -22,6 +22,8 @@ class GameScene:
     def scene_changed(self):
         sound_manager = self.scene_manager.sound_manager
 
+        sound_manager.stop_all_sfx()
+
         if settings.MUSIC_CHILD_MODE is True:
             menu_music = "mainmenu_child.wav"
             race_music = "race_child.wav"
