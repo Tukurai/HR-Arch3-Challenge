@@ -1,6 +1,4 @@
 import asyncio
-import time
-
 import websockets
 import json
 import threading

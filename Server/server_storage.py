@@ -3,18 +3,19 @@ from typing import Any
 
 from Server.data_categories import GameDataType as gdt
 
-def store_data(category: gdt, data: Any):
+
+def store_data(category: gdt, data: Any, debug: bool = False):
     """
     Store data in a pickle file based on the given category.
 
     :param category: The category name, used as the filename.
     :param data: The data to be stored.
     """
-    with open(f"{category}.pkl", "wb") as file:
+    with open(f"{category}_debug_{debug}.pkl", "wb") as file:
         pickle.dump(data, file)
 
 
-def retrieve_data(category: gdt) -> Any:
+def retrieve_data(category: gdt, debug: bool = False) -> Any:
     """
     Retrieve data from a pickle file based on the given category.
 
@@ -22,7 +23,7 @@ def retrieve_data(category: gdt) -> Any:
     :return: The data retrieved from the file.
     """
     try:
-        with open(f"{category}.pkl", "rb") as file:
+        with open(f"{category}_debug_{debug}.pkl", "rb") as file:
             return pickle.load(file)
     except FileNotFoundError:
         print(f"Error: No data found for category '{category}'.")
