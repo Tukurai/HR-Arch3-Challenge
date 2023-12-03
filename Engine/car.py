@@ -69,7 +69,7 @@ class Car(Component):
             case Direction.UP:
                 self.set_current_speed(self.speed_limiter(self.current_speed + 3))
             case Direction.DOWN:
-                self.set_current_speed(self.speed_limiter(self.current_speed - 6))
+                self.set_current_speed(self.speed_limiter(self.current_speed - 4))
             case Direction.LEFT:
                 if self.current_speed != 0:
                     self.rotation_direction = Direction.LEFT

@@ -1,5 +1,6 @@
 import sys
 from Manager.scene_manager import SceneManager
+from Manager.server_manager import ServerManager
 from Manager.sound_manager import SoundManager
 from Manager.sprite_manager import SpriteManager
 from Engine.input_state import InputState
@@ -20,6 +21,7 @@ class GameEngine:
             sprite_manager=SpriteManager(),
             screen=self.game.screen
         )
+        self.score_manager = ServerManager()
 
     def handle_events(self):
         for event in pygame.event.get():  # Handle the close window event.
@@ -28,6 +30,7 @@ class GameEngine:
                 sys.exit()
             else:
                 self.scene_manager.handle_event(event)
+                self.score_manager.handle_event(event)
 
     def update(self, timedelta):
         self.input_state.update(

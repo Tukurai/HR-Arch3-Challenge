@@ -122,8 +122,8 @@ class RaceScene(GameScene):
 
         # Determine the center of the checkpoint, or the ideal turning point, this requires me to know the next checkpoint.
         scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE
-        small_offset = scaled_tile_size * 0.47
-        large_offset = scaled_tile_size * 0.53
+        small_offset = scaled_tile_size * 0.57
+        large_offset = scaled_tile_size * 0.43
         center_offset = scaled_tile_size * 0.5
         target_pos_offset = (0, 0)
         match direction:
@@ -189,9 +189,9 @@ class RaceScene(GameScene):
             and abs(car.y - y) <= scaled_tile_size
             and turning
         ):
-            if car.current_speed > 100:
+            if car.current_speed > 90:
                 car.handle_controls(Direction.DOWN)
-            elif car.current_speed > 75:
+            elif car.current_speed > 65:
                 car.apply_drag()
             else:
                 car.handle_controls(Direction.UP)
