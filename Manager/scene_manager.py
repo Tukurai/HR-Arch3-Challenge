@@ -1,3 +1,5 @@
+import time
+
 import pygame
 from Engine.component import Component
 from Engine.text_component import TextComponent
@@ -17,7 +19,8 @@ class SceneManager:
         self.screen = screen
         if score_manager is not None:
             self.score_manager = score_manager
-            self.scores = score_manager.scores
+            self.scores = score_manager.ws_client.game_data.highscores
+            print(f"Scores: {self.scores}")
 
         self.scenes = self.create_scenes()
         self.set_active_scene(self.get_scene_by_name("Main menu"))
@@ -38,8 +41,7 @@ class SceneManager:
 
     def get_scene_by_name(self, scene_name):
         return next(
-            (scene for scene in self.scenes if scene.scene_name == scene_name), None
-        )
+            (scene for scene in self.scenes if scene.scene_name == scene_name), None)
 
     def create_scenes(self):
         # Create a static list of scenes based on the base class GameScene.

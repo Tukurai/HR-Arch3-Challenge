@@ -1,4 +1,5 @@
 from Server.client import WebSocketClient
+from random import choice
 from Settings.user_events import SUBMIT_SCORE_EVENT, TEXT_BOX_INPUT
 
 
@@ -7,6 +8,9 @@ class ServerManager:
         self.ws_client = WebSocketClient()
         self.scores = self.ws_client.game_data.highscores
         self.active_players = self.ws_client.game_data.active_players
+        self.devs = ["Marijn", "Jeroen", "Salih"]
+        self.ws_client.send_active_player_msg(choice(self.devs))
+        self.ws_client.do_handshake()
 
     def handle_event(self, event):
         if event.type == SUBMIT_SCORE_EVENT:

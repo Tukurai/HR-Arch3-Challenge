@@ -7,7 +7,7 @@ from Engine.text_component import TextComponent
 from Enums.direction import Direction
 from Scenes.game_scene import GameScene
 from Settings import settings
-from Settings.user_events import BUTTON_CLICK
+from Settings.user_events import BUTTON_CLICK, TEXT_BOX_INPUT
 
 
 class CarSelectionScene(GameScene):
@@ -20,15 +20,19 @@ class CarSelectionScene(GameScene):
         self.car_buttons = []
 
     def handle_event(self, event):
+
+        if event.type == TEXT_BOX_INPUT:
+            self.player_name = event.player_name
+            print("GETTING NAME IN CAR SELECTION SCENE")
         if event.type == BUTTON_CLICK:
             self.car_buttons.append(event.button)
 
             if event.button.component_name in self.car_selection:
                 car = copy.copy(self.car_selection[event.button.component_name])
                 car.player_name = f"Player_{len(self.selected_cars)+1}"
+                car.component_name = self.player_name
                 car.set_controls(
-                    CarSelectionScene.get_key_mapping(len(self.selected_cars) + 1)
-                )
+                    CarSelectionScene.get_key_mapping(len(self.selected_cars) + 1))
                 self.selected_cars.append(car)
                 event.button.selected = True
 
@@ -41,8 +45,7 @@ class CarSelectionScene(GameScene):
 
             elif event.button.component_name == "BackButton":
                 self.scene_manager.set_active_scene(
-                    self.scene_manager.get_scene_by_name("Main menu")
-                )
+                    self.scene_manager.get_scene_by_name("Main menu"))
 
             if settings.DEBUG_MODE:
                 print(f"Button {event.button.component_name} clicked!")

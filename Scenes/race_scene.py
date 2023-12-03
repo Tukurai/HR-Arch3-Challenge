@@ -539,7 +539,7 @@ class RaceScene(GameScene):
                         for player in player_cars:
                             submit_score_event = pygame.event.Event(
                                 SUBMIT_SCORE_EVENT,
-                                name=player.player_name,
+                                name=player.component_name,
                                 score=player.score,
                                 level_name=self.level_name,
                             )

@@ -36,6 +36,9 @@ class WebSocketClient(BaseWebSocketClient):
         with self.lock:
             return self.game_data.active_players
 
+    def do_handshake(self):
+        self.send_message(json.dumps({"action": "handshake"}))
+
     ###########################
     # Handle Incoming Msg Methods
     ###########################

@@ -44,6 +44,14 @@ class WebSocketServer:
                             msg = {"action": "active_players",
                                    "params": {"active_players": self.game_data.active_players}}
                             await self.broadcast_data(msg)
+                        case "handshake":
+                            msg1 = {"action": "active_players",
+                                   "params": {"active_players": self.game_data.active_players}}
+                            msg2 = {"action": "highscores",
+                                   "params": {"highscores": self.game_data.highscores}}
+                            await self.broadcast_data(msg1)
+                            await self.broadcast_data(msg2)
+
                         case _:
                             print(f"Unknown action: {data['action']}")
                     print(self.game_data)

@@ -2,11 +2,13 @@ import pygame
 from Engine.text_component import TextComponent
 from Scenes.game_scene import GameScene
 from Engine.button_component import BUTTON_CLICK, ButtonComponent
+from Settings.user_events import SUBMIT_SCORE_EVENT
 
 
 class HighScoreScene(GameScene):
     def __init__(self, scene_manager, sprite_manager, components):
         super().__init__(scene_manager, sprite_manager, "High score", components)
+        self.score_manager = self.scene_manager.score_manager
 
     def handle_event(self, event):
         if event.type == BUTTON_CLICK:
@@ -14,6 +16,8 @@ class HighScoreScene(GameScene):
                 self.scene_manager.set_active_scene(
                     self.scene_manager.get_scene_by_name("Main menu")
                 )
+        if event.type == SUBMIT_SCORE_EVENT:
+            self.build_ui()
 
         return super().handle_event(event)
 
@@ -70,6 +74,7 @@ class HighScoreScene(GameScene):
         ]
 
         player_scores = {}
+        print(player_scores)
         for map_data in self.scene_manager.scores.values():
             for player_data in map_data:
                 player_scores[player_data[1]] = player_data[0]
@@ -81,10 +86,11 @@ class HighScoreScene(GameScene):
 
         index = 1
         for key, value in sorted_dict.items():
+            print(text_component_settings[index][1])
             text_components.append(
                 TextComponent(
                     text_component_settings[index][0],
-                    "1: " + key + " - " + str(value),
+                    f"{index}: " + key + " - " + str(value),
                     30,
                     True,
                     None,
@@ -98,5 +104,4 @@ class HighScoreScene(GameScene):
             index += 1
 
         index = 0
-
         self.components.extend(text_components)

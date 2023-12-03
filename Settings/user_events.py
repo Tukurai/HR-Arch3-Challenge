@@ -1,6 +1,5 @@
 import pygame
 
-
 DRIVE_CAR_EVENT = pygame.USEREVENT + 1
 RESET_CAR_EVENT = pygame.USEREVENT + 2
 USER_QUIT = pygame.USEREVENT + 3
