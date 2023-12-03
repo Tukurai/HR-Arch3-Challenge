@@ -3,10 +3,10 @@ from Manager.scene_manager import SceneManager
 from Manager.sound_manager import SoundManager
 from Manager.sprite_manager import SpriteManager
 from Engine.input_state import InputState
-from Scenes.main_menu_scene import USER_QUIT
 import pygame
 
 from Settings import settings
+from Settings.user_events import USER_QUIT
 
 
 class GameEngine:

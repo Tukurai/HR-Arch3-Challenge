@@ -1,10 +1,10 @@
 import copy
 import pygame
-from Engine.button_component import BUTTON_CLICK
 from Engine.player_car import PlayerCar
 from Enums.direction import Direction
 from Scenes.game_scene import GameScene
 from Settings import settings
+from Settings.user_events import BUTTON_CLICK
 
 
 class CarSelectionScene(GameScene):

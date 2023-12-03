@@ -1,16 +1,17 @@
 import copy
 import math
+import time
 
 import pygame
-from Engine.button_component import BUTTON_CLICK
 from Engine.component import Component
 from Engine.player_car import PlayerCar
 from Enums.direction import Direction
 from Manager.collision_manager import CollisionManager
 from Manager.level_manager import LevelManager
-from Engine.car import RESET_CAR_EVENT, Car
+from Engine.car import Car
 from Scenes.game_scene import GameScene
 from Settings import settings
+from Settings.user_events import RESET_CAR_EVENT, BUTTON_CLICK, START_RACE_EVENT, SUBMIT_SCORE_EVENT
 
 
 class RaceScene(GameScene):
@@ -19,6 +20,8 @@ class RaceScene(GameScene):
         self.level_manager = LevelManager(sprite_manager)
         self.collision_manager = CollisionManager(scene_manager, self)
         self.players = []
+        self.start_time = time.time()
+        self.level_name = ""
 
         self.set_level("map_right")
 
@@ -78,12 +81,24 @@ class RaceScene(GameScene):
     def change_level(self, level_name):
         """Change the level internally and update the players to the new level."""
         cached_players = self.players
+        for player in cached_players:
+            player.reset()
+
         self.clear_race()
         self.set_level(level_name)
         self.add_players(cached_players)
+        for player in cached_players:
+            if isinstance(player, PlayerCar):
+                start_race_event = pygame.event.Event(
+                    START_RACE_EVENT,
+                    name=player.player_name,
+                    level_name=self.level_name,
+                )
+                pygame.event.post(start_race_event)
 
     def set_level(self, level_name):
         level = self.level_manager.get_level(level_name)
+        self.level_name = level_name
 
         self.level = {
             "Ground": self.get_level_layer(level, "Ground"),
@@ -157,17 +172,20 @@ class RaceScene(GameScene):
         )
 
         ideal_rotation = self.calculate_rotation(car.x, car.y, x, y)
-        rotation_difference = self.fastest_rotation_direction(car.rotation, ideal_rotation)
+        rotation_difference = self.fastest_rotation_direction(
+            car.rotation, ideal_rotation
+        )
 
         turning = False
-        if  rotation_difference > 3:
+        if rotation_difference > 3:
             car.handle_controls(Direction.RIGHT)
             turning = True
         elif rotation_difference < -3:
             car.handle_controls(Direction.LEFT)
             turning = True
 
-        if (abs(car.x - x) <= scaled_tile_size
+        if (
+            abs(car.x - x) <= scaled_tile_size
             and abs(car.y - y) <= scaled_tile_size
             and turning
         ):
@@ -352,6 +370,7 @@ class RaceScene(GameScene):
             component for component in self.components if not isinstance(component, Car)
         ]
         self.players = []
+        self.start_time = time.time()
 
     def reset_car_to_checkpoint(self, car):
         checkpoint = self.get_checkpoint_component(
@@ -407,19 +426,31 @@ class RaceScene(GameScene):
 
             if car.current_checkpoint == 0:
                 car.lap += 1
-                if car.lap >= 3:
+                if car.lap == 3:
                     # get all players that are an instance of playercar
                     player_cars = [
                         player
                         for player in self.players
                         if isinstance(player, PlayerCar)
                     ]
+                    if isinstance(car, PlayerCar):
+                        car.caclulate_score(self.start_time, time.time())
+
                     progress_to_next_scene = True
                     for player in player_cars:
                         if player.lap < 3:
                             progress_to_next_scene = False
 
                     if progress_to_next_scene:
+                        for player in player_cars:
+                            submit_score_event = pygame.event.Event(
+                                SUBMIT_SCORE_EVENT,
+                                name=player.player_name,
+                                score=player.score,
+                                level_name=self.level_name,
+                            )
+                            pygame.event.post(submit_score_event)
+
                         self.scene_manager.set_active_scene(
                             self.scene_manager.get_scene_by_name("High score")
                         )

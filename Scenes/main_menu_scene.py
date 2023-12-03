@@ -2,8 +2,8 @@ import pygame
 from Engine.button_component import BUTTON_CLICK
 from Scenes.game_scene import GameScene
 from Settings import settings
+from Settings.user_events import USER_QUIT
 
-USER_QUIT = pygame.USEREVENT + 3
 
 class MainMenuScene(GameScene):
     def __init__(self, scene_manager, sprite_manager, components):

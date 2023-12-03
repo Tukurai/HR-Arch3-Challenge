@@ -4,13 +4,13 @@ import pygame
 from Engine.component import Component
 from Enums.direction import Direction
 from Settings import settings
-
-DRIVE_CAR_EVENT = pygame.USEREVENT + 1
-RESET_CAR_EVENT = pygame.USEREVENT + 2
+from Settings.user_events import DRIVE_CAR_EVENT, RESET_CAR_EVENT
 
 
 class Car(Component):
-    def __init__(self, max_speed, drag, component_name, full_sprite, depth, tolerance=30):
+    def __init__(
+        self, max_speed, drag, component_name, full_sprite, depth, tolerance=30
+    ):
         super().__init__(
             component_name,
             full_sprite.sprite,
@@ -22,18 +22,10 @@ class Car(Component):
             mask_layers=full_sprite.mask_layers,
         )
         self.max_speed = max_speed
-        self.drag = drag
-        self.current_speed = 0
-        self.prev_speed = 0
-        self.prev_x = 0
-        self.prev_y = 0
-
         self.tolerance = tolerance
-        self.current_checkpoint = 0
-        self.next_checkpoint = 1
-        self.lap = 0
-        self.penalties = 0
-        self.timeout = 0
+        self.drag = drag
+
+        self.reset()
 
     def handle_event(self, event):
         pass
@@ -43,6 +35,33 @@ class Car(Component):
 
     def draw(self, screen):
         super().draw(screen)
+
+    def caclulate_score(self, start_time, end_time):
+        final_score = 10500  # 10,500 is 7 minutes without penalties.
+        elapsed_time = end_time - start_time
+
+        final_score -= elapsed_time.total_seconds() * 25
+        final_score -= self.penalties * 100
+
+        if final_score < 0:
+            final_score = 0
+
+        self.score = final_score
+
+    def reset(self):
+        self.current_speed = 0
+        self.prev_speed = 0
+        self.x = 0
+        self.y = 0
+        self.rotation = 0
+        self.rotation_direction = None
+
+        self.current_checkpoint = 0
+        self.next_checkpoint = 1
+        self.lap = 0
+        self.penalties = 0
+        self.timeout = 0
+        self.score = 0
 
     def handle_controls(self, direction):
         match (direction):

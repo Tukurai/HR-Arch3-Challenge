@@ -1,6 +1,6 @@
 import pygame
 from Scenes.game_scene import GameScene
-from Engine.button_component import BUTTON_CLICK
+from Settings.user_events import BUTTON_CLICK
 
 class SettingsScene(GameScene):
     def __init__(self, scene_manager, sprite_manager, components):

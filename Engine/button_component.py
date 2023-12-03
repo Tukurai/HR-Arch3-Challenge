@@ -2,8 +2,8 @@ import pygame
 
 from Engine.component import Component
 from Engine.text_component import TextComponent
+from Settings.user_events import BUTTON_CLICK
 
-BUTTON_CLICK = pygame.USEREVENT + 5
 
 class ButtonComponent(Component):
     def __init__(self,

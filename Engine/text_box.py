@@ -2,43 +2,45 @@ import pygame
 
 from Engine.text_component import TextComponent
 from Settings import settings
+from Settings.user_events import TEXT_BOX_INPUT
 
 COLOR_ACTIVE = pygame.Color("gray96")
 COLOR_INACTIVE = pygame.Color("gray77")
-TEXT_BOX_INPUT = pygame.USEREVENT + 4
 
 
-class TextBox():
+class TextBox:
     """
     A text box that can be used to input text.
     saved_text_display postion is absolute.
     """
 
-    def __init__(self,
-                 component_name: str,
-                 pos: tuple[int, int],
-                 width: int,
-                 height: int,
-                 rotation=0,
-                 depth=0.50,
-                 scale=None,
-                 text=None,
-                 font_size=0,
-                 centered=True,
-                 box_color_active=COLOR_ACTIVE,
-                 box_color_inactive=COLOR_INACTIVE,
-                 saved_text_display=None):
+    def __init__(
+        self,
+        component_name: str,
+        pos: tuple[int, int],
+        width: int,
+        height: int,
+        rotation=0,
+        depth=0.50,
+        scale=None,
+        text=None,
+        font_size=0,
+        centered=True,
+        box_color_active=COLOR_ACTIVE,
+        box_color_inactive=COLOR_INACTIVE,
+        saved_text_display=None,
+    ):
         self.text_component = TextComponent(
             component_name + "_textbox_text",
             text,
             font_size,
             centered,
             None,
-            (pos[0] + width/2, pos[1] + height/2),
+            (pos[0] + width / 2, pos[1] + height / 2),
             0,
             0,
             0,
-            1.00
+            1.00,
         )
 
         self.rect = pygame.Rect(pos[0], pos[1], width, height)
@@ -73,9 +75,10 @@ class TextBox():
             if self.active:
                 if event.key == pygame.K_RETURN:
                     self.send_text()
-                    if (settings.DEBUG_MODE):
+                    if settings.DEBUG_MODE:
                         print(
-                            f"{self.text_component.component_name}: {self.text_component.text}")
+                            f"{self.text_component.component_name}: {self.text_component.text}"
+                        )
                     self.text_component.text = ""
                 elif event.key == pygame.K_BACKSPACE:
                     self.text_component.text = self.text_component.text[:-1]
@@ -95,6 +98,6 @@ class TextBox():
 
         if self.text_component is not None:
             self.text_component.draw(screen)
-        
+
         if self.saved_text_display is not None:
             self.saved_text_display.draw(screen)
