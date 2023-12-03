@@ -11,10 +11,12 @@ from Settings import settings
 
 
 class SceneManager:
-    def __init__(self, sound_manager, sprite_manager, screen):
+    def __init__(self, sound_manager, sprite_manager, screen, score_manager=None):
         self.sound_manager = sound_manager
         self.sprite_manager = sprite_manager
         self.screen = screen
+        if score_manager is not None:
+            self.score_manager = score_manager
 
         self.scenes = self.create_scenes()
         self.set_active_scene(self.get_scene_by_name("Main menu"))
@@ -42,9 +44,9 @@ class SceneManager:
         # Create a static list of scenes based on the base class GameScene.
         scenes = {
             MainMenuScene(self, self.sprite_manager, []),
-            CarSelectionScene(self,self.sprite_manager, []),
-            RaceScene(self,self.sprite_manager,[]),
-            HighScoreScene(self,self.sprite_manager,[]),
+            CarSelectionScene(self, self.sprite_manager, []),
+            RaceScene(self, self.sprite_manager, []),
+            HighScoreScene(self, self.sprite_manager, []),
         }
         return scenes
 
