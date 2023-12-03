@@ -52,192 +52,174 @@ class CarSelectionScene(GameScene):
     def build_ui(self):
         screen = self.scene_manager.screen
 
-        self.components.extend([
-            TextComponent(
-                "Header",
-                "Select a car",
-                36,
-                True,
-                None,
-                (screen.get_width() / 2, 200),
-                0,
-                0,
-                0,
-                1.00,
-            ),
-            TextComponent(
-                "Instruction",
-                "Enter your name, hit enter and select a car",
-                24,
-                True,
-                None,
-                (screen.get_width() / 2, screen.get_height() - 200),
-                0,
-                0,
-                0,
-                1.00,
-            ),
-            ButtonComponent(
-                "BackButton",
-                self.sprite_manager.get_full_ui_element(
-                    "blue_button00.png",
-                    "green_button00.png",
-                    "green_button01.png",
-                ),
-                (
-                    screen.get_width()
-                    - self.sprite_manager.get_ui_element(
-                        "blue_button00.png"
-                    ).width
-                    - 220,
-                    self.scene_manager.screen.get_height()
-                    - self.sprite_manager.get_ui_element(
-                        "blue_button00.png"
-                    ).height
-                    - 150,
-                ),
-                0,
-                1,
-                "Back to main menu",
-                24,
-                True,
-            ),
-            TextBox(
-                "NameTextBox",
-                (
-                    screen.get_width() / 2 - 95,
-                    screen.get_height() / 2 - 255,
-                ),
-                190,
-                49,
-                text="Enter your name",
-                font_size=32,
-                saved_text_display=TextComponent(
-                    "PlayerName",
-                    "Player Name: ",
-                    24,
+        self.components.extend(
+            [
+                TextComponent(
+                    "Header",
+                    "Select a car",
+                    36,
                     True,
                     None,
-                    (
-                        screen.get_width() / 2,
-                        (screen.get_height() / 2) - 185,
-                    ),
+                    (screen.get_width() / 2, 200),
                     0,
                     0,
                     0,
                     1.00,
                 ),
-                enter_input_event=BUTTON_CLICK,
-            ),
-            ButtonComponent(
-                "car1",
-                self.sprite_manager.get_full_car_ui_element(
-                    "car_black_small_1.png"
+                TextComponent(
+                    "Instruction",
+                    "Enter your name, hit enter and select a car",
+                    24,
+                    True,
+                    None,
+                    (screen.get_width() / 2, screen.get_height() - 200),
+                    0,
+                    0,
+                    0,
+                    1.00,
                 ),
-                (
-                    (screen.get_width() / 2)
-                    - (
-                        self.sprite_manager.get_car(
-                            "car_black_small_1.png"
-                        ).width
-                        / 2
-                    )
-                    - 200,
-                    screen.get_height() / 2,
-                ),
-                0,
-                1.00,
-                "",
-                1,
-                True,
-            ),
-            ButtonComponent(
-                "car2",
-                self.sprite_manager.get_full_car_ui_element(
-                    "car_red_small_1.png"
-                ),
-                (
-                    (screen.get_width() / 2)
-                    - (
-                        self.sprite_manager.get_car("car_red_small_1.png").width
-                        / 2
-                    )
-                    - 100,
-                    screen.get_height() / 2,
-                ),
-                0,
-                1.00,
-                "",
-                1,
-                True,
-            ),
-            ButtonComponent(
-                "car3",
-                self.sprite_manager.get_full_car_ui_element(
-                    "car_yellow_small_1.png"
-                ),
-                (
-                    (screen.get_width() / 2)
-                    - (
-                        self.sprite_manager.get_car(
-                            "car_yellow_small_1.png"
-                        ).width
-                        / 2
+                ButtonComponent(
+                    "BackButton",
+                    self.sprite_manager.get_full_ui_element(
+                        "blue_button00.png",
+                        "green_button00.png",
+                        "green_button01.png",
                     ),
-                    screen.get_height() / 2,
+                    (
+                        screen.get_width()
+                        - self.sprite_manager.get_ui_element("blue_button00.png").width
+                        - 220,
+                        self.scene_manager.screen.get_height()
+                        - self.sprite_manager.get_ui_element("blue_button00.png").height
+                        - 150,
+                    ),
+                    0,
+                    1,
+                    "Back to main menu",
+                    24,
+                    True,
                 ),
-                0,
-                1.00,
-                "",
-                1,
-                True,
-            ),
-            ButtonComponent(
-                "car4",
-                self.sprite_manager.get_full_car_ui_element(
-                    "car_green_small_1.png"
+                TextBox(
+                    "NameTextBox",
+                    (
+                        screen.get_width() / 2 - 95,
+                        screen.get_height() / 2 - 255,
+                    ),
+                    190,
+                    49,
+                    text="Enter your name",
+                    font_size=32,
+                    saved_text_display=TextComponent(
+                        "PlayerName",
+                        "Player Name: ",
+                        24,
+                        True,
+                        None,
+                        (
+                            screen.get_width() / 2,
+                            (screen.get_height() / 2) - 185,
+                        ),
+                        0,
+                        0,
+                        0,
+                        1.00,
+                    ),
                 ),
-                (
-                    (screen.get_width() / 2)
-                    - (
-                        self.sprite_manager.get_car(
-                            "car_green_small_1.png"
-                        ).width
-                        / 2
-                    )
-                    + 100,
-                    screen.get_height() / 2,
+                ButtonComponent(
+                    "car1",
+                    self.sprite_manager.get_full_car_ui_element(
+                        "car_black_small_1.png"
+                    ),
+                    (
+                        (screen.get_width() / 2)
+                        - (
+                            self.sprite_manager.get_car("car_black_small_1.png").width
+                            / 2
+                        )
+                        - 200,
+                        screen.get_height() / 2,
+                    ),
+                    0,
+                    1.00,
+                    "",
+                    1,
+                    True,
                 ),
-                0,
-                1.00,
-                "",
-                1,
-                True,
-            ),
-            ButtonComponent(
-                "car5",
-                self.sprite_manager.get_full_car_ui_element(
-                    "car_blue_small_1.png"
+                ButtonComponent(
+                    "car2",
+                    self.sprite_manager.get_full_car_ui_element("car_red_small_1.png"),
+                    (
+                        (screen.get_width() / 2)
+                        - (self.sprite_manager.get_car("car_red_small_1.png").width / 2)
+                        - 100,
+                        screen.get_height() / 2,
+                    ),
+                    0,
+                    1.00,
+                    "",
+                    1,
+                    True,
                 ),
-                (
-                    (screen.get_width() / 2)
-                    - (
-                        self.sprite_manager.get_car(
-                            "car_blue_small_1.png"
-                        ).width
-                        / 2
-                    )
-                    + 200,
-                    screen.get_height() / 2,
+                ButtonComponent(
+                    "car3",
+                    self.sprite_manager.get_full_car_ui_element(
+                        "car_yellow_small_1.png"
+                    ),
+                    (
+                        (screen.get_width() / 2)
+                        - (
+                            self.sprite_manager.get_car("car_yellow_small_1.png").width
+                            / 2
+                        ),
+                        screen.get_height() / 2,
+                    ),
+                    0,
+                    1.00,
+                    "",
+                    1,
+                    True,
                 ),
-                0,
-                1.00,
-                "",
-                1,
-                True,
-            ),
-        ])
-    
+                ButtonComponent(
+                    "car4",
+                    self.sprite_manager.get_full_car_ui_element(
+                        "car_green_small_1.png"
+                    ),
+                    (
+                        (screen.get_width() / 2)
+                        - (
+                            self.sprite_manager.get_car("car_green_small_1.png").width
+                            / 2
+                        )
+                        + 100,
+                        screen.get_height() / 2,
+                    ),
+                    0,
+                    1.00,
+                    "",
+                    1,
+                    True,
+                ),
+                ButtonComponent(
+                    "car5",
+                    self.sprite_manager.get_full_car_ui_element("car_blue_small_1.png"),
+                    (
+                        (screen.get_width() / 2)
+                        - (
+                            self.sprite_manager.get_car("car_blue_small_1.png").width
+                            / 2
+                        )
+                        + 200,
+                        screen.get_height() / 2,
+                    ),
+                    0,
+                    1.00,
+                    "",
+                    1,
+                    True,
+                ),
+            ]
+        )
+
     def set_cars_needed(self, cars_needed):
         self.cars_needed = cars_needed
         self.components = []

@@ -73,8 +73,6 @@ class TextBox:
             else:
                 self.color = self.box_color_inactive
 
-
-
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if self.enter_input_event is not None:
@@ -88,23 +86,25 @@ class TextBox:
                 if event.key == pygame.K_BACKSPACE:
                     self.text_component.text = self.text_component.text[:-1]
                 else:
-                    if len(self.text_component.text) < 10:
+                    if (
+                        len(self.text_component.text) < 10
+                        and event.key != pygame.K_RETURN
+                    ):
                         self.text_component.text += event.unicode
 
     def enter_text(self):
         self.send_text()
         if settings.DEBUG_MODE:
-            print(
-                f"{self.text_component.component_name}: {self.text_component.text}"
-            )
+            print(f"{self.text_component.component_name}: {self.text_component.text}")
         self.text_component.text = ""
-
 
     def send_text(self):
         if self.saved_text_display is not None:
             self.saved_text_display.text += self.text_component.text
 
-        textbox_text = pygame.event.Event(TEXT_BOX_INPUT, player_name=self.text_component.text)
+        textbox_text = pygame.event.Event(
+            TEXT_BOX_INPUT, player_name=self.text_component.text
+        )
         pygame.event.post(textbox_text)
 
     def draw(self, screen, pos=None, scale=None):
