@@ -23,7 +23,7 @@ class ServerGameData:
         else:
             self.highscores[level_name] = sorted(self.highscores[level_name], key=lambda x: x[0])
             if highscore > self.highscores[level_name][0][0]:
-                self.highscores[level_name][0] = (highscore, player, level_name)
+                self.highscores[level_name][0] = (highscore, player)
                 self.highscores[level_name] = sorted(self.highscores[level_name], key=lambda x: x[0])
 
     def __repr__(self):

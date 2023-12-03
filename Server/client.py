@@ -37,7 +37,6 @@ class WebSocketClient(BaseWebSocketClient):
         with self.lock:
             return self.game_data.active_players
 
-
     ###########################
     # Handle Incoming Msg Methods
     ###########################
@@ -65,14 +64,14 @@ class WebSocketClient(BaseWebSocketClient):
                 "params": {"name": f"{name}"}
             }))
 
-    def send_highscore_msg(self, highscore: int, player_name:str, level_name:str):
+    def send_highscore_msg(self, highscore: int, player_name: str, level_name: str):
         self.send_message(json.dumps({
-                "action": "register_highscore",
-                "params": {
-                    "name": f"{player_name}",
-                    "highscore": highscore,
-                    "level": f"{level_name}"
-                }}))
+            "action": "register_highscore",
+            "params": {
+                "name": f"{player_name}",
+                "highscore": highscore,
+                "level": f"{level_name}"
+            }}))
 
 
 # Example usage
