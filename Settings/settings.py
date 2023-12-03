@@ -14,7 +14,7 @@ MUSIC_CHILD_MODE = False
 # Debug mode
 DEBUG_MODE = False
 # Server URL for websockets
-SERVER_URI = "86.80.116.182"
+SERVER_URI = "ws://86.80.116.182"
 # Server port for websockets
 SERVER_PORT = "8765"
 # Server Logging bool

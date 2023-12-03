@@ -1,25 +1,31 @@
 class ServerGameData:
 
     def __init__(self):
-        self.latest_players: list[str] = []
-        self.highscores: list[(str, int)] = []
+        self.active_players: list[str] = []
+        self.highscores: dict = {}
         self.max_amount_of_players = 5
         self.max_amount_of_highscores = 10
 
     def ingest_player(self, player: str):
-        if player in self.latest_players:
+        if player in self.active_players:
             return
-        if len(self.latest_players) < self.max_amount_of_players:
-            self.latest_players.append(player)
+        if len(self.active_players) < self.max_amount_of_players:
+            self.active_players.append(player)
         else:
-            self.latest_players.pop(0)
-            self.latest_players.append(player)
+            self.active_players.pop(0)
+            self.active_players.append(player)
 
-    def ingest_highscore(self, player:str, highscore: int):
-        if len(self.highscores) < self.max_amount_of_highscores:
-            self.highscores.append(highscore)
+    def ingest_highscore(self, highscore: int, player:str, level_name:str):
+        if level_name not in self.highscores:
+            self.highscores[level_name] = []
+        if len(self.highscores[level_name]) < self.max_amount_of_highscores:
+            self.highscores[level_name].append((highscore, player))
         else:
-            self.highscores.sort()
-            if highscore > self.highscores[0]:
-                self.highscores[0] = highscore
-                self.highscores.sort()
+            self.highscores[level_name] = sorted(self.highscores[level_name], key=lambda x: x[0])
+            if highscore > self.highscores[level_name][0][0]:
+                self.highscores[level_name][0] = (highscore, player, level_name)
+                self.highscores[level_name] = sorted(self.highscores[level_name], key=lambda x: x[0])
+
+    def __repr__(self):
+        return (f"ServerGameData(latest_players={self.active_players} ---"
+                f" highscores={self.highscores})")
