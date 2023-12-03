@@ -236,7 +236,11 @@ class CarSelectionScene(GameScene):
                 True,
             ),
         ])
-            
+    
+    def set_cars_needed(self, cars_needed):
+        self.cars_needed = cars_needed
+        self.components = []
+        self.build_ui()
 
     def scene_changed(self):
         return super().scene_changed()

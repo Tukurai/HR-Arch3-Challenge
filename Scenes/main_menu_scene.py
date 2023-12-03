@@ -17,13 +17,14 @@ class MainMenuScene(GameScene):
                     "Car selection"
                 )
                 selection_scene.selected_cars = []
+                selection_scene.set_cars_needed(1)
                 self.scene_manager.set_active_scene(selection_scene)
             elif event.button.component_name == "MultiPlayer":
                 selection_scene = self.scene_manager.get_scene_by_name(
                     "Car selection"
                 )
                 selection_scene.selected_cars = []
-                selection_scene.cars_needed = 2
+                selection_scene.set_cars_needed(2)
                 self.scene_manager.set_active_scene(selection_scene)
             elif event.button.component_name == "HighScoreButton":
                 self.scene_manager.set_active_scene(

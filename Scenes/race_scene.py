@@ -465,8 +465,16 @@ class RaceScene(GameScene):
         if next_checkpoint >= len(self.level["Checkpoints"]):
             next_checkpoint = 0
         return next_checkpoint
+    
+    def is_enclosed(self, inner, outer):
+        return (outer[0] <= inner[0] and
+                outer[1] <= inner[1] and
+                outer[2] >= inner[2] and
+                outer[3] >= inner[3])
 
     def update_checkpoints(self, car):
+        scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE
+
         mask_car = pygame.mask.from_surface(
             car.get_scaled_rotated_sprite_or_mask(car.mask_layers[0])[0]
         )
@@ -479,6 +487,13 @@ class RaceScene(GameScene):
         if mask_checkpoint.overlap(
             mask_car, (car.x - checkpoint.x, car.y - checkpoint.y)
         ):
+            sprite = car.get_scaled_rotated_sprite_or_mask(car.sprite)
+
+            if self.is_enclosed(
+                (car.x, car.y, sprite[0].get_width(), sprite[0].get_height()),
+                (checkpoint.x, checkpoint.y, scaled_tile_size, scaled_tile_size)
+            ):
+                print(f"next checkpoint {car.component_name}")  # TODO: Finish this
             car.current_checkpoint = car.next_checkpoint
             car.next_checkpoint = self.get_next_checkpoint(car.current_checkpoint)
 
