@@ -40,8 +40,9 @@ class Car(Component):
         final_score = 10500  # 10,500 is 7 minutes without penalties.
         elapsed_time = end_time - start_time
 
-        final_score -= elapsed_time.total_seconds() * 25
+        final_score -= elapsed_time * 25
         final_score -= self.penalties * 100
+        final_score = math.floor(final_score)
 
         if final_score < 0:
             final_score = 0
