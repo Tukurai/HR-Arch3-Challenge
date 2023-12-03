@@ -2,7 +2,11 @@ class ServerGameData:
 
     def __init__(self):
         self.active_players: list[str] = []
-        self.highscores: dict = {}
+        self.highscores: dict[str, list] = {"map_left": [],
+                                 "map_right": [],
+                                 "map_up": [],
+                                 "map_down": [],
+                                 "map_complex": []}
         self.max_amount_of_players = 5
         self.max_amount_of_highscores = 10
 

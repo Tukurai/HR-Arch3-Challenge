@@ -7,10 +7,9 @@ from server_game_data import ServerGameData
 
 
 class WebSocketClient(BaseWebSocketClient):
-    def __init__(self, player_name: str, uri=None):
+    def __init__(self, uri=None):
         super().__init__(uri)
         self.game_data = ServerGameData()
-        self.player_name = player_name
         self.message_router = {
             "active_players": self.handle_active_players_msg,
             "highscores": self.handle_highscore_msg,
@@ -53,16 +52,12 @@ class WebSocketClient(BaseWebSocketClient):
     # Outgoing Msg Methods
     ###########################
 
-    def send_active_player(self, player_name: str = None):
-        if not player_name:
-            name = self.player_name
-        else:
-            name = player_name
+    def send_active_player_msg(self, player_name: str):
         self.send_message(
-            json.dumps({
-                "action": "register_player",
-                "params": {"name": f"{name}"}
-            }))
+        json.dumps({
+            "action": "register_player",
+            "params": {"name": f"{player_name}"}
+        }))
 
     def send_highscore_msg(self, highscore: int, player_name: str, level_name: str):
         self.send_message(json.dumps({
@@ -87,7 +82,7 @@ if __name__ == "__main__":
         while client.running:
             if (settings.DEBUG_MODE): print("Main loop doing stuff")
             # Example sending a message
-            client.send_active_player(choice(players))
+            client.send_active_player_msg(choice(players))
             time.sleep(1)
             client.send_message(json.dumps({
                 "action": "register_highscore",
