@@ -3,6 +3,7 @@ import os
 import time
 import pygame
 from Engine.car import DRIVE_CAR_EVENT
+from Engine.button_component import BUTTON_CLICK
 from Engine.player_car import PlayerCar
 
 from Settings import settings
@@ -117,7 +118,7 @@ class SoundManager:
         Play a sound effect on an available channel
         """
         self.sfx_library[sfx_file].play()
-        self.volume_sfx(self.sfx_library[sfx_file], volume)
+        self.volume_sfx(sfx_file, volume)
 
     def pause_sfx(self, sfx_file: str):
         """
@@ -214,6 +215,9 @@ class SoundManager:
                     event.car.max_speed,
                     self.car_sounds[event.car.player_name]
                 )
+        
+        if event.type == BUTTON_CLICK:
+            self.play_sfx("ui_click1.ogg")
 
     def play_car_sound(self, speed, previous_speed, max_speed, sound_files: list):
         if speed < 0:
