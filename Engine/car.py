@@ -24,6 +24,7 @@ class Car(Component):
         self.max_speed = max_speed
         self.tolerance = tolerance
         self.drag = drag
+        self.render_name = False
 
         self.reset()
 

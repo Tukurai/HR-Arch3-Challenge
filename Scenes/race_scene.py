@@ -13,7 +13,12 @@ from Manager.level_manager import LevelManager
 from Engine.car import Car
 from Scenes.game_scene import GameScene
 from Settings import settings
-from Settings.user_events import RESET_CAR_EVENT, BUTTON_CLICK, START_RACE_EVENT, SUBMIT_SCORE_EVENT
+from Settings.user_events import (
+    RESET_CAR_EVENT,
+    BUTTON_CLICK,
+    START_RACE_EVENT,
+    SUBMIT_SCORE_EVENT,
+)
 
 
 class RaceScene(GameScene):
@@ -24,6 +29,10 @@ class RaceScene(GameScene):
         self.players = []
         self.start_time = time.time()
         self.level_name = ""
+
+        self.header = None
+        self.player_1_stats = None
+        self.player_2_stats = None
 
         self.change_level("map_right")
 
@@ -83,58 +92,68 @@ class RaceScene(GameScene):
     def build_ui(self):
         screen = self.scene_manager.screen
 
-        self.components.extend([
-            TextComponent(
-                "Header",
-                "Race",
-                36,
-                True,
-                None,
-                (screen.get_width() / 2, 32),
-                0,
-                0,
-                0,
-                1.00,
-            ),
-            TextComponent(
-                "Instruction",
-                "Use W, A, S, D to control your car",
-                24,
-                True,
-                None,
-                (screen.get_width() / 2, screen.get_height() - 60),
-                0,
-                0,
-                0,
-                1.00,
-            ),
-            ButtonComponent(
-                "EndRaceButton",
-                self.sprite_manager.get_full_ui_element(
-                    "blue_button00.png",
-                    "green_button00.png",
-                    "green_button01.png",
+        self.header = TextComponent(
+            "Header",
+            "Race",
+            36,
+            True,
+            None,
+            (screen.get_width() / 2, 32),
+            0,
+            0,
+            0,
+            1.00,
+        )
+        self.components.extend(
+            [
+                self.header,
+                TextComponent(
+                    "Instruction 1",
+                    "Player 1 use W, A, S, D to control your car.",
+                    24,
+                    True,
+                    None,
+                    (screen.get_width() / 2, screen.get_height() - 70),
+                    0,
+                    0,
+                    0,
+                    1.00,
                 ),
-                (
-                    screen.get_width()
-                    - self.sprite_manager.get_ui_element(
-                        "blue_button00.png"
-                    ).width
-                    - 220,
-                    screen.get_height()
-                    - self.sprite_manager.get_ui_element(
-                        "blue_button00.png"
-                    ).height
-                    - 150,
+                TextComponent(
+                    "Instruction 2",
+                    "Player 2 use up, left, down, right to control your car.",
+                    24,
+                    True,
+                    None,
+                    (screen.get_width() / 2, screen.get_height() - 50),
+                    0,
+                    0,
+                    0,
+                    1.00,
                 ),
-                0,
-                1,
-                "End Race",
-                24,
-                True,
-            ),
-        ])
-            
+                ButtonComponent(
+                    "EndRaceButton",
+                    self.sprite_manager.get_full_ui_element(
+                        "blue_button00.png",
+                        "green_button00.png",
+                        "green_button01.png",
+                    ),
+                    (
+                        screen.get_width()
+                        - self.sprite_manager.get_ui_element("blue_button00.png").width
+                        - 220,
+                        screen.get_height()
+                        - self.sprite_manager.get_ui_element("blue_button00.png").height
+                        - 60,
+                    ),
+                    0,
+                    1,
+                    "End Race",
+                    24,
+                    True,
+                ),
+            ]
+        )
 
     def change_level(self, level_name):
         """Change the level internally and update the players to the new level."""
@@ -465,12 +484,14 @@ class RaceScene(GameScene):
         if next_checkpoint >= len(self.level["Checkpoints"]):
             next_checkpoint = 0
         return next_checkpoint
-    
+
     def is_enclosed(self, inner, outer):
-        return (outer[0] <= inner[0] and
-                outer[1] <= inner[1] and
-                outer[2] >= inner[2] and
-                outer[3] >= inner[3])
+        return (
+            outer[0] <= inner[0]
+            and outer[1] <= inner[1]
+            and outer[2] >= inner[2]
+            and outer[3] >= inner[3]
+        )
 
     def update_checkpoints(self, car):
         scaled_tile_size = settings.TILE_SIZE * settings.GAME_SCALE
@@ -491,7 +512,7 @@ class RaceScene(GameScene):
 
             if self.is_enclosed(
                 (car.x, car.y, sprite[0].get_width(), sprite[0].get_height()),
-                (checkpoint.x, checkpoint.y, scaled_tile_size, scaled_tile_size)
+                (checkpoint.x, checkpoint.y, scaled_tile_size, scaled_tile_size),
             ):
                 print(f"next checkpoint {car.component_name}")  # TODO: Finish this
             car.current_checkpoint = car.next_checkpoint

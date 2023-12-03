@@ -29,6 +29,8 @@ class Component:
         self.depth = depth
         self.scale = scale
         self.mask_layers = mask_layers
+        self.render_name = False
+        self.display_name = ""
 
         if color is not None and self.sprite is None:
             # Create a surface with dimensions 1792x896
@@ -57,6 +59,22 @@ class Component:
 
         sprite = self.get_scaled_rotated_sprite_or_mask(self.sprite, scale)
         screen.blit(sprite[0], draw_pos + sprite[1])
+
+        if self.render_name:
+            font = pygame.font.Font(None, 24)
+            text = font.render(self.component_name, True, (255, 255, 255))
+            text_outline = font.render(self.component_name, True, (0, 0, 0))
+
+            centered_x = self.x + (self.width / 2) - (text.get_width() / 2)
+            centered_y = self.y + (self.height / 2) - (text.get_height() / 2)
+
+            # Render the outline by offsetting the text position
+            for x_offset in [-1, 1]:
+                for y_offset in [-1, 1]:
+                    screen.blit(text_outline, (centered_x + x_offset, centered_y + y_offset - 50))
+
+            # Render the text itself
+            screen.blit(text, (centered_x, centered_y - 50))
 
         # if self.mask_layers is not None: # Draw mask layers for debugging
         #    mask = self.get_scaled_rotated_sprite_or_mask(self.mask_layers[0], scale)

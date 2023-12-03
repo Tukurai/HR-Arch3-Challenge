@@ -19,6 +19,8 @@ class PlayerCar(Car):
     ):
         super().__init__(max_speed, drag, component_name, full_sprite, depth, tolerance)
         self.player_name = player_name
+        self.display_name = player_name
+        self.render_name = True
         self.controls = controls
         self.reverse_controls = None
         if controls is not None:
