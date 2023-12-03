@@ -3,7 +3,7 @@ import threading
 import time
 from Settings import settings
 from Server.base_client import BaseWebSocketClient
-from server_game_data import ServerGameData
+from Server.server_game_data import ServerGameData
 
 
 class WebSocketClient(BaseWebSocketClient):
