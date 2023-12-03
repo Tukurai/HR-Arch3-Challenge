@@ -127,6 +127,7 @@ class CarSelectionScene(GameScene):
                     0,
                     1.00,
                 ),
+                enter_input_event=BUTTON_CLICK,
             ),
             ButtonComponent(
                 "car1",

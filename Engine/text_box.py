@@ -29,6 +29,7 @@ class TextBox:
         box_color_active=COLOR_ACTIVE,
         box_color_inactive=COLOR_INACTIVE,
         saved_text_display=None,
+        enter_input_event=None,
     ):
         self.text_component = TextComponent(
             component_name + "_textbox_text",
@@ -51,6 +52,7 @@ class TextBox:
         self.box_color_inactive = box_color_inactive
         self.color = box_color_inactive
         self.saved_text_display = saved_text_display
+        self.enter_input_event = enter_input_event
 
     def update(self, timedelta, input_state):
         if self.active is False:
@@ -71,20 +73,32 @@ class TextBox:
             else:
                 self.color = self.box_color_inactive
 
+
+
         if event.type == pygame.KEYDOWN:
             if self.active:
-                if event.key == pygame.K_RETURN:
-                    self.send_text()
-                    if settings.DEBUG_MODE:
-                        print(
-                            f"{self.text_component.component_name}: {self.text_component.text}"
-                        )
-                    self.text_component.text = ""
-                elif event.key == pygame.K_BACKSPACE:
+                if self.enter_input_event is not None:
+                    if event == self.enter_input_event:
+                        if "car" in self.enter_input_event.file_name:
+                            self.enter_text()
+                else:
+                    if event.key == pygame.K_RETURN:
+                        self.enter_text()
+
+                if event.key == pygame.K_BACKSPACE:
                     self.text_component.text = self.text_component.text[:-1]
                 else:
                     if len(self.text_component.text) < 10:
                         self.text_component.text += event.unicode
+
+    def enter_text(self):
+        self.send_text()
+        if settings.DEBUG_MODE:
+            print(
+                f"{self.text_component.component_name}: {self.text_component.text}"
+            )
+        self.text_component.text = ""
+
 
     def send_text(self):
         if self.saved_text_display is not None:
