@@ -1,4 +1,7 @@
+from Engine.button_component import ButtonComponent
+from Engine.text_component import TextComponent
 from Settings import settings
+
 
 class GameScene:
     def __init__(self, scene_manager, sprite_manager, scene_name, components):
@@ -6,6 +9,8 @@ class GameScene:
         self.sprite_manager = sprite_manager
         self.scene_name = scene_name
         self.components = components
+
+        self.build_ui()
 
     def handle_event(self, event):
         for component in self.components:
@@ -18,6 +23,9 @@ class GameScene:
     def draw(self, screen):
         for component in self.components:
             component.draw(screen)
+
+    def build_ui(self):
+        pass
 
     def scene_changed(self):
         sound_manager = self.scene_manager.sound_manager
@@ -37,4 +45,3 @@ class GameScene:
         else:
             sound_manager.stop_music()
             sound_manager.play_music(race_music, volume=0.3)
-

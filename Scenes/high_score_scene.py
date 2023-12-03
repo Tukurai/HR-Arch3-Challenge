@@ -1,6 +1,7 @@
 import pygame
+from Engine.text_component import TextComponent
 from Scenes.game_scene import GameScene
-from Engine.button_component import BUTTON_CLICK
+from Engine.button_component import BUTTON_CLICK, ButtonComponent
 
 class HighScoreScene(GameScene):
     def __init__(self, scene_manager, sprite_manager, components):
@@ -14,3 +15,46 @@ class HighScoreScene(GameScene):
                 )
 
         return super().handle_event(event)
+    
+    def build_ui(self):
+        screen = self.scene_manager.screen
+
+        self.components.extend([
+            TextComponent(
+                "Header",
+                "High Scores",
+                36,
+                True,
+                None,
+                (screen.get_width() / 2, 200),
+                0,
+                0,
+                0,
+                1.00,
+            ),
+            ButtonComponent(
+                "BackButton",
+                self.sprite_manager.get_full_ui_element(
+                    "blue_button00.png",
+                    "green_button00.png",
+                    "green_button01.png",
+                ),
+                (
+                    screen.get_width()
+                    - self.sprite_manager.get_ui_element(
+                        "blue_button00.png"
+                    ).width
+                    - 220,
+                    screen.get_height()
+                    - self.sprite_manager.get_ui_element(
+                        "blue_button00.png"
+                    ).height
+                    - 150,
+                ),
+                0,
+                1,
+                "Back to main menu",
+                24,
+                True,
+            ),
+        ])

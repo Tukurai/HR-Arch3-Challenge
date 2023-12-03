@@ -3,8 +3,10 @@ import math
 import time
 
 import pygame
+from Engine.button_component import ButtonComponent
 from Engine.component import Component
 from Engine.player_car import PlayerCar
+from Engine.text_component import TextComponent
 from Enums.direction import Direction
 from Manager.collision_manager import CollisionManager
 from Manager.level_manager import LevelManager
@@ -77,6 +79,62 @@ class RaceScene(GameScene):
 
         if settings.DEBUG_MODE:
             self.draw_checkpoints(screen)
+
+    def build_ui(self):
+        screen = self.scene_manager.screen
+
+        self.components.extend([
+            TextComponent(
+                "Header",
+                "Race",
+                36,
+                True,
+                None,
+                (screen.get_width() / 2, 32),
+                0,
+                0,
+                0,
+                1.00,
+            ),
+            TextComponent(
+                "Instruction",
+                "Use W, A, S, D to control your car",
+                24,
+                True,
+                None,
+                (screen.get_width() / 2, screen.get_height() - 60),
+                0,
+                0,
+                0,
+                1.00,
+            ),
+            ButtonComponent(
+                "EndRaceButton",
+                self.sprite_manager.get_full_ui_element(
+                    "blue_button00.png",
+                    "green_button00.png",
+                    "green_button01.png",
+                ),
+                (
+                    screen.get_width()
+                    - self.sprite_manager.get_ui_element(
+                        "blue_button00.png"
+                    ).width
+                    - 220,
+                    screen.get_height()
+                    - self.sprite_manager.get_ui_element(
+                        "blue_button00.png"
+                    ).height
+                    - 150,
+                ),
+                0,
+                1,
+                "End Race",
+                24,
+                True,
+            ),
+        ])
+            
 
     def change_level(self, level_name):
         """Change the level internally and update the players to the new level."""

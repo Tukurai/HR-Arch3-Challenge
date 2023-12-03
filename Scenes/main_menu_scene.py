@@ -1,5 +1,6 @@
 import pygame
-from Engine.button_component import BUTTON_CLICK
+from Engine.button_component import BUTTON_CLICK, ButtonComponent
+from Engine.text_component import TextComponent
 from Scenes.game_scene import GameScene
 from Settings import settings
 from Settings.user_events import USER_QUIT
@@ -35,3 +36,89 @@ class MainMenuScene(GameScene):
             if(settings.DEBUG_MODE): print(f"Button {event.button.component_name} clicked!")
 
         return super().handle_event(event)
+
+    def build_ui(self):
+        screen = self.scene_manager.screen
+
+        self.components.extend([
+            TextComponent(
+                "Header",
+                "Fantastic Race Game",
+                36,
+                True,
+                None,
+                (screen.get_width() / 2, 200),
+                0,
+                0,
+                0,
+                1.00,
+            ),
+            ButtonComponent(
+                "SinglePlayer",
+                self.sprite_manager.get_full_ui_element(
+                    "blue_button00.png",
+                    "green_button00.png",
+                    "green_button01.png",
+                ),
+                (
+                    screen.get_width() / 2 - 95,
+                    screen.get_height() / 2 - 170,
+                ),
+                0,
+                1,
+                "Singleplayer",
+                32,
+                True,
+            ),
+            ButtonComponent(
+                "MultiPlayer",
+                self.sprite_manager.get_full_ui_element(
+                    "blue_button00.png",
+                    "green_button00.png",
+                    "green_button01.png",
+                ),
+                (
+                    screen.get_width() / 2 - 95,
+                    screen.get_height() / 2 - 85,
+                ),
+                0,
+                1,
+                "Multiplayer",
+                32,
+                True,
+            ),
+            ButtonComponent(
+                "HighScoreButton",
+                self.sprite_manager.get_full_ui_element(
+                    "blue_button00.png",
+                    "green_button00.png",
+                    "green_button01.png",
+                ),
+                (
+                    screen.get_width() / 2 - 95,
+                    screen.get_height() / 2,
+                ),
+                0,
+                1,
+                "Highscores",
+                32,
+                True,
+            ),
+            ButtonComponent(
+                "QuitButton",
+                self.sprite_manager.get_full_ui_element(
+                    "blue_button00.png",
+                    "green_button00.png",
+                    "green_button01.png",
+                ),
+                (
+                    screen.get_width() / 2 - 95,
+                    screen.get_height() / 2 + 85,
+                ),
+                0,
+                1,
+                "Quit",
+                32,
+                True,
+            ),
+        ])
