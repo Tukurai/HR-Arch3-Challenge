@@ -20,160 +20,83 @@ class HighScoreScene(GameScene):
     def build_ui(self):
         screen = self.scene_manager.screen
 
-        self.components.extend(
-            [
-                TextComponent(
-                    "Header",
-                    "High Scores",
-                    36,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 200),
-                    0,
-                    0,
-                    0,
-                    1.00,
+        text_component_settings = {
+            1: ["FirstPlace", 300],
+            2: ["SecondPlace", 340],
+            3: ["ThirdPlace", 380],
+            4: ["FourthPlace", 420],
+            5: ["FifthPlace", 460],
+            6: ["SixthPlace", 500],
+            7: ["SeventhPlace", 540],
+            8: ["EithPlace", 580],
+            9: ["NinthPlace", 620],
+            10: ["TenthPlace", 660],
+        }
+
+        text_components = [
+            TextComponent(
+                "Header",
+                "High Scores",
+                36,
+                True,
+                None,
+                (screen.get_width() / 2, 200),
+                0,
+                0,
+                0,
+                1.00,
+            ),
+            ButtonComponent(
+                "BackButton",
+                self.sprite_manager.get_full_ui_element(
+                    "blue_button00.png",
+                    "green_button00.png",
+                    "green_button01.png",
                 ),
+                (
+                    screen.get_width()
+                    - self.sprite_manager.get_ui_element("blue_button00.png").width
+                    - 220,
+                    screen.get_height()
+                    - self.sprite_manager.get_ui_element("blue_button00.png").height
+                    - 150,
+                ),
+                0,
+                1,
+                "Back to main menu",
+                24,
+                True,
+            ),
+        ]
+
+        player_scores = {}
+        for map_data in self.scene_manager.scores.values():
+            for player_data in map_data:
+                player_scores[player_data[1]] = player_data[0]
+
+        sorted_dict = {
+            key: value
+            for key, value in sorted(player_scores.items(), key=lambda item: item[1])
+        }
+
+        index = 1
+        for key, value in sorted_dict.items():
+            text_components.append(
                 TextComponent(
-                    "FirstPlace",
-                    "1: ",
+                    text_component_settings[index][0],
+                    "1: " + key + " - " + str(value),
                     30,
                     True,
                     None,
-                    (screen.get_width() / 2, 300),
+                    (screen.get_width() / 2, text_component_settings[index][1]),
                     0,
                     0,
                     0,
                     1.00,
                 ),
-                TextComponent(
-                    "SecondPlace",
-                    "2: ",
-                    30,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 340),
-                    0,
-                    0,
-                    0,
-                    1.00,
-                ),
-                TextComponent(
-                    "ThirdPlace",
-                    "3: ",
-                    30,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 380),
-                    0,
-                    0,
-                    0,
-                    1.00,
-                ),
-                TextComponent(
-                    "FourthPlace",
-                    "4: ",
-                    30,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 420),
-                    0,
-                    0,
-                    0,
-                    1.00,
-                ),
-                TextComponent(
-                    "FifthPlace",
-                    "5: ",
-                    30,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 460),
-                    0,
-                    0,
-                    0,
-                    1.00,
-                ),
-                TextComponent(
-                    "SixthPlace",
-                    "6: ",
-                    30,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 500),
-                    0,
-                    0,
-                    0,
-                    1.00,
-                ),
-                TextComponent(
-                    "SeventhPlace",
-                    "7: ",
-                    30,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 540),
-                    0,
-                    0,
-                    0,
-                    1.00,
-                ),
-                TextComponent(
-                    "EithPlace",
-                    "8: ",
-                    30,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 580),
-                    0,
-                    0,
-                    0,
-                    1.00,
-                ),
-                TextComponent(
-                    "NinthPlace",
-                    "9: ",
-                    30,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 620),
-                    0,
-                    0,
-                    0,
-                    1.00,
-                ),
-                TextComponent(
-                    "TenthPlace",
-                    "10: ",
-                    30,
-                    True,
-                    None,
-                    (screen.get_width() / 2, 660),
-                    0,
-                    0,
-                    0,
-                    1.00,
-                ),
-                ButtonComponent(
-                    "BackButton",
-                    self.sprite_manager.get_full_ui_element(
-                        "blue_button00.png",
-                        "green_button00.png",
-                        "green_button01.png",
-                    ),
-                    (
-                        screen.get_width()
-                        - self.sprite_manager.get_ui_element("blue_button00.png").width
-                        - 220,
-                        screen.get_height()
-                        - self.sprite_manager.get_ui_element("blue_button00.png").height
-                        - 150,
-                    ),
-                    0,
-                    1,
-                    "Back to main menu",
-                    24,
-                    True,
-                ),
-            ]
-        )
+            )
+            index += 1
+
+        index = 0
+
+        self.components.extend(text_components)

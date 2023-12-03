@@ -17,6 +17,7 @@ class SceneManager:
         self.screen = screen
         if score_manager is not None:
             self.score_manager = score_manager
+            self.scores = score_manager.scores
 
         self.scenes = self.create_scenes()
         self.set_active_scene(self.get_scene_by_name("Main menu"))
