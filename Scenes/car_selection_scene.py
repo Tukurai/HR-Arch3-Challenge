@@ -47,9 +47,6 @@ class CarSelectionScene(GameScene):
         return super().handle_event(event)
 
     def scene_changed(self):
-        for button in self.car_buttons:
-            button.reset()
-
         return super().scene_changed()
 
     def get_key_mapping(number):

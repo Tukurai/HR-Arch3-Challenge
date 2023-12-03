@@ -173,7 +173,7 @@ class RaceScene(GameScene):
         ):
             if car.current_speed > 100:
                 car.handle_controls(Direction.DOWN)
-            elif car.current_speed > 60:
+            elif car.current_speed > 75:
                 car.apply_drag()
             else:
                 car.handle_controls(Direction.UP)

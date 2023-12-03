@@ -8,17 +8,16 @@ from Settings.relative_scale import SCALES
 
 
 class SpriteManager:
-
     def __init__(self):
         current_path = os.path.dirname(os.path.dirname(__file__))
 
         self.cars_spritesheet = Spritesheet(
             os.path.join(current_path, "Assets", "Sprites", "spritesheet_vehicles.png"),
-            mask_layer_amount=1
+            mask_layer_amount=1,
         )
         self.objects_spritesheet = Spritesheet(
             os.path.join(current_path, "Assets", "Sprites", "spritesheet_objects.png"),
-            mask_layer_amount=1
+            mask_layer_amount=1,
         )
         self.roads_spritesheet = Spritesheet(
             os.path.join(current_path, "Assets", "Sprites", "spritesheet_tiles.png"),
@@ -54,23 +53,30 @@ class SpriteManager:
             # This library is already populated, so we offset its index
             index_offset = list(self.sprites_by_name[category].values())[-1].tile_id + 1
         for index, file_name in enumerate(atlas.keys()):
-            width = atlas[file_name]['w']
-            height = atlas[file_name]['h']
+            width = atlas[file_name]["w"]
+            height = atlas[file_name]["h"]
             sprite = sprite_sheet.get_sprite(file_name)
             masks = sprite_sheet.get_mask_from_all_layers(file_name)
             scale = SCALES.get(file_name)
 
             # Create the object
-            sprite_object = FullSpriteObject(file_name,
-                                             index + index_offset,
-                                             sprite, width, height,
-                                             mask_layers=masks,
-                                             scale=scale)
+            sprite_object = FullSpriteObject(
+                file_name,
+                index + index_offset,
+                sprite,
+                width,
+                height,
+                mask_layers=masks,
+                scale=scale,
+            )
 
             # Store it in two libraries, so we can look up by name and ID
             self.sprites_by_name[category][file_name] = sprite_object
             self.sprites_by_id[category][index] = sprite_object
-            if(settings.DEBUG_MODE): print(f"Loaded [FullSpriteObject]: {self.sprites_by_name[category][file_name]}")
+            if settings.DEBUG_MODE:
+                print(
+                    f"Loaded [FullSpriteObject]: {self.sprites_by_name[category][file_name]}"
+                )
 
     def get_road(self, sprite_id: Union[int, str]):
         """
@@ -108,18 +114,46 @@ class SpriteManager:
         """
         return self.get_sprite_object("UI", sprite_id)
 
+    def get_full_ui_element(
+        self,
+        sprite_id_standard: Union[int, str],
+        sprite_id_hover: Union[int, str],
+        sprite_id_active: Union[int, str],
+    ):
+        return (
+            self.get_ui_element(sprite_id_standard),
+            self.get_ui_element(sprite_id_hover),
+            self.get_ui_element(sprite_id_active),
+        )
+    
+    def get_full_car_ui_element(
+        self,
+        sprite_id_standard: Union[int, str],
+    ):
+        return (
+            self.get_car(sprite_id_standard),
+            self.get_car(sprite_id_standard),
+            self.get_car(sprite_id_standard),
+        )
+
     def get_sprite_object(self, category: str, sprite_id):
         if isinstance(sprite_id, str):
             if sprite_id in self.sprites_by_name[category]:
                 return self.sprites_by_name[category][sprite_id]
-            elif(settings.DEBUG_MODE): print(f"Error, '{sprite_id}' not found in Sprite Library ({category}) (by name).")
+            elif settings.DEBUG_MODE:
+                print(
+                    f"Error, '{sprite_id}' not found in Sprite Library ({category}) (by name)."
+                )
         if isinstance(sprite_id, int):
             if sprite_id in self.sprites_by_id[category]:
                 return self.sprites_by_id[category][sprite_id]
-            elif(settings.DEBUG_MODE): print(f"Error, '{sprite_id}' not found in Sprite Library ({category}) (by ID/Int).")
+            elif settings.DEBUG_MODE:
+                print(
+                    f"Error, '{sprite_id}' not found in Sprite Library ({category}) (by ID/Int)."
+                )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pygame.init()
     DISPLAY_W, DISPLAY_H = 800, 300
     canvas = pygame.Surface((DISPLAY_W, DISPLAY_H))
@@ -138,15 +172,12 @@ if __name__ == '__main__':
         # Make white background
         canvas.fill((0, 0, 0))
         # Place road sprite
-        canvas.blit(manager.get_car(10).sprite,
-                    (20, DISPLAY_H - 200))
+        canvas.blit(manager.get_car(10).sprite, (20, DISPLAY_H - 200))
 
         # Place road sprite
-        canvas.blit(manager.get_road(47).sprite,
-                    (140, DISPLAY_H - 200))
+        canvas.blit(manager.get_road(47).sprite, (140, DISPLAY_H - 200))
         # Place road mask
-        canvas.blit(manager.get_road(47).mask_layers[0],
-                    (300, DISPLAY_H - 200))
+        canvas.blit(manager.get_road(47).mask_layers[0], (300, DISPLAY_H - 200))
 
         window.blit(canvas, (0, 0))
         pygame.display.update()

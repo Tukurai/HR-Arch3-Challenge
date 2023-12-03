@@ -59,13 +59,15 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "SinglePlayer",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_full_ui_element(
+                            "blue_button00.png",
+                            "green_button00.png",
+                            "green_button01.png",
+                        ),
                         (
                             self.screen.get_width() / 2 - 95,
                             self.screen.get_height() / 2 - 170,
                         ),
-                        self.sprite_manager.get_ui_element("blue_button00.png").width,
-                        self.sprite_manager.get_ui_element("blue_button00.png").height,
                         0,
                         1,
                         "Singleplayer",
@@ -74,13 +76,15 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "MultiPlayer",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_full_ui_element(
+                            "blue_button00.png",
+                            "green_button00.png",
+                            "green_button01.png",
+                        ),
                         (
                             self.screen.get_width() / 2 - 95,
                             self.screen.get_height() / 2 - 85,
                         ),
-                        self.sprite_manager.get_ui_element("blue_button00.png").width,
-                        self.sprite_manager.get_ui_element("blue_button00.png").height,
                         0,
                         1,
                         "Multiplayer",
@@ -89,13 +93,15 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "HighScoreButton",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_full_ui_element(
+                            "blue_button00.png",
+                            "green_button00.png",
+                            "green_button01.png",
+                        ),
                         (
                             self.screen.get_width() / 2 - 95,
                             self.screen.get_height() / 2,
                         ),
-                        self.sprite_manager.get_ui_element("blue_button00.png").width,
-                        self.sprite_manager.get_ui_element("blue_button00.png").height,
                         0,
                         1,
                         "Highscores",
@@ -104,13 +110,15 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "QuitButton",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_full_ui_element(
+                            "blue_button00.png",
+                            "green_button00.png",
+                            "green_button01.png",
+                        ),
                         (
                             self.screen.get_width() / 2 - 95,
                             self.screen.get_height() / 2 + 85,
                         ),
-                        self.sprite_manager.get_ui_element("blue_button00.png").width,
-                        self.sprite_manager.get_ui_element("blue_button00.png").height,
                         0,
                         1,
                         "Quit",
@@ -149,7 +157,11 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "BackButton",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_full_ui_element(
+                            "blue_button00.png",
+                            "green_button00.png",
+                            "green_button01.png",
+                        ),
                         (
                             self.screen.get_width()
                             - self.sprite_manager.get_ui_element(
@@ -162,8 +174,6 @@ class SceneManager:
                             ).height
                             - 150,
                         ),
-                        self.sprite_manager.get_ui_element("blue_button00.png").width,
-                        self.sprite_manager.get_ui_element("blue_button00.png").height,
                         0,
                         1,
                         "Back to main menu",
@@ -198,7 +208,9 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "car1",
-                        self.sprite_manager.get_car("car_black_small_1.png").sprite,
+                        self.sprite_manager.get_full_car_ui_element(
+                            "car_black_small_1.png"
+                        ),
                         (
                             (self.screen.get_width() / 2)
                             - (
@@ -210,8 +222,6 @@ class SceneManager:
                             - 200,
                             self.screen.get_height() / 2,
                         ),
-                        self.sprite_manager.get_car("car_black_small_1.png").width,
-                        self.sprite_manager.get_car("car_black_small_1.png").height,
                         0,
                         1.00,
                         "",
@@ -220,7 +230,9 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "car2",
-                        self.sprite_manager.get_car("car_red_small_1.png").sprite,
+                        self.sprite_manager.get_full_car_ui_element(
+                            "car_red_small_1.png"
+                        ),
                         (
                             (self.screen.get_width() / 2)
                             - (
@@ -230,8 +242,6 @@ class SceneManager:
                             - 100,
                             self.screen.get_height() / 2,
                         ),
-                        self.sprite_manager.get_car("car_red_small_1.png").width,
-                        self.sprite_manager.get_car("car_red_small_1.png").height,
                         0,
                         1.00,
                         "",
@@ -240,7 +250,9 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "car3",
-                        self.sprite_manager.get_car("car_yellow_small_1.png").sprite,
+                        self.sprite_manager.get_full_car_ui_element(
+                            "car_yellow_small_1.png"
+                        ),
                         (
                             (self.screen.get_width() / 2)
                             - (
@@ -251,8 +263,6 @@ class SceneManager:
                             ),
                             self.screen.get_height() / 2,
                         ),
-                        self.sprite_manager.get_car("car_yellow_small_1.png").width,
-                        self.sprite_manager.get_car("car_yellow_small_1.png").height,
                         0,
                         1.00,
                         "",
@@ -261,7 +271,9 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "car4",
-                        self.sprite_manager.get_car("car_green_small_1.png").sprite,
+                        self.sprite_manager.get_full_car_ui_element(
+                            "car_green_small_1.png"
+                        ),
                         (
                             (self.screen.get_width() / 2)
                             - (
@@ -273,8 +285,6 @@ class SceneManager:
                             + 100,
                             self.screen.get_height() / 2,
                         ),
-                        self.sprite_manager.get_car("car_green_small_1.png").width,
-                        self.sprite_manager.get_car("car_green_small_1.png").height,
                         0,
                         1.00,
                         "",
@@ -283,7 +293,9 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "car5",
-                        self.sprite_manager.get_car("car_blue_small_1.png").sprite,
+                        self.sprite_manager.get_full_car_ui_element(
+                            "car_blue_small_1.png"
+                        ),
                         (
                             (self.screen.get_width() / 2)
                             - (
@@ -295,8 +307,6 @@ class SceneManager:
                             + 200,
                             self.screen.get_height() / 2,
                         ),
-                        self.sprite_manager.get_car("car_blue_small_1.png").width,
-                        self.sprite_manager.get_car("car_blue_small_1.png").height,
                         0,
                         1.00,
                         "",
@@ -335,7 +345,11 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "EndRaceButton",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_full_ui_element(
+                            "blue_button00.png",
+                            "green_button00.png",
+                            "green_button01.png",
+                        ),
                         (
                             self.screen.get_width()
                             - self.sprite_manager.get_ui_element(
@@ -348,8 +362,6 @@ class SceneManager:
                             ).height
                             - 150,
                         ),
-                        self.sprite_manager.get_ui_element("blue_button00.png").width,
-                        self.sprite_manager.get_ui_element("blue_button00.png").height,
                         0,
                         1,
                         "End Race",
@@ -376,7 +388,11 @@ class SceneManager:
                     ),
                     ButtonComponent(
                         "BackButton",
-                        self.sprite_manager.get_ui_element("blue_button00.png").sprite,
+                        self.sprite_manager.get_full_ui_element(
+                            "blue_button00.png",
+                            "green_button00.png",
+                            "green_button01.png",
+                        ),
                         (
                             self.screen.get_width()
                             - self.sprite_manager.get_ui_element(
@@ -389,8 +405,6 @@ class SceneManager:
                             ).height
                             - 150,
                         ),
-                        self.sprite_manager.get_ui_element("blue_button00.png").width,
-                        self.sprite_manager.get_ui_element("blue_button00.png").height,
                         0,
                         1,
                         "Back to main menu",
