@@ -90,7 +90,7 @@ class TextBox:
         if self.saved_text_display is not None:
             self.saved_text_display.text += self.text_component.text
 
-        textbox_text = pygame.event.Event(TEXT_BOX_INPUT, textbox=self)
+        textbox_text = pygame.event.Event(TEXT_BOX_INPUT, player_name=self.text_component.text)
         pygame.event.post(textbox_text)
 
     def draw(self, screen, pos=None, scale=None):

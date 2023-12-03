@@ -1,5 +1,5 @@
 from Server.client import WebSocketClient
-from Settings.user_events import SUBMIT_SCORE_EVENT, START_RACE_EVENT
+from Settings.user_events import SUBMIT_SCORE_EVENT, TEXT_BOX_INPUT
 
 
 class ServerManager:
@@ -10,8 +10,10 @@ class ServerManager:
 
     def handle_event(self, event):
         if event.type == SUBMIT_SCORE_EVENT:
-            self.ws_client.send_highscore_msg(event.score, event.player_name, event.level_name)
-        if event.type == START_RACE_EVENT:
+            print(f"Sending high_score msg for: {event.name} -- {event.score}")
+            self.ws_client.send_highscore_msg(event.score, event.name, event.level_name)
+        if event.type == TEXT_BOX_INPUT:
+            print(f"Sending active player msg: {event.player_name}")
             self.ws_client.send_active_player_msg(event.player_name)
 
     def update(self, timedelta, input_state):

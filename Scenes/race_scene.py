@@ -25,7 +25,7 @@ class RaceScene(GameScene):
         self.start_time = time.time()
         self.level_name = ""
 
-        self.set_level("map_right")
+        self.change_level("map_right")
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
