@@ -1,0 +1,46 @@
+Weekoverzicht, format overgenomen van de Challenge doc.
+
+Maandag (Research)
+
+    Werk: 5 uur 
+		- PyGame docs lezen
+		- Ideeen opschrijven
+
+Dinsdag (Orientation)
+
+    Werk: 7 uur
+		- Spritesheets research
+		- Gebruik gemaakt van "Tiled" voor het leren maken van maps/levels dmv spritesheets
+
+Woensdag (Design/Prototype)
+
+    Werk: 7 uur
+		- Eerste level af
+		- Gebruik gemaakt van layers (floor, road, objects)
+		- SpritesheetManager ontwikkeld voor de game
+
+Donderdag (Development)
+
+    Werk: 7 uur
+		- Converter afgemaakt voor levels die als CSV-files worden opgeslagen in meerdere level-layers.
+		- Begin gemaakt van de server
+		- Diverse helper functies gemaakt om sprites beter te vertalen naar level tiles
+
+Vrijdag (Advanced Development)
+
+    Werk: 4 uur
+		- Begonnen aan de server, vooral veel onderzoek naar threading en asyncio
+
+Zaterdag (Advanced Development)
+
+    Werk: 4 uur
+		- Server ontwikkeling d.m.v remote development in Pycharm en deployment op Raspberry Pi (red m'n ziel aub, als ik nog een keer "source venv/bin/activate" moet intypen....)
+		- Client voor server communicatie afgerond.
+
+Zondag (Refactor & Cleanup)
+
+    Werk: 8 uur
+		- Server afgerond en integratie met game. Bevestigd dat server ook buiten het netwerk benaderbaar is. Data wordt gebroadcast naar alle actieve websocket verbindingen.
+		- M'n teamgenoten geholpen met puntjes op de i. Vooral veel losse componenten aan elkaar verbinden.
+
+Totaal gewerkte uren: 42 uur
