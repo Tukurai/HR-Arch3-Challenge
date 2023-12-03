@@ -16,12 +16,13 @@ class GameEngine:
         self.input_state = InputState(
             None, pygame.key.get_pressed(), None, pygame.mouse.get_pressed()
         )
+        self.score_manager = ServerManager()
         self.scene_manager = SceneManager(
             sound_manager=SoundManager(), 
             sprite_manager=SpriteManager(),
-            screen=self.game.screen
+            screen=self.game.screen,
+            score_manager=self.score_manager
         )
-        self.score_manager = ServerManager()
 
     def handle_events(self):
         for event in pygame.event.get():  # Handle the close window event.
